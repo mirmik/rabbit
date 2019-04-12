@@ -2,32 +2,65 @@
 #define RABBIT_CURVE2_H
 
 #include <linalg.h>
-#include <rabbit/trans2.h>
+#include <rabbit/pntvec.h>
 
-using namespace linalg::aliases;
+#include <nos/print.h>
 
 namespace rabbit 
 {
-	struct analityc_curve2 
+	template <class T>
+	struct curve2 
 	{
-		double tmin;
-		double tmax;
-		bool periodic;
-
-		virtual double2 d0(double t) = 0;
+		virtual pnt2<T> d0(T t) = 0;
+		virtual vec2<T> d1(T t) = 0;
 	};
 
-	struct circle2 
+	template <class T>
+	struct line2 : public curve2<T>
 	{
-		double radius;
-		trans2 trans;
+		pnt2<T> 	c;
+		vec2<T> 	v;
 
-		circle2(double radius_) : radius(radius_), trans() {}
-		circle2(double radius_, trans2 trans_) : radius(radius_), trans(trans_) {}
+		line2(pnt<T,2> c, vec<T,2> v) : c(c), v(v) {}
 
-		double2 d0(double t) 
+		pnt2<T> d0(T t) override
 		{			
-			return trans( double2 { cos(t) * radius, sin(t) * radius } ); 
+			return c + v*t; 
+		}
+
+		vec2<T> d1(T t) override
+		{			
+			return v; 
+		}
+
+	};
+
+
+	template <class T>
+	struct circ2 : public curve2<T>
+	{
+		pnt<T,2> 	c;
+		vec<T,2> 	x;
+		vec<T,2> 	y;
+		
+		circ2(pnt2<T> c, vec2<T> x) : c(c), x(x), y(ort(x)) {}
+		circ2(pnt2<T> c, vec2<T> x, vec2<T> y) : c(c), x(x), y(y) {}
+		circ2(const loc3<T>& location, T radius) 
+			: c(location.c), x(location.x * radius), y(location.y * radius) {};
+		
+		pnt2<T> d0(T t) override
+		{			
+			return c + x*(T)cos(t) + y*(T)sin(t); 
+		}
+
+		vec2<T> d1(T t) override
+		{			
+			return x*(T)sin(t) + y*(T)cos(t); 
+		}
+
+		size_t print_to(nos::ostream & o) const 
+		{
+			return nos::fprint_to(o, "circ2(c:{},x:{},y:{})", c, x, y);
 		}
 	};
 }
