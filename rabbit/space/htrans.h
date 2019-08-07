@@ -6,8 +6,10 @@
 
 namespace rabbit
 {
+	using linalg::ostream_overloads::operator <<;
+
 	template <typename T>
-	struct trans2
+	struct htrans2
 	{
 		T orient;
 		linalg::vec<T,2> center;
@@ -28,9 +30,21 @@ namespace rabbit
 				orient * oth.orient, 
 				linalg::rot(orient, oth.center) + center);
 		}
-	};
 
-	using linalg::ostream_overloads::operator <<;
+		// В 2д пространстве сложение с винтом аналогично 
+		// композиции трансформаций.
+		trans2 operator + (const screw2<T>& screw) 
+		{
+			return trans2(
+				orient * screw.orient, 
+				linalg::rot(orient, screw.center) + center);
+		}
+
+		htrans2 integrate(const hspeed2<T>& spd, T delta) 
+		{
+			return { *this + spd * delta; }
+		}
+	};
 
 	template<class C, class T>
 	std::basic_ostream<C> & operator << (std::basic_ostream<C> & out, const rabbit::trans2<T> & tr)
