@@ -27,7 +27,7 @@ namespace rabbit
 		trans2 operator * (const trans2& oth)
 		{
 			return trans2(
-				orient * oth.orient, 
+				orient + oth.orient, 
 				linalg::rot(orient, oth.center) + center);
 		}
 
@@ -36,8 +36,8 @@ namespace rabbit
 		trans2 operator + (const screw2<T>& screw) 
 		{
 			return trans2(
-				orient * screw.orient, 
-				linalg::rot(orient, screw.center) + center);
+				orient + screw.orient, 
+				linalg::rot(-orient, screw.center) + center);
 		}
 
 		htrans2 integrate(const hspeed2<T>& spd, T delta) 

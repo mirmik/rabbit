@@ -1,5 +1,5 @@
-#ifndef RABBIT_PHYSICS_BODY_H
-#define RABBIT_PHYSICS_BODY_H
+#ifndef RABBIT_SPACE_BODY_H
+#define RABBIT_SPACE_BODY_H
 
 namespace rabbit 
 {
