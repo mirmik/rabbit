@@ -31,7 +31,7 @@ namespace rabbit
 				linalg::rot(orient, oth.center) + center);
 		}
 
-		// В 2д пространстве сложение с винтом аналогично 
+		// В 2д пространстве сложение с бивектором аналогично 
 		// композиции трансформаций.
 		trans2 operator + (const screw2<T>& screw) 
 		{

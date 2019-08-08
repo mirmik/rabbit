@@ -5,15 +5,15 @@ namespace rabbit
 {
 	struct body 
 	{
-		rabbit::htrans3 position; //< позиция тела в вычислительном базисе
+		rabbit::htrans3 position; //< позиция тела в вычислительном базисе.
 		rabbit::inertia3 inertia; //< инерция тела в собственной системе.
 		rabbit::himpulse3 impulse; //< h-импульс в вычислительном базисе.
 
 		void integrate(T delta) 
 		{
-			auto locimpulse = impulse.trans(position.inverse());
+			auto locimpulse = impulse.inverse_rotate(position);
 			auto lochspd = locimpulse / inertia;
-			auto hspd = lochspd.trans(position);
+			auto hspd = lochspd.rotate(position);
 
 			position = position.integrate(hspd, delta);	
 		} 
