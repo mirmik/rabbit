@@ -2,27 +2,31 @@
 #define RABBIT_GEOM_CURVE2_H
 
 #include <rabbit/linalg.h>
+#include <rabbit/interval.h>
+
+#include <nos/print.h>
+#include <nos/fprint.h>
 
 namespace rabbit
 {
 	template <class T>
 	struct curve2
 	{
-		virtual linalg::vec2<T> d0();
-		virtual linalg::vec2<T> d1();
+		virtual rabbit::pnt2<T> d0(T t);
+		virtual rabbit::vec2<T> d1(T t);
 	};
 
 	template <class T>
-	struct line_curve2 : public curve
+	struct line_curve2 : public curve2<T>
 	{
-		rabbit::pnt2<T, 2> 	c;
-		rabbit::dir2<T, 2> 	d;
+		rabbit::pnt2<T> 	c;
+		rabbit::dir2<T> 	d;
 
-		line(
-		    linalg::vec<T, 2> a,
-		    linalg::vec<T, 2> b)
+		line_curve2(
+		    rabbit::pnt2<T> c,
+		    rabbit::dir2<T> d)
 			:
-			a(a), b(b)
+			c(c), d(d)
 		{}
 
 		rabbit::pnt2<T> d0(T t) override
@@ -39,46 +43,54 @@ namespace rabbit
 	};
 
 	template <class T>
-	struct ellipse_curve2 : public curve
+	struct ellipse_curve2 : public curve2<T>
 	{
-		linalg::vec<T, 2> 	c;
-		linalg::vec<T, 2> 	x;
-		linalg::vec<T, 2> 	y;
+		rabbit::pnt2<T> 	c;
+		rabbit::vec2<T> 	x;
+		rabbit::vec2<T> 	y;
 
 		ellipse_curve2(
-		    linalg::vec<T, 2> c,
-		    linalg::vec<T, 2> x)
+		    rabbit::vec2<T> c,
+		    rabbit::vec2<T> x)
 			:
 			c(c), x(x), y(ort(x))
 		{}
 
 		ellipse_curve2(
-		    linalg::vec<T, 2> c,
-		    linalg::vec<T, 2> x,
-		    linalg::vec<T, 2> y)
+		    rabbit::pnt2<T> c,
+		    rabbit::vec2<T> x,
+		    rabbit::vec2<T> y)
 			:
 			c(c), x(x), y(y)
 		{}
 
-		linalg::vec<T, 2> d0(T t) override
+		rabbit::pnt2<T> d0(T t) override
 		{
 			return c + x * (T)cos(t) + y * (T)sin(t);
 		}
 
-		linalg::vec<T, 2> d1(T t) override
+		rabbit::vec2<T> d1(T t) override
 		{
 			return x * (T)sin(t) + y * (T)cos(t);
 		}
 
 		template <class Trans>
-		ellipse transform(const Trans& trans)
+		ellipse_curve2 transform(const Trans& trans)
 		{
-			return ellipse2
+			return ellipse_curve2
 			{
 				trans.transform(c),
 				trans.rotate(x),
 				trans.rotate(y)
-			}
+			};
+		}
+
+		template <class Trans>
+		ellipse_curve2 self_transform(const Trans& trans)
+		{
+			c = trans.transform(c);
+			x = trans.rotate(x);
+			y = trans.rotate(y);
 		}
 
 		size_t print_to(nos::ostream & o) const
@@ -90,35 +102,39 @@ namespace rabbit
 	template <class T>
 	struct bounded_curve2
 	{
-		virtual T tstart();
-		virtual T tfinish();
+		virtual T tstart() = 0;
+		virtual T tfinish() = 0;
 
-		virtual T tlength() { return finish() - start(); }
+		virtual T tlength() { return tfinish() - tstart(); }
 	};
 
 	template <class T>
-	struct segment2 : public bounded_curve2
+	struct segment2 : public bounded_curve2<T>
 	{
-		rabbit::pnt2<T, 2> 	a;
-		rabbit::pnt2<T, 2> 	b;
+		pnt2<T> 	a;
+		pnt2<T> 	b;
 
 		pnt2<T> d0(T t) { return a * (1 - t) + b * t; }
 		vec2<T> d1(T t) { return b - a; }
 	
-		T tstart() override  { return 0; };
-		T tfinish() override { return 1; };	
+		T tstart() override  { return 0; }
+		T tfinish() override { return 1; }
 		T tlength() override { return 1; }	
-	}
+	};
 
 	template <class T>
-	struct trimmed_curve2 : public bounded_curve2
+	struct trimmed_curve2 : public bounded_curve2<T>
 	{
-		curve * base;
-		rabbit::interval interval;
+		curve2<T> * base;
+		rabbit::interval<T> interval;
 
 		pnt2<T> d0(T t) { return base->d0(t); }
 		vec2<T> d1(T t) { return base->d1(t); }
-	}
+
+		T tstart() override  { return interval.minimum; }
+		T tfinish() override { return interval.maximum; }	
+		trimmed_curve2(curve2<T> * base, T a, T b) : base(base), interval(a,b) {}
+	};
 }
 
 #endif
