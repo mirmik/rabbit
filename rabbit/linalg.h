@@ -2,18 +2,33 @@
 #define RABBIT_LINALG_H
 
 #include <linalg-v3/linalg.h>
+#include <nos/fprint.h>
 
 namespace rabbit 
 {
+	template <class T> class pnt2;
+	template <class T> class vec2;
+
 	template <class T>
 	class pnt2 : public linalg::vec<T,2>
 	{
 	public:
 		using parent = linalg::vec<T,2>;
-		pnt2(T x, T y) : parent(x,y) {}
-		pnt2(const parent& oth) : parent(oth) {}
+		pnt2(const T& _x, const T& _y) : parent{_x,_y} {PRINT(parent::x); PRINT(parent::y); PRINT(_x); PRINT(_y);}
+		pnt2(const pnt2& oth) : parent(oth.x, oth.y) {}
+		pnt2(pnt2&& oth) : parent(oth.x, oth.y) {}
+		pnt2(const parent& oth) : parent(oth.x, oth.y) {}
+		pnt2(parent&& oth) : parent(oth.x, oth.y) {}
 		
-		pnt2 operator +(const parent& oth) { return ((parent&)(*this)) + oth; }	
+		pnt2 operator +(const vec2<T>& oth);
+		
+		pnt2 operator +(const parent& oth) = delete;
+		pnt2 operator *(const parent& oth) = delete;
+
+		ssize_t print_to(nos::ostream& os) const
+		{
+			return nos::print_to(os, "pnt2({},{})", (T)parent::x, (T)parent::y);
+		}
 	};
 
 	template <class T>
@@ -21,11 +36,22 @@ namespace rabbit
 	{
 	public:
 		using parent = linalg::vec<T,2>;
-		vec2(T x, T y) : parent(x,y) {}
-		vec2(const parent& oth) : parent(oth) {}
-
+		vec2(T _x, T _y) : parent{_x,_y} {PRINT(parent::x); PRINT(parent::y); PRINT(_x); PRINT(_y);}
+		vec2(const vec2& oth) : parent(oth.x, oth.y) {}
+		vec2(vec2&& oth) : parent(oth.x, oth.y) {}
+		vec2(const parent& oth) : parent(oth.x, oth.y) {}
+		vec2(parent&& oth) : parent(oth.x, oth.y) {}
+		
 		vec2 operator *(T s) { return ((parent&)(*this)) * s; }
-		vec2 operator +(const parent& oth) { return ((parent&)(*this)) + oth; }
+		vec2 operator +(const vec2& oth) { return ((parent&)(*this)) + (parent&)oth; }
+
+		vec2 operator +(const parent& oth) = delete;
+		vec2 operator *(const parent& oth) = delete;
+
+		ssize_t print_to(nos::ostream& os) const
+		{
+			return nos::fprint_to(os, "vec2({},{})", (T)parent::x, (T)parent::y);
+		}
 	};
 
 	template <class T>
@@ -51,6 +77,14 @@ namespace rabbit
 	{
 
 	};
+
+
+
+	template <class T>
+	pnt2<T> pnt2<T>::operator +(const vec2<T>& oth) 
+	{ 
+		return ((parent&)(*this)) + (parent&)oth; 
+	}		
 }
 
 #endif

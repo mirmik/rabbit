@@ -12,8 +12,8 @@ namespace rabbit
 	template <class T>
 	struct curve2
 	{
-		virtual rabbit::pnt2<T> d0(T t);
-		virtual rabbit::vec2<T> d1(T t);
+		virtual rabbit::pnt2<T> d0(T t) = 0;
+		virtual rabbit::vec2<T> d1(T t) = 0;
 	};
 
 	template <class T>
@@ -57,15 +57,23 @@ namespace rabbit
 		{}
 
 		ellipse_curve2(
-		    rabbit::pnt2<T> c,
-		    rabbit::vec2<T> x,
-		    rabbit::vec2<T> y)
+		    rabbit::pnt2<T> _c,
+		    rabbit::vec2<T> _x,
+		    rabbit::vec2<T> _y)
 			:
-			c(c), x(x), y(y)
-		{}
+			c(_c), x(_x), y(_y)
+		{
+			PRINT(c);
+			PRINT(_c);
+			PRINT(y);
+			PRINT(_y);
+		}
 
 		rabbit::pnt2<T> d0(T t) override
 		{
+			//PRINT(x);
+			//PRINT(y);
+			//PRINT(c);
 			return c + x * (T)cos(t) + y * (T)sin(t);
 		}
 
@@ -100,7 +108,7 @@ namespace rabbit
 	};
 
 	template <class T>
-	struct bounded_curve2
+	struct bounded_curve2 : public curve2<T>
 	{
 		virtual T tstart() = 0;
 		virtual T tfinish() = 0;
@@ -114,8 +122,8 @@ namespace rabbit
 		pnt2<T> 	a;
 		pnt2<T> 	b;
 
-		pnt2<T> d0(T t) { return a * (1 - t) + b * t; }
-		vec2<T> d1(T t) { return b - a; }
+		pnt2<T> d0(T t) override { return a * (1 - t) + b * t; }
+		vec2<T> d1(T t) override { return b - a; }
 	
 		T tstart() override  { return 0; }
 		T tfinish() override { return 1; }
@@ -128,8 +136,8 @@ namespace rabbit
 		curve2<T> * base;
 		rabbit::interval<T> interval;
 
-		pnt2<T> d0(T t) { return base->d0(t); }
-		vec2<T> d1(T t) { return base->d1(t); }
+		pnt2<T> d0(T t) override { return base->d0(t); }
+		vec2<T> d1(T t) override { return base->d1(t); }
 
 		T tstart() override  { return interval.minimum; }
 		T tfinish() override { return interval.maximum; }	

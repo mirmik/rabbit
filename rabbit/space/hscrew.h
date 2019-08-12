@@ -9,7 +9,13 @@ namespace rabbit
 	struct screw;
 
 	template <class T>
-	struct screw3 
+	using screw2 = screw<T,2>;
+
+	template <class T>
+	using screw3 = screw<T,3>;
+
+	template <class T>
+	struct screw<T,3> 
 	{
 		linalg::vec<T,3> ang;
 		linalg::vec<T,3> lin;
@@ -20,10 +26,10 @@ namespace rabbit
 		{
 			return { ang * koeff, lin * koeff };
 		} 
-	}
+	};
 
 	template <class T>
-	struct screw2 
+	struct screw<T,2>
 	{
 		T ang;
 		linalg::vec<T,2> lin;
@@ -34,7 +40,7 @@ namespace rabbit
 		{
 			return { ang * koeff, lin * koeff };
 		} 
-	}
+	};
 }
 
 #endif
