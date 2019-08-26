@@ -2,6 +2,7 @@
 #define RABBIT_LINALG_H
 
 #include <linalg-v3/linalg.h>
+#include <linalg-v3/linalg-ext.h>
 #include <nos/fprint.h>
 
 namespace rabbit 
@@ -84,7 +85,14 @@ namespace rabbit
 	pnt2<T> pnt2<T>::operator +(const vec2<T>& oth) 
 	{ 
 		return ((parent&)(*this)) + (parent&)oth; 
-	}		
+	}	
+
+	template <class T>
+	inline vec2<T> operator *(T a, const vec2<T>& b) 
+	{ 
+		return a * (typename vec2<T>::parent&)b; 
+	}	
+
 }
 
 #endif

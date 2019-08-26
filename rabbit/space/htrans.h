@@ -2,8 +2,7 @@
 #define RABBIT_TRANS2_H
 
 #include <rabbit/space/hscrew.h>
-#include <linalg.h>
-#include <linalg-ext.h>
+#include <rabbit/linalg.h>
 
 namespace rabbit
 {
@@ -45,14 +44,31 @@ namespace rabbit
 		{
 			return *this + spd * delta;
 		}
+
+		htrans2 inverse()
+		{
+			return { -orient, linalg::rot(-orient, -center) };
+		}
+
+		rabbit::vec2<T> inverse_rotate(const rabbit::vec2<T>& v)
+		{
+			return linalg::rot(-orient, v);
+		}
+
+		T rotation() { return orient; }
+
+		linalg::vec<T, 2> translation() { return center; }
 	};
 
-	template<class C, class T>
-	std::basic_ostream<C> & operator << (
-	    std::basic_ostream<C> & out,
-	    const rabbit::htrans2<T> & tr)
+	namespace ostream_overloads
 	{
-		return out << '{' << tr.orient << ',' << tr.center << '}';
+		template<class C, class T>
+		std::basic_ostream<C> & operator << (
+		    std::basic_ostream<C> & out,
+		    const rabbit::htrans2<T> & tr)
+		{
+			return out << '{' << tr.orient << ',' << tr.center << '}';
+		}
 	}
 }
 
