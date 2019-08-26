@@ -26,6 +26,9 @@ namespace rabbit
 		{
 			return { ang * koeff, lin * koeff };
 		}
+
+		T rotation() { return ang; }
+		linalg::vec<T,3> translation() { return lin; }
 	};
 
 	template <class T>
