@@ -22,10 +22,13 @@ namespace rabbit
 
 		screw(const linalg::vec<T,3>& ang, const linalg::vec<T,3>& lin);
 
-		screw nlerp(float koeff) 
+		screw operator * (float koeff) 
 		{
 			return { ang * koeff, lin * koeff };
-		} 
+		}
+
+		T rotation() { return ang; }
+		linalg::vec<T,3> translation() { return lin; }
 	};
 
 	template <class T>
@@ -34,12 +37,16 @@ namespace rabbit
 		T ang;
 		linalg::vec<T,2> lin;
 
-		screw(T ang, const linalg::vec<T,3>& lin);
+		screw(T ang, const linalg::vec<T,2>& lin) : ang(ang), lin(lin) {}
+		screw(){}
 
-		screw nlerp(float koeff) 
+		screw operator * (float koeff) 
 		{
 			return { ang * koeff, lin * koeff };
-		} 
+		}
+
+		T rotation() { return ang; }
+		linalg::vec<T,2> translation() { return lin; }
 	};
 }
 
