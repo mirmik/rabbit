@@ -63,10 +63,10 @@ namespace rabbit
 			:
 			c(_c), x(_x), y(_y)
 		{
-			PRINT(c);
+			/*PRINT(c);
 			PRINT(_c);
 			PRINT(y);
-			PRINT(_y);
+			PRINT(_y);*/
 		}
 
 		rabbit::pnt2<T> d0(T t) override

@@ -2,6 +2,7 @@
 #define RABBIT_LINALG_H
 
 #include <linalg-v3/linalg.h>
+#include <linalg-v3/linalg-ext.h>
 #include <nos/fprint.h>
 
 namespace rabbit 
@@ -14,7 +15,7 @@ namespace rabbit
 	{
 	public:
 		using parent = linalg::vec<T,2>;
-		pnt2(const T& _x, const T& _y) : parent{_x,_y} {PRINT(parent::x); PRINT(parent::y); PRINT(_x); PRINT(_y);}
+		pnt2(const T& _x, const T& _y) : parent{_x,_y} {}
 		pnt2(const pnt2& oth) : parent(oth.x, oth.y) {}
 		pnt2(pnt2&& oth) : parent(oth.x, oth.y) {}
 		pnt2(const parent& oth) : parent(oth.x, oth.y) {}
@@ -27,7 +28,7 @@ namespace rabbit
 
 		ssize_t print_to(nos::ostream& os) const
 		{
-			return nos::print_to(os, "pnt2({},{})", (T)parent::x, (T)parent::y);
+			return nos::fprint_to(os, "pnt2({},{})", (T)parent::x, (T)parent::y);
 		}
 	};
 
@@ -36,7 +37,7 @@ namespace rabbit
 	{
 	public:
 		using parent = linalg::vec<T,2>;
-		vec2(T _x, T _y) : parent{_x,_y} {PRINT(parent::x); PRINT(parent::y); PRINT(_x); PRINT(_y);}
+		vec2(T _x, T _y) : parent{_x,_y} {}
 		vec2(const vec2& oth) : parent(oth.x, oth.y) {}
 		vec2(vec2&& oth) : parent(oth.x, oth.y) {}
 		vec2(const parent& oth) : parent(oth.x, oth.y) {}
