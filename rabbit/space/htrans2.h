@@ -1,7 +1,7 @@
 #ifndef RABBIT_TRANS2_H
 #define RABBIT_TRANS2_H
 
-#include <rabbit/space/hscrew.h>
+#include <rabbit/space/screw.h>
 #include <rabbit/linalg.h>
 
 namespace rabbit
@@ -32,12 +32,19 @@ namespace rabbit
 		}
 
 		// В 2д пространстве сложение с бивектором аналогично
-		// композиции трансформаций.
-		htrans2 operator + (const screw2<T>& screw)
+		// композиции трансформаций. 
+		// !!! Скорее всего в обратном порядке!!!
+		/*htrans2 operator + (const screw2<T>& screw)
 		{
 			return htrans2(
 			           orient + screw.orient,
-			           linalg::rot(-orient, screw.center) + center);
+			           linalg::rot(orient, screw.center) + center);
+		}*/
+
+		screw2<T> operator - (const htrans2<T>& oth)
+		{
+			return { orient - oth.orient,
+			         linalg::rot(-oth.orient, center - oth.center) };
 		}
 
 		htrans2 integrate_speed(const screw2<T>& spd, T delta)
@@ -60,8 +67,8 @@ namespace rabbit
 		linalg::vec<T, 2> translation() { return center; }
 	};
 
-	namespace ostream_overloads
-	{
+	//namespace ostream_overloads
+	//{
 		template<class C, class T>
 		std::basic_ostream<C> & operator << (
 		    std::basic_ostream<C> & out,
@@ -69,7 +76,7 @@ namespace rabbit
 		{
 			return out << '{' << tr.orient << ',' << tr.center << '}';
 		}
-	}
+	//}
 }
 
 #endif
