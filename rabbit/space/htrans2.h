@@ -43,6 +43,9 @@ namespace rabbit
 
 		screw2<T> operator - (const htrans2<T>& oth)
 		{
+			//PRINT(*this);
+			//PRINT(oth);
+
 			return { orient - oth.orient,
 			         linalg::rot(-oth.orient, center - oth.center) };
 		}
@@ -57,6 +60,11 @@ namespace rabbit
 			return { -orient, linalg::rot(-orient, -center) };
 		}
 
+		rabbit::vec2<T> rotate(const rabbit::vec2<T>& v)
+		{
+			return linalg::rot(orient, v);
+		}
+		
 		rabbit::vec2<T> inverse_rotate(const rabbit::vec2<T>& v)
 		{
 			return linalg::rot(-orient, v);

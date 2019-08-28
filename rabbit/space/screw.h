@@ -38,7 +38,19 @@ namespace rabbit
 		linalg::vec<T,2> lin;
 
 		screw(T ang, const linalg::vec<T,2>& lin) : ang(ang), lin(lin) {}
-		screw(){}
+		screw() : ang(0), lin(0,0) {}
+		
+		template<class U>
+		screw(const screw2<U>& oth) : ang(oth.ang), lin(oth.lin.x, oth.lin.y) {}
+
+		template<class U>
+		screw& operator = (const screw2<U>& oth) 
+		{
+			ang = oth.ang;
+			lin.x = oth.lin.x;
+			lin.y = oth.lin.y;
+			return *this;
+		}
 
 		screw operator * (float koeff) 
 		{
@@ -51,6 +63,9 @@ namespace rabbit
 		T norm() const { return sqrt(ang * ang + lin.x * lin.x + lin.y * lin.y); }
 
 		T dot(const screw& o) { return ang*o.ang + lin.x*o.lin.x + lin.y*o.lin.y; } 
+
+		bool operator == (const screw& b) 
+		{ return ang == b.ang && lin == b.lin; }
 	};
 
 	template<class T, int N> 
