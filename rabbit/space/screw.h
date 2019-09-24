@@ -62,7 +62,7 @@ namespace rabbit
 
 		T norm() const { return sqrt(ang * ang + lin.x * lin.x + lin.y * lin.y); }
 
-		T dot(const screw& o) { return ang*o.ang + lin.x*o.lin.x + lin.y*o.lin.y; } 
+		T dot(const screw& o) const { return ang*o.ang + lin.x*o.lin.x + lin.y*o.lin.y; } 
 
 		bool operator == (const screw& b) 
 		{ return ang == b.ang && lin == b.lin; }

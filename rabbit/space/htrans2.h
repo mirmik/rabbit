@@ -73,6 +73,11 @@ namespace rabbit
 		T rotation() { return orient; }
 
 		linalg::vec<T, 2> translation() { return center; }
+
+		ssize_t print_to(nos::ostream& out) const
+		{
+			return nos::fprint_to(out, "htrans({},{})",orient,center );
+		}
 	};
 
 	//namespace ostream_overloads
