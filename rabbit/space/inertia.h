@@ -1,7 +1,7 @@
 #ifndef RABBIT_SPACE_INERTIA_H
 #define RABBIT_SPACE_INERTIA_H
 
-#include <linalg-v3/linalg.h>
+#include <linalg/linalg.h>
 
 namespace rabbit 
 {

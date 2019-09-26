@@ -4,13 +4,13 @@
 import licant
 
 licant.include("rabbit")
-licant.include("linalg-v3")
+licant.include("linalg")
 
 licant.cxx_application("target",
 	sources=["main.cpp"],
 	mdepends=[
 		"rabbit", 
-		"linalg-v3"
+		"linalg"
 	],
 	libs=["igris", "nos"]
 )

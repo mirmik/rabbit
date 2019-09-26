@@ -1,8 +1,7 @@
 #ifndef RABBIT_LINALG_H
 #define RABBIT_LINALG_H
 
-#include <linalg-v3/linalg.h>
-#include <linalg-v3/linalg-ext.h>
+#include <linalg/linalg.h>
 #include <nos/fprint.h>
 
 namespace rabbit 
