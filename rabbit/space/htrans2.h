@@ -34,12 +34,8 @@ namespace rabbit
 		// В 2д пространстве сложение с бивектором аналогично
 		// композиции трансформаций. 
 		// !!! Скорее всего в обратном порядке!!!
-		/*htrans2 operator + (const screw2<T>& screw)
-		{
-			return htrans2(
-			           orient + screw.orient,
-			           linalg::rot(orient, screw.center) + center);
-		}*/
+		// Разность выполняется в общем базисе. Композиция
+		// В базисе левого объекта.
 
 		screw2<T> operator - (const htrans2<T>& oth)
 		{
@@ -47,7 +43,9 @@ namespace rabbit
 			//PRINT(oth);
 
 			return { orient - oth.orient,
-			         linalg::rot(-oth.orient, center - oth.center) };
+			         //linalg::rot(-oth.orient, center - oth.center)
+			         center - oth.center 
+			     };
 		}
 
 		htrans2 integrate_speed(const screw2<T>& spd, T delta)
