@@ -24,6 +24,11 @@ namespace rabbit
 			return linalg::rot(orient, vec) + center;
 		};
 
+		screw2<T> rotate_screw(screw2<T> scr)
+		{
+			return { scr.ang, linalg::rot(orient, scr.lin) };
+		};
+
 		htrans2 operator * (const htrans2& oth)
 		{
 			return htrans2(

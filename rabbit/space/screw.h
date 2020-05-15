@@ -77,6 +77,9 @@ namespace rabbit
 
 		bool operator == (const screw& b)
 		{ return ang == b.ang && lin == b.lin; }
+
+		ssize_t print_to(nos::ostream& os) const 
+		{ return nos::fprint_to(os, "({},{})", ang,lin); }
 	};
 
 	template<class T, int N>
