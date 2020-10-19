@@ -6,26 +6,25 @@
 
 namespace rabbit
 {
-	class line2
+	class line2eq
 	{
 	public:
 		r_float a, b, c;
 
-		line2(r_float a, r_float b, r_float c) 
+		line2eq(r_float a, r_float b, r_float c) 
 			: a(a), b(b), c(c)
 		{}
 
 		static
-		line2 by_pntdir(vec2 pnt, vec2 dir)
+		line2 from_points(vec2 p1, vec2 p2)
 		{
-			dir = normalize(dir);
-
-			r_float dx = dir.x;
-			r_float dy = dir.y;
-			r_float x1 = pnt.x;
-			r_float y1 = pnt.y;
-			r_float x2 = x1 + dx;
-			r_float y2 = y1 + dy;
+			vec2 d = p2 - p2;
+			r_float dx = d.x;
+			r_float dy = d.y;
+			r_float x1 = p1.x;
+			r_float y1 = p2.y;
+			r_float x2 = p2.x;
+			r_float y2 = p2.y;
 
 			r_float a = -dy;
 			r_float b =  dx;
@@ -60,6 +59,22 @@ namespace rabbit
 				trsf.transform_point(bpnt)
 			};
 		}
+
+		line2eq line_equation() 
+		{
+			return line2eq::from_points(apnt, bpnt);
+		} 
+	};
+
+	class polysegm2 
+	{
+		vec2 * pnts;
+		int pnts_count;
+
+	public:
+		polysegm2(vec2 * pnts, int pnts_count) 
+			: pnts(pnts), pnts_count(pnts_count)
+		{}
 	};
 }
 
