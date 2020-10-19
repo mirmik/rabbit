@@ -2,6 +2,7 @@
 #define RABBIT_LINALG_H
 
 #include <linalg/linalg.h>
+#include <rabbit/types.h>
 #include <nos/fprint.h>
 
 namespace rabbit
@@ -32,9 +33,19 @@ namespace rabbit
 			           ang + oth.ang);
 		}
 
-		trans2 operator() (const trans2& oth) 
+		/*trans2 operator() (const trans2& oth) 
 		{
 			return (*this)(oth);
+		}*/
+
+		vec2 transform_vector(const vec2& vec) const
+		{
+			return linalg::rot(ang, vec);
+		}
+
+		vec2 transform_point(const vec2& vec) const
+		{
+			return linalg::rot(ang, vec) + lin;
 		}
 	};
 
