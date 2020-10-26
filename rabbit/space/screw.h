@@ -80,6 +80,14 @@ namespace rabbit
 
 		ssize_t print_to(nos::ostream& os) const 
 		{ return nos::fprint_to(os, "({},{})", ang,lin); }
+
+		screw kinematic_carry(linalg::vec<T, 2> arm) 
+		{
+			return screw( 
+				ang,
+				lin + linalg::cross(ang, arm)
+			);
+		}
 	};
 
 	template<class T, int N>

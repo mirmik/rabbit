@@ -67,6 +67,11 @@ namespace rabbit
 		{
 			return linalg::rot(orient, v);
 		}
+
+		rabbit::screw<T,2> rotate(const rabbit::screw<T,2>& v)
+		{
+			return {v.ang, linalg::rot(orient, v.lin)};
+		}
 		
 		rabbit::vec2<T> inverse_rotate(const rabbit::vec2<T>& v)
 		{
