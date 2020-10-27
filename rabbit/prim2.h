@@ -16,13 +16,14 @@ namespace rabbit
 		{}
 
 		static
-		line2 from_points(vec2 p1, vec2 p2)
+		line2eq from_points(vec2 p1, vec2 p2)
 		{
-			vec2 d = p2 - p2;
+			vec2 d = p2 - p1;
+
 			r_float dx = d.x;
 			r_float dy = d.y;
 			r_float x1 = p1.x;
-			r_float y1 = p2.y;
+			r_float y1 = p1.y;
 			r_float x2 = p2.x;
 			r_float y2 = p2.y;
 
@@ -38,6 +39,11 @@ namespace rabbit
 			return (-a*x - c) / b;
 		}
 
+		r_float subs(linalg::vec<r_float, 2> pnt) const 
+		{
+			return pnt.x * a + pnt.y * b + c;
+		} 
+
 		ssize_t print_to(nos::ostream & os) const
 		{
 			return nos::fprint_to(os, "({}x+{}y+{}=0)", a, b, c);
@@ -46,12 +52,14 @@ namespace rabbit
 
 	class segm2
 	{
+	public:
 		vec2 apnt;
 		vec2 bpnt;
 
+	public:
 		segm2(vec2 apnt, vec2 bpnt) : apnt(apnt), bpnt(bpnt) {}
 
-		segm2 transformed(const trans2& trsf)
+		segm2 transformed(const trans2& trsf) const
 		{
 			return
 			{
@@ -60,14 +68,20 @@ namespace rabbit
 			};
 		}
 
-		line2eq line_equation() 
+		line2eq line_equation() const
 		{
 			return line2eq::from_points(apnt, bpnt);
 		} 
+
+		ssize_t print_to(nos::ostream & os) const 
+		{
+			return nos::fprint_to(os, "({},{})", apnt, bpnt);
+		}
 	};
 
 	class polysegm2 
 	{
+	public:
 		vec2 * pnts;
 		int pnts_count;
 
