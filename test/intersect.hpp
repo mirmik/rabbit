@@ -66,7 +66,9 @@ LT_BEGIN_TEST(rabbit_test_suite, polysegment_intersect)
 	rabbit::segm2 segm1({0,0}, {10, 10});
 	rabbit::polysegm2 psegm(_psegm, 5);
 
-	int retcount = rabbit::intersect_points_segm2_polysegm2(&segm, &psegm, ipnts); 
+	int retcount;
+
+	retcount = rabbit::intersect_points_segm2_polysegm2(&segm, &psegm, ipnts); 
 	LT_CHECK_EQ(retcount, 2);
 	LT_CHECK(linalg::length(ipnts[0] - linalg::vec<r_float,2>(0,1)) < 1e-5);
 	LT_CHECK(linalg::length(ipnts[1] - linalg::vec<r_float,2>(9,10)) < 1e-5);
