@@ -9,7 +9,10 @@ from licant.libs import include
 licant.execute("../rabbit.g.py")
 
 application("runtests",
-	sources = ["main.cpp"],
+	sources = [
+		"main.cpp",
+		"intersect.cpp"		
+	],
 
 	cxx_flags = "-g",
 	cc_flags = "-g",
