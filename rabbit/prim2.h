@@ -6,40 +6,41 @@
 
 namespace rabbit
 {
+	template <class T>
 	class line2eq
 	{
 	public:
-		r_float a, b, c;
+		T a, b, c;
 
-		line2eq(r_float a, r_float b, r_float c) 
+		line2eq(T a, T b, T c) 
 			: a(a), b(b), c(c)
 		{}
 
 		static
-		line2eq from_points(vec2 p1, vec2 p2)
+		line2eq from_points(linalg::vec<T,2> p1, linalg::vec<T,2> p2)
 		{
-			vec2 d = p2 - p1;
+			linalg::vec<T,2> d = p2 - p1;
 
-			r_float dx = d.x;
-			r_float dy = d.y;
-			r_float x1 = p1.x;
-			r_float y1 = p1.y;
-			r_float x2 = p2.x;
-			r_float y2 = p2.y;
+			T dx = d.x;
+			T dy = d.y;
+			T x1 = p1.x;
+			T y1 = p1.y;
+			T x2 = p2.x;
+			T y2 = p2.y;
 
-			r_float a = -dy;
-			r_float b =  dx;
-			r_float c = x1*y2 - y1*x2;
+			T a = -dy;
+			T b =  dx;
+			T c = x1*y2 - y1*x2;
 
 			return { a, b, c };
 		}
 
-		r_float subs_x(r_float x)
+		T subs_x(T x)
 		{
 			return (-a*x - c) / b;
 		}
 
-		r_float subs(linalg::vec<r_float, 2> pnt) const 
+		T subs(linalg::vec<T, 2> pnt) const 
 		{
 			return pnt.x * a + pnt.y * b + c;
 		} 
@@ -50,14 +51,16 @@ namespace rabbit
 		}
 	};
 
+	template <class T>
 	class segm2
 	{
 	public:
-		vec2 apnt;
-		vec2 bpnt;
+		linalg::vec<T,2> apnt;
+		linalg::vec<T,2> bpnt;
 
 	public:
-		segm2(vec2 apnt, vec2 bpnt) : apnt(apnt), bpnt(bpnt) {}
+		segm2(linalg::vec<T,2> apnt, linalg::vec<T,2> bpnt) 
+			: apnt(apnt), bpnt(bpnt) {}
 
 		segm2 transformed(const trans2& trsf) const
 		{
@@ -68,9 +71,9 @@ namespace rabbit
 			};
 		}
 
-		line2eq line_equation() const
+		line2eq<T> line_equation() const
 		{
-			return line2eq::from_points(apnt, bpnt);
+			return line2eq<T>::from_points(apnt, bpnt);
 		} 
 
 		ssize_t print_to(nos::ostream & os) const 
@@ -79,14 +82,15 @@ namespace rabbit
 		}
 	};
 
+	template <class T>
 	class polysegm2 
 	{
 	public:
-		vec2 * pnts;
+		linalg::vec<T,2> * pnts;
 		int pnts_count;
 
 	public:
-		polysegm2(vec2 * pnts, int pnts_count) 
+		polysegm2(linalg::vec<T,2> * pnts, int pnts_count) 
 			: pnts(pnts), pnts_count(pnts_count)
 		{}
 	};
