@@ -213,15 +213,15 @@ namespace rabbit
 			endtype end_bit;
 
 			intersected_group(
-				begtype a, 
-				endtype ea, 
-				begtype b, 
-				endtype eb
-			) : 
-				begin_ait(a), 
-				end_ait(ea), 
-				begin_bit(b), 
-				end_bit(eb) 
+			    begtype a,
+			    endtype ea,
+			    begtype b,
+			    endtype eb
+			) :
+				begin_ait(a),
+				end_ait(ea),
+				begin_bit(b),
+				end_bit(eb)
 			{}
 
 			operator bool()
@@ -345,11 +345,12 @@ namespace rabbit
 			std::swap(vec, nvec);
 		}
 
-		static intersected_group __find_intersected_group(
-			auto ait, 
-			auto end_ait, 
-			auto bit, 
-			auto end_bit)
+		template <class AI, class CAI, class BI, class CBI>
+		intersected_group __find_intersected_group(
+			AI  ait, 
+			CAI end_ait, 
+			BI  bit, 
+			CBI end_bit)
 		{
 			auto a = ait;
 			auto b = bit;
@@ -367,7 +368,13 @@ namespace rabbit
 		}
 
 		//Поиск группы пересечения. Интерпретирует непересекающиеся интервалы как группы.
-		static intersected_group find_intersected_group_weak(auto ait, auto end_ait, auto bit, auto end_bit)
+		template <class AI, class CAI, class BI, class CBI>
+		intersected_group find_intersected_group_weak(
+		    AI  ait,
+		    CAI end_ait,
+		    BI  bit,
+		    CBI end_bit)
+
 		{
 			if (ait == end_ait)
 			{
@@ -399,7 +406,12 @@ namespace rabbit
 		};
 
 		//Поиск группы пересечения. Непересекающиеся интервалы отбрасываются.
-		static intersected_group find_intersected_group(auto ait, auto eait, auto bit, auto ebit)
+		template <class AI, class CAI, class BI, class CBI>
+		intersected_group find_intersected_group(
+		    AI  ait,
+		    CAI eait,
+		    BI  bit,
+		    CBI ebit)
 		{
 			while (1)
 			{

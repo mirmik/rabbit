@@ -28,8 +28,6 @@ TEST_CASE("intersect")
 	          &pnt
 	      );
 
-	PRINT(pnt);
-
 	CHECK_EQ(sts, 1);
 	CHECK(fabs(pnt.x + 1) < 1e-5);
 	CHECK(fabs(pnt.y - 1) < 1e-5);

@@ -49,6 +49,7 @@ namespace rabbit
 		}
 	};
 
+	static inline
 	r_float vector_angle(vec2 vec) 
 	{
 		return atan2(vec.y, vec.x);
