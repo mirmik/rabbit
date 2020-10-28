@@ -140,7 +140,7 @@ namespace rabbit
 		//Операция пересечения двух интервалов.
 		interval_union<T> intersect(interval oth) const
 		{
-			auto i = simple_intersect(oth);
+			interval i = simple_intersect(oth);
 			return i ? interval_union<T> { i } : interval_union<T>();
 		}
 
@@ -212,7 +212,17 @@ namespace rabbit
 			begtype begin_bit;
 			endtype end_bit;
 
-			intersected_group(auto a, auto ea, auto b, auto eb) : begin_ait(a), end_ait(ea), begin_bit(b), end_bit(eb) {}
+			intersected_group(
+				begtype a, 
+				endtype ea, 
+				begtype b, 
+				endtype eb
+			) : 
+				begin_ait(a), 
+				end_ait(ea), 
+				begin_bit(b), 
+				end_bit(eb) 
+			{}
 
 			operator bool()
 			{
@@ -335,7 +345,11 @@ namespace rabbit
 			std::swap(vec, nvec);
 		}
 
-		static intersected_group __find_intersected_group(auto ait, auto end_ait, auto bit, auto end_bit)
+		static intersected_group __find_intersected_group(
+			auto ait, 
+			auto end_ait, 
+			auto bit, 
+			auto end_bit)
 		{
 			auto a = ait;
 			auto b = bit;

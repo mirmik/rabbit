@@ -16,10 +16,11 @@ install_library_path = os.path.join(install_directory_path, target)
 
 
 licant.cxx_shared_library("librabbit.so",
+	sources=["rabbit/inctest.cpp"],
 	mdepends=[
 		"rabbit"
 	],
-	cxx_flags="-fPIC",
+	cxx_flags="-fPIC -fconcepts",
 	cc_flags="-fPIC"
 )
 
@@ -30,16 +31,5 @@ licant.install.install_library(
 	libtgt="librabbit.so",
 	hroot="rabbit",
 	headers="rabbit")
-
-
-#@licant.routine(deps=["librabbit.so"])
-#def install():
-#	os.system("cp {0} {1}".format(target, install_directory_path))
-#	
-#	shutil.rmtree(install_include_path, True)
-#	shutil.copytree("rabbit", install_include_path, 
-#		symlinks=False, ignore=shutil.ignore_patterns('*.cpp', '*.c'))
-#	
-#	print("successfully installed")
 
 licant.ex("librabbit.so")
