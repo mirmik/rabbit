@@ -22,12 +22,12 @@ namespace rabbit
 			: ang(q), lin(l)
 		{}
 
-		/*linalg::vec<T, 2> operator()(linalg::vec<T, 2> vec)
+		linalg::vec<T, 3> rotate(linalg::vec<T, 3> vec) const
 		{
-			return linalg::rot(orient, vec) + center;
+			return linalg::qrot(ang, vec);
 		};
 
-		screw2<T> rotate_screw(screw2<T> scr)
+/*		screw2<T> rotate_screw(screw2<T> scr)
 		{
 			return { scr.ang, linalg::rot(orient, scr.lin) };
 		};*/

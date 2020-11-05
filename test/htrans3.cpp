@@ -68,4 +68,16 @@ TEST_CASE("htrans3")
 		rabbit::htrans3<double>{{0,0,0,1},{0,-10,0}});
 
 	CHECK_EQ(tr0.to_screw(), rabbit::screw<double,3>{{M_PI/2,0,0},{0,0,0}});
+
+	rabbit::htrans3<double> tr
+	{
+		{0, 0, sin(M_PI / 4), cos(M_PI / 4)},
+		{0, 0, 0}
+	};
+
+	rabbit::screw<double,3> aa {{10,0,0}, {0,10,10}};
+	rabbit::screw<double,3> bb {{0,10,0}, {-10,0,10}};
+
+	CHECK(length((aa.rotate_by(tr)).lin - bb.lin) < 1e-5);
+	CHECK(length((aa.rotate_by(tr)).ang - bb.ang) < 1e-5);
 }

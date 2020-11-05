@@ -5,6 +5,8 @@
 
 namespace rabbit
 {
+	template <class T> class htrans3;
+
 	template< class T, int N >
 	struct screw;
 
@@ -19,6 +21,11 @@ namespace rabbit
 	{
 		linalg::vec<T, 3> ang;
 		linalg::vec<T, 3> lin;
+
+		screw() :
+			ang(),
+			lin()
+		{}
 
 		screw(
 		    const linalg::vec<T, 3>& ang,
@@ -40,6 +47,8 @@ namespace rabbit
 		{
 			return lin == oth.lin && ang == oth.ang;
 		}
+
+		screw rotate_by(const htrans3<T>&);
 	};
 
 	template <class T>
