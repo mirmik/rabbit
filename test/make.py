@@ -11,7 +11,8 @@ licant.execute("../rabbit.g.py")
 application("runtests",
 	sources = [
 		"main.cpp",
-		"intersect.cpp"		
+		"intersect.cpp",	
+		"htrans3.cpp"		
 	],
 
 	cxx_flags = "-g",

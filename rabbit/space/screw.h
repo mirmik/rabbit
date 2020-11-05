@@ -20,7 +20,13 @@ namespace rabbit
 		linalg::vec<T, 3> ang;
 		linalg::vec<T, 3> lin;
 
-		screw(const linalg::vec<T, 3>& ang, const linalg::vec<T, 3>& lin);
+		screw(
+		    const linalg::vec<T, 3>& ang,
+		    const linalg::vec<T, 3>& lin
+		) :
+			ang(ang),
+			lin(lin)
+		{}
 
 		screw operator * (float koeff)
 		{
@@ -29,6 +35,11 @@ namespace rabbit
 
 		T rotation() { return ang; }
 		linalg::vec<T, 3> translation() { return lin; }
+
+		bool operator == (const screw& oth) const
+		{
+			return lin == oth.lin && ang == oth.ang;
+		}
 	};
 
 	template <class T>
@@ -78,15 +89,15 @@ namespace rabbit
 		bool operator == (const screw& b)
 		{ return ang == b.ang && lin == b.lin; }
 
-		ssize_t print_to(nos::ostream& os) const 
-		{ return nos::fprint_to(os, "({},{})", ang,lin); }
+		ssize_t print_to(nos::ostream& os) const
+		{ return nos::fprint_to(os, "({},{})", ang, lin); }
 
-		screw kinematic_carry(linalg::vec<T, 2> arm) 
+		screw kinematic_carry(linalg::vec<T, 2> arm)
 		{
-			return screw( 
-				ang,
-				lin + linalg::cross(ang, arm)
-			);
+			return screw(
+			           ang,
+			           lin + linalg::cross(ang, arm)
+			       );
 		}
 	};
 
