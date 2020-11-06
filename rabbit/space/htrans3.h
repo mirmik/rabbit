@@ -75,7 +75,7 @@ namespace rabbit
 			return
 			{
 				inv_q,
-				linalg::qrot(inv_q, -lin)
+				-linalg::qrot(inv_q, lin)
 			};
 		}
 

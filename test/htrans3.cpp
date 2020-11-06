@@ -80,4 +80,85 @@ TEST_CASE("htrans3")
 
 	CHECK(length((aa.rotate_by(tr)).lin - bb.lin) < 1e-5);
 	CHECK(length((aa.rotate_by(tr)).ang - bb.ang) < 1e-5);
+
+}
+
+TEST_CASE("htrans3_2")
+{
+		rabbit::htrans3<double> tr0
+	{
+		{sin(0.5), 0, 0, cos(0.5)},
+		{0, 2, 0}
+	};
+
+	rabbit::htrans3<double> tr1
+	{
+		{0, sin(-0.1), 0, cos(-0.1)},
+		{1, 0, 2}
+	};
+
+	rabbit::htrans3<double> tr2
+	{
+		{0, 0, sin(-2), cos(-2)},
+		{0, 3, 1}
+	};
+
+	rabbit::htrans3<double> tr3
+	{
+		{0, 0, sin(M_PI/4), cos(M_PI/4)},
+		{1, 0, 0}
+	};
+
+	auto tr = tr0 * tr1 * tr2;
+
+	PRINT(tr0);
+	PRINT(tr1);
+	PRINT(tr2);
+
+	PRINT(tr0 * tr1);
+	PRINT(tr1 * tr2);
+
+	PRINT(tr);
+	PRINT(tr.inverse());
+	PRINT(tr.inverse() * tr);
+	PRINT(tr * tr.inverse());
+
+	PRINT(tr3);
+	PRINT(tr3.inverse());
+}
+
+TEST_CASE("htrans3_2")
+{
+		rabbit::htrans3<double> tr0
+	{
+		linalg::rotation_quat<double>(linalg::normalize<double,3>({1,1,1}), 2),
+		{0, 2, 0}
+	};
+
+	PRINT(tr0.to_screw());
+	PRINT(linalg::length(tr0.to_screw().ang));
+}
+
+TEST_CASE("htrans3_3")
+{
+	rabbit::htrans3<double> tr0
+	{
+		linalg::rotation_quat<double>({1,0,0}, M_PI/2),
+		{0, 0, 0}
+	};
+
+	rabbit::htrans3<double> tr1
+	{
+		linalg::rotation_quat<double>({0,1,0}, M_PI/2),
+		{0, 0, 0}
+	};
+
+	rabbit::htrans3<double> tr2
+	{
+		linalg::rotation_quat<double>({0,0,1}, M_PI/2),
+		{0, 0, 0}
+	};
+
+	PRINT(tr0 * tr1 * tr2 * tr0 * tr1 * tr2);
+	PRINT(tr1.inverse() * tr2 * tr1 * tr0);
 }

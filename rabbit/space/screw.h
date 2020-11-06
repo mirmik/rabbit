@@ -48,6 +48,11 @@ namespace rabbit
 			return lin == oth.lin && ang == oth.ang;
 		}
 
+		screw operator -() const
+		{
+			return {-ang, -lin};
+		}
+
 		screw rotate_by(const htrans3<T>&);
 	};
 
