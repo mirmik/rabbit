@@ -21,7 +21,7 @@ namespace rabbit
 	int intersect_point_segm2_segm2(
 	    const segm2<T>   * segment1,
 	    const segm2<T>   * segment2,
-	    linalg::vec<T,2> * out_intersection,
+	    linalg::vec<T, 2> * out_intersection,
 	    T epsilon = r_epsilon
 	);
 
@@ -29,15 +29,22 @@ namespace rabbit
 	int __intersect_points_segm2_polysegm2(
 	    const segm2<T>     * segm,
 	    const polysegm2<T> * poly,
-	    linalg::vec<T,2>   * points
+	    linalg::vec<T, 2>   * points
 	);
 
 	template <class T>
 	int intersect_points_segm2_polysegm2(
 	    const segm2<T>     * segm,
 	    const polysegm2<T> * poly,
-	    linalg::vec<T,2>   * points,
+	    linalg::vec<T, 2>   * points,
 	    T epsilon = r_epsilon
+	);
+
+
+	template <class T>
+	linalg::vec<T, 2> intersect_point_line2_line2(
+	    const line2eq<T> & line1,
+	    const line2eq<T> & line2
 	);
 }
 

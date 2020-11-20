@@ -2,6 +2,20 @@
 #include <igris/util/template_instance.h>
 
 template <class T>
+linalg::vec<T, 2> rabbit::intersect_point_line2_line2(
+    const line2eq<T> & line1,
+    const line2eq<T> & line2
+)
+{
+	T a = line1.b * line2.c - line2.b * line1.c;
+	T b = line2.a * line1.c - line1.a * line2.c;
+	T c = line1.a * line2.b - line2.a * line1.b;
+
+	return { a/c, b/c };
+}
+
+
+template <class T>
 int rabbit::intersect_point_segm2_segm2(
     const segm2<T>   * segment1,
     const segm2<T>   * segment2,
@@ -108,3 +122,6 @@ TEMPLATE_INSTANCE(rabbit::intersect_point_segm2_segm2,double);
 
 TEMPLATE_INSTANCE(rabbit::intersect_points_segm2_polysegm2,float);
 TEMPLATE_INSTANCE(rabbit::intersect_points_segm2_polysegm2,double);
+
+TEMPLATE_INSTANCE(rabbit::intersect_point_line2_line2,float);
+TEMPLATE_INSTANCE(rabbit::intersect_point_line2_line2,double);

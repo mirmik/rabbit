@@ -27,6 +27,10 @@ namespace rabbit
 			return linalg::qrot(ang, vec);
 		};
 
+		linalg::vec<T,3> xdir() const { return linalg::qxdir(ang); }
+		linalg::vec<T,3> ydir() const { return linalg::qydir(ang); }
+		linalg::vec<T,3> zdir() const { return linalg::qzdir(ang); }
+
 /*		screw2<T> rotate_screw(screw2<T> scr)
 		{
 			return { scr.ang, linalg::rot(orient, scr.lin) };
