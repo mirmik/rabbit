@@ -12,7 +12,8 @@ application("runtests",
 	sources = [
 		"main.cpp",
 		"intersect.cpp",	
-		"htrans3.cpp"		
+		"htrans3.cpp",		
+		"nearest.cpp"		
 	],
 
 	cxx_flags = "-g",
