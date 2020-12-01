@@ -1,23 +1,8 @@
-#ifndef RABBIT_GAZEBO_H
-#define RABBIT_GAZEBO_H
+#include <rabbit/space/gazebo.h>
 
-#include <rabbit/space/htrans3.h>
-
-#include <gazebo/gazebo.hh>
-#include <gazebo/physics/physics.hh>
-#include <gazebo/common/common.hh>
-#include <ignition/math/Vector3.hh>
-
-namespace rabbit
+namespace gazebo
 {
-	enum class PoseMode
-	{
-		World = 0,
-		CoG = 1,
-		Inertial = 2
-	};
-
-	static htrans3<double> Pose3d_to_htrans3(ignition::math::Pose3d Pose)
+	htrans3<double> Pose3d_to_htrans3(ignition::math::Pose3d Pose)
 	{
 		htrans3<double> ret;
 
@@ -30,13 +15,13 @@ namespace rabbit
 		return ret;
 	}
 
-	static linalg::vec<double, 3> Vector3d_to_vec3(ignition::math::Vector3d V)
+	linalg::vec<double, 3> Vector3d_to_vec3(ignition::math::Vector3d V)
 	{
 		return { V.X(), V.Y(), V.Z() };
 	}
 
-	static htrans3<double> gazebo_link_pose(
-	    gazebo::physics::LinkPtr link, PoseMode mode = PoseMode::CoG)
+	htrans3<double> gazebo_link_pose(
+	    gazebo::physics::LinkPtr link, PoseMode mode)
 	{
 		ignition::math::Pose3d pos;
 
@@ -50,13 +35,13 @@ namespace rabbit
 		return Pose3d_to_htrans3(pos);
 	}
 
-	static htrans3<double> gazebo_joint_anchor_pose(
+	htrans3<double> gazebo_joint_anchor_pose(
 	    gazebo::physics::JointPtr joint)
 	{
 		return Pose3d_to_htrans3(joint->InitialAnchorPose());
 	}
 
-	static screw<double, 3> gazebo_joint_local_axis(
+	screw<double, 3> gazebo_joint_local_axis(
 	    gazebo::physics::JointPtr joint)
 	{
 		return
@@ -66,7 +51,7 @@ namespace rabbit
 		};
 	}
 
-	static screw<double, 3> gazebo_joint_reaction(
+	screw<double, 3> gazebo_joint_reaction(
 	    gazebo::physics::JointPtr joint)
 	{
 		auto wrench = joint->GetForceTorque(0);
@@ -77,5 +62,3 @@ namespace rabbit
 			Vector3d_to_vec3(wrench.body1Force) };
 	}
 }
-
-#endif
