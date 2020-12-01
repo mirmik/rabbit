@@ -50,10 +50,18 @@ namespace rabbit
 
 		screw operator -() const
 		{
-			return {-ang, -lin};
+			return { -ang, -lin};
 		}
 
 		screw rotate_by(const htrans3<T>&);
+
+		screw kinematic_carry(linalg::vec<T, 3> arm)
+		{
+			return screw(
+			           ang,
+			           lin + cross(ang, arm)
+			       );
+		}
 	};
 
 	template <class T>

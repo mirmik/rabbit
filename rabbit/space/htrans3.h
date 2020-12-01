@@ -22,9 +22,32 @@ namespace rabbit
 			: ang(q), lin(l)
 		{}
 
+		htrans3(
+		    const rabbit::screw<T, 3>& scr
+		)
+			: lin(scr.lin)
+		{
+			auto w = scr.ang;
+
+			auto angle = length(w);			
+			auto axis = w / angle;
+
+			ang = rotation_quat(axis, angle);
+		}
+
 		linalg::vec<T, 3> rotate(linalg::vec<T, 3> vec) const
 		{
 			return linalg::qrot(ang, vec);
+		};
+
+		linalg::vec<T, 3> rotate_vector(linalg::vec<T, 3> vec) const
+		{
+			return linalg::qrot(ang, vec);
+		};
+
+		screw<T,3> rotate_screw(screw<T,3> v) const
+		{
+			return { rotate_vector(v.ang), rotate_vector(v.lin) };
 		};
 
 		linalg::vec<T,3> xdir() const { return linalg::qxdir(ang); }
@@ -122,6 +145,12 @@ namespace rabbit
 		ssize_t print_to(nos::ostream& out) const
 		{
 			return nos::fprint_to(out, "htrans({},{})", ang, lin);
+		}
+
+		htrans3& operator*= (const htrans3& oth) 
+		{
+			*this = *this * oth;
+			return *this;
 		}
 	};
 
