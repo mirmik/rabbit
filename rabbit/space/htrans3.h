@@ -32,7 +32,10 @@ namespace rabbit
 			auto angle = length(w);			
 			auto axis = w / angle;
 
-			ang = rotation_quat(axis, angle);
+			if (angle == 0) 
+				ang = {0,0,0,1};
+			else
+				ang = rotation_quat(axis, angle);
 		}
 
 		linalg::vec<T, 3> rotate(linalg::vec<T, 3> vec) const

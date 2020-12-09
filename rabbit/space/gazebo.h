@@ -50,6 +50,20 @@ namespace rabbit
 		return Pose3d_to_htrans3(pos);
 	}
 
+	static htrans3<double> gazebo_link_initial_relative_pose(
+	    gazebo::physics::LinkPtr link)
+	{
+		ignition::math::Pose3d pos = link->InitialRelativePose();
+		return Pose3d_to_htrans3(pos);
+	}
+
+	static htrans3<double> gazebo_link_relative_pose(
+	    gazebo::physics::LinkPtr link)
+	{
+		ignition::math::Pose3d pos = link->RelativePose();
+		return Pose3d_to_htrans3(pos);
+	}
+
 	static htrans3<double> gazebo_joint_anchor_pose(
 	    gazebo::physics::JointPtr joint)
 	{
