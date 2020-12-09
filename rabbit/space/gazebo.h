@@ -50,6 +50,15 @@ namespace rabbit
 		return Pose3d_to_htrans3(pos);
 	}
 
+	static screw<double,3> gazebo_link_speed(
+	    gazebo::physics::LinkPtr link)
+	{
+		auto w = Vector3d_to_vec3(link->WorldAngularVel());
+		auto v = Vector3d_to_vec3(link->WorldCoGLinearVel());
+
+		return {w,v};
+	}
+
 	static htrans3<double> gazebo_link_initial_relative_pose(
 	    gazebo::physics::LinkPtr link)
 	{
