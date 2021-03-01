@@ -24,12 +24,12 @@ int rabbit::intersect_point_segm2_segm2(
 )
 {
 	linalg::vec<T, 2> start1 = segment1->apnt;
-	linalg::vec<T, 2> start2 = segment2->apnt;
+	//linalg::vec<T, 2> start2 = segment2->apnt;
 	linalg::vec<T, 2> end1 = segment1->bpnt;
-	linalg::vec<T, 2> end2 = segment2->bpnt;
+	//linalg::vec<T, 2> end2 = segment2->bpnt;
 
 	linalg::vec<T, 2> dir1 = end1 - start1;
-	linalg::vec<T, 2> dir2 = end2 - start2;
+	//linalg::vec<T, 2> dir2 = end2 - start2;
 
 	line2eq<T> eq1 = segment1->line_equation();
 	line2eq<T> eq2 = segment2->line_equation();
@@ -52,7 +52,7 @@ int rabbit::intersect_point_segm2_segm2(
 
 	// Из пропорции расстояний находим параметр в точке пересечения.
 	T u1 = seg1_line2_start / (seg1_line2_start - seg1_line2_end);
-	T u2 = seg2_line1_start / (seg2_line1_start - seg2_line1_end);
+	//T u2 = seg2_line1_start / (seg2_line1_start - seg2_line1_end);
 	*out_intersection =  start1 + u1 * dir1;
 
 	//nos::println("result:", *out_intersection);

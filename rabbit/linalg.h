@@ -14,9 +14,9 @@ namespace rabbit
 
 	class trans2
 	{
-		r_float     ang;
 		vec2        lin;
-
+		r_float     ang;
+		
 	public:
 		trans2(vec2 lin, r_float ang)
 			: lin(lin), ang(ang) {}
