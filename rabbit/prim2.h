@@ -59,6 +59,10 @@ namespace rabbit
 		linalg::vec<T,2> bpnt;
 
 	public:
+		segm2(){}
+
+		segm2& operator = (const segm2& oth) = default;
+
 		segm2(linalg::vec<T,2> apnt, linalg::vec<T,2> bpnt) 
 			: apnt(apnt), bpnt(bpnt) {}
 
@@ -90,6 +94,13 @@ namespace rabbit
 		int pnts_count;
 
 	public:
+
+		polysegm2() 
+			: pnts(nullptr)
+		{}
+
+		polysegm2& operator=(const polysegm2&) = default;
+
 		polysegm2(linalg::vec<T,2> * pnts, int pnts_count) 
 			: pnts(pnts), pnts_count(pnts_count)
 		{}
