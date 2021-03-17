@@ -81,3 +81,53 @@ TEST_CASE("polysegment_intersect")
 	CHECK(linalg::length(ipnts[0] - linalg::vec<float,2>(0,0)) == 0);
 	CHECK(round(linalg::length(ipnts[1] - linalg::vec<float,2>(10,10))) == 0);
 }
+
+
+TEST_CASE("polysegment_intersect_nocenter")
+{
+	linalg::vec<float, 2> _psegm[] =
+	{
+		{-20, -5},
+		{-20, 5},
+		{-10, 5},
+		{-10, -5},
+		{-20, -5},
+	};
+
+	linalg::vec<float, 2> ipnts[10];
+
+	rabbit::segm2<float> segm({-30,0}, {30, 0});
+	rabbit::polysegm2<float> psegm(_psegm, 5);
+
+	int retcount;
+
+	retcount = rabbit::intersect_points_segm2_polysegm2(&segm, &psegm, ipnts); 
+	CHECK_EQ(retcount, 2);
+	CHECK(linalg::length(ipnts[0] - linalg::vec<float,2>(-20,0)) == 0);
+	CHECK(linalg::length(ipnts[1] - linalg::vec<float,2>(-10,0)) == 0);
+}
+
+
+TEST_CASE("polysegment_intersect_nocenter2")
+{
+	linalg::vec<float, 2> _psegm[] =
+	{
+		{-5, 10},
+		{ 5, 10},
+		{ 5, 20},
+		{-5, 20},
+		{-5, 10},
+	};
+
+	linalg::vec<float, 2> ipnts[10];
+
+	rabbit::segm2<float> segm({0,-30}, {0, 30});
+	rabbit::polysegm2<float> psegm(_psegm, 5);
+
+	int retcount;
+
+	retcount = rabbit::intersect_points_segm2_polysegm2(&segm, &psegm, ipnts); 
+	CHECK_EQ(retcount, 2);
+	CHECK(linalg::length(ipnts[0] - linalg::vec<float,2>(0,10)) == 0);
+	CHECK(linalg::length(ipnts[1] - linalg::vec<float,2>(0,20)) == 0);
+}
