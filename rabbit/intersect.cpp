@@ -1,5 +1,5 @@
 #include <rabbit/intersect.h>
-#include <igris/util/template_instance.h>
+#include <igris/util/macro.h>
 
 template <class T>
 linalg::vec<T, 2> rabbit::intersect_point_line2_line2(

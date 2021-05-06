@@ -7,19 +7,30 @@
 namespace rabbit
 {
 	template <class T>
+	class equation_curve2 
+	{
+		virtual T subs(T x, T y) = 0;
+	};
+
+	template <class T>
 	class line2eq
 	{
 	public:
 		T a, b, c;
 
-		line2eq(T a, T b, T c) 
+		line2eq(T a, T b, T c)
 			: a(a), b(b), c(c)
 		{}
 
-		static
-		line2eq from_points(linalg::vec<T,2> p1, linalg::vec<T,2> p2)
+		T subs(T x, T y) 
 		{
-			linalg::vec<T,2> d = p2 - p1;
+			return a*x + b*y + c;
+		}
+
+		static
+		line2eq from_points(linalg::vec<T, 2> p1, linalg::vec<T, 2> p2)
+		{
+			linalg::vec<T, 2> d = p2 - p1;
 
 			T dx = d.x;
 			T dy = d.y;
@@ -30,24 +41,43 @@ namespace rabbit
 
 			T a = -dy;
 			T b =  dx;
-			T c = x1*y2 - y1*x2;
+			T c = x1 * y2 - y1 * x2;
 
 			return { a, b, c };
 		}
 
-		T subs_x(T x)
+		static
+		line2eq from_point_and_vector(linalg::vec<T, 2> pnt, linalg::vec<T, 2> vec)
 		{
-			return (-a*x - c) / b;
+			auto x = pnt.x;
+			auto y = pnt.y;
+
+			auto a = - vec.y;
+			auto b =   vec.x;
+			auto c = - (a * x + b * y);
+
+			return line2eq(a, b, c);
 		}
 
-		T subs(linalg::vec<T, 2> pnt) const 
+		T subs_x(T x)
+		{
+			return (-a * x - c) / b;
+		}
+
+		T subs(linalg::vec<T, 2> pnt) const
 		{
 			return pnt.x * a + pnt.y * b + c;
-		} 
+		}
 
 		ssize_t print_to(nos::ostream & os) const
 		{
 			return nos::fprint_to(os, "({}x+{}y+{}=0)", a, b, c);
+		}
+
+		bool equal(const line2eq & oth) 
+		{
+			// TODO
+			return true;
 		}
 	};
 
@@ -55,15 +85,15 @@ namespace rabbit
 	class segm2
 	{
 	public:
-		linalg::vec<T,2> apnt;
-		linalg::vec<T,2> bpnt;
+		linalg::vec<T, 2> apnt;
+		linalg::vec<T, 2> bpnt;
 
 	public:
-		segm2(){}
+		segm2() {}
 
 		segm2& operator = (const segm2& oth) = default;
 
-		segm2(linalg::vec<T,2> apnt, linalg::vec<T,2> bpnt) 
+		segm2(linalg::vec<T, 2> apnt, linalg::vec<T, 2> bpnt)
 			: apnt(apnt), bpnt(bpnt) {}
 
 		segm2 transformed(const trans2& trsf) const
@@ -78,30 +108,30 @@ namespace rabbit
 		line2eq<T> line_equation() const
 		{
 			return line2eq<T>::from_points(apnt, bpnt);
-		} 
+		}
 
-		ssize_t print_to(nos::ostream & os) const 
+		ssize_t print_to(nos::ostream & os) const
 		{
 			return nos::fprint_to(os, "({},{})", apnt, bpnt);
 		}
 	};
 
 	template <class T>
-	class polysegm2 
+	class polysegm2
 	{
 	public:
-		linalg::vec<T,2> * pnts;
+		linalg::vec<T, 2> * pnts;
 		int pnts_count;
 
 	public:
 
-		polysegm2() 
+		polysegm2()
 			: pnts(nullptr)
 		{}
 
 		polysegm2& operator=(const polysegm2&) = default;
 
-		polysegm2(linalg::vec<T,2> * pnts, int pnts_count) 
+		polysegm2(linalg::vec<T, 2> * pnts, int pnts_count)
 			: pnts(pnts), pnts_count(pnts_count)
 		{}
 	};

@@ -13,7 +13,9 @@ application("runtests",
 		"main.cpp",
 		"intersect.cpp",	
 		"htrans3.cpp",		
-		"nearest.cpp"		
+		"nearest.cpp",		
+		"line2.cpp",
+		"optimize.cpp"		
 	],
 
 	cxx_flags = "-g",
