@@ -153,9 +153,6 @@ TEST_CASE("polysegment_intersect_nocenter2_opposite")
 
 	retcount = rabbit::intersect_points_segm2_polysegm2(&segm, &psegm, ipnts); 
 	
-	PRINT(ipnts[0]);
-	PRINT(ipnts[1]);
-
 	CHECK_EQ(retcount, 2);
 	CHECK(linalg::length(ipnts[0] - linalg::vec<float,2>(0,20)) == 0);
 	CHECK(linalg::length(ipnts[1] - linalg::vec<float,2>(0,10)) == 0);

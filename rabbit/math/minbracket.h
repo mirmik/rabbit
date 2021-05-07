@@ -1,11 +1,15 @@
 #ifndef RABBIT_MATH_MINBRACKET_H
 #define RABBIT_MATH_MINBRACKET_H
 
+#include <rabbit/math/function.h>
+
+#define GOLD 1.6180339887498948482
+
 namespace rabbit
 {
 	// Класс решает задачу оценки интервала поиска для последующего применения
 	// алгоритмов однопараметрической оптимизации.
-	class minbracket
+	class minimize_bracket
 	{
 		rabbit::function * func;
 
@@ -18,39 +22,56 @@ namespace rabbit
 		real fc;
 
 		real lambda = GOLD;
+		real min_border = std::numeric_limits<real>::min();
+		real max_border = std::numeric_limits<real>::max();
 
 	public:
-		minbracket(rabbit::function * func, real a, real b) : 
-			func(func)
+		minimize_bracket(rabbit::function * func, real a, real b) :
+			func(func),
+			a(a),
+			b(b)
 		{}
 
-		void doit() 
+		real limited(real c) 
 		{
+			return c < min_border ? min_border : 
+			       c > max_border ? max_border : 
+			       c; 
+		}
+
+		int doit()
+		{
+			int sts;
 			auto f = func;
 
-			fa = f(a);
-			fb = f(b);			
+			if ((sts = f->value(a, &fa))) return sts;
+			if ((sts = f->value(b, &fb))) return sts;
 
-			if (fa < fb) 
+			if (fa < fb)
 			{
-				std::swap(a, b);
-				std::swap(fa, fb);
+				real tmp;
+				tmp = a; a = b; b = tmp;
+				tmp = fa; fa = fb; fb = tmp;
 			}
 
-			while(1) {
+			while (1)
+			{
 				c = b + (b - a);
-				c = limited(c);
-				fc = f(c); 
 
-				if (c == b) 
+				nos::println(a,b,c, fa, fb, fc);
+
+				c = limited(c);
+				if ((sts = f->value(c, &fc))) return sts;
+
+				if (c == b)
 				{
-					return 0;
+					break;
 				}
 
-				if (c >= b) 
+				if (c >= b)
 				{
 					// нашли
-					return 0;
+					break;
 				}
 
 				a = b;
@@ -59,8 +80,15 @@ namespace rabbit
 				fa = fb;
 				fb = fc;
 			}
+
+			if (a > c) 
+			{
+				real tmp;
+				tmp = a; a = c; c = tmp;
+				tmp = fa; fa = fc; fc = tmp;
+			}
 		}
-	}
+	};
 }
 
 #endif

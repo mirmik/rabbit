@@ -110,21 +110,6 @@ TEST_CASE("htrans3_2")
 	};
 
 	auto tr = tr0 * tr1 * tr2;
-
-	PRINT(tr0);
-	PRINT(tr1);
-	PRINT(tr2);
-
-	PRINT(tr0 * tr1);
-	PRINT(tr1 * tr2);
-
-	PRINT(tr);
-	PRINT(tr.inverse());
-	PRINT(tr.inverse() * tr);
-	PRINT(tr * tr.inverse());
-
-	PRINT(tr3);
-	PRINT(tr3.inverse());
 }
 
 TEST_CASE("htrans3_2")
@@ -134,9 +119,6 @@ TEST_CASE("htrans3_2")
 		linalg::rotation_quat<double>(linalg::normalize<double,3>({1,1,1}), 2),
 		{0, 2, 0}
 	};
-
-	PRINT(tr0.to_screw());
-	PRINT(linalg::length(tr0.to_screw().ang));
 }
 
 TEST_CASE("htrans3_3")
@@ -158,7 +140,4 @@ TEST_CASE("htrans3_3")
 		linalg::rotation_quat<double>({0,0,1}, M_PI/2),
 		{0, 0, 0}
 	};
-
-	PRINT(tr0 * tr1 * tr2 * tr0 * tr1 * tr2);
-	PRINT(tr1.inverse() * tr2 * tr1 * tr0);
 }
