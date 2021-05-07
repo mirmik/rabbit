@@ -11,7 +11,7 @@ const r_float r_epsilon = 1e-5;
 namespace rabbit 
 {
 	using real = RABBIT_REAL_TYPE;
-	const real epsilon = 1e-5; 
+	const real epsilon = 1e-10; 
 } 
 
 #endif

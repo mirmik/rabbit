@@ -11,6 +11,7 @@ namespace rabbit
 	// алгоритмов однопараметрической оптимизации.
 	class minimize_bracket
 	{
+	public:
 		rabbit::function * func;
 
 		real a;
@@ -22,8 +23,10 @@ namespace rabbit
 		real fc;
 
 		real lambda = GOLD;
-		real min_border = std::numeric_limits<real>::min();
+		real min_border = std::numeric_limits<real>::lowest();
 		real max_border = std::numeric_limits<real>::max();
+
+		int maxiter = 10;
 
 	public:
 		minimize_bracket(rabbit::function * func, real a, real b) :
@@ -32,11 +35,21 @@ namespace rabbit
 			b(b)
 		{}
 
-		real limited(real c) 
+		real limited(real c)
 		{
-			return c < min_border ? min_border : 
-			       c > max_border ? max_border : 
-			       c; 
+			return c < min_border ? min_border :
+			       c > max_border ? max_border :
+			       c;
+		}
+
+		real strt()
+		{
+			return a;
+		}
+
+		real fini()
+		{
+			return c;
 		}
 
 		int doit()
@@ -54,13 +67,12 @@ namespace rabbit
 				tmp = fa; fa = fb; fb = tmp;
 			}
 
-			while (1)
+			while (maxiter--)
 			{
 				c = b + (b - a);
 
-				nos::println(a,b,c, fa, fb, fc);
-
 				c = limited(c);
+				nos::println("A", a, b, c, fa, fb, fc);
 				if ((sts = f->value(c, &fc))) return sts;
 
 				if (c == b)
@@ -68,7 +80,7 @@ namespace rabbit
 					break;
 				}
 
-				if (c >= b)
+				if (fc >= fb)
 				{
 					// нашли
 					break;
@@ -81,12 +93,16 @@ namespace rabbit
 				fb = fc;
 			}
 
-			if (a > c) 
+			nos::println(a, b, c, fa, fb, fc);
+			if (a > c)
 			{
 				real tmp;
 				tmp = a; a = c; c = tmp;
 				tmp = fa; fa = fc; fc = tmp;
 			}
+
+
+			nos::println(a, b, c, fa, fb, fc);
 		}
 	};
 }
