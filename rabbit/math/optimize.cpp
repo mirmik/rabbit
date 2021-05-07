@@ -1,73 +1,58 @@
 #ifndef RABBIT_MATH_OPTIMIZE_H
 #define RABBIT_MATH_OPTIMIZE_H
 
-namespace rabbit 
+#include <rabbit/math/optimize.h>
+
+optimization::optimization(
+    minimized_function_t minimized_function,
+    real * minbound,
+    real * maxbound,
+    uint8_t dim,
+    real * tmpzone
+)
+	:
+	minimized_function(minimized_function),
+	minbound(minbound),
+	maxbound(maxbound),
+	dim(dim),
+	tmpzone(tmpzone)
 {
-	using minimized_function_t = real(*)(real *);
-
-
-	class optimization 
+	real fseed = 0;
+	for (int i = 0; i < dim; ++i)
 	{
-	public:
-		minimized_function_t minimized_function;
+		fseed += maxbound[i];
+		fseed += minbound[i];
+	}
 
-		real * minbound;
-		real * maxbound;
+	randgen.seed(fseed * 16553);
+}
 
-		uint8_t dim;
+void optimization::random_point(real * point)
+{
+	for (int i = 0; i < dim; ++i)
+	{
+		randgen::result_type randval = randgen();
+		real koeff =
+		    (double)(randval - randgen.min()) /
+		    (double)(randgen.max() - randgen.min());
 
-	public:
-		optimization(
-			minimized_function_t minimized_function,
-			real * minbound,
-			real * maxbound,
-			uint8_t dim
-		)
-		:
-			minimized_function(minimized_function),
-			minbound(minbound),
-			maxbound(maxbound),
-			dim(dim) 
-		{}
+		point[i] = (1 - k) * minbound[i] + k * maxbound[i];
+	}
+}
 
-		void compute_cell_minimum(real cellsize, real * out, real * result) 
+void optimization::random_minimum_finder(int n, real * point, real * value)
+{
+	real minvalue = std::limits<real>::max();
+
+	for (int i = 0; i < n; ++i)
+	{
+		random_point(point);
+
+		real curval = minimized_function(point);
+		if (curval < minvalue)
 		{
-			real tmp[dim];
-			compute_cell_minimum_recurse(cellsize, 0, tmp, out, result);
-		}
-
-	private:
-		void compute_cell_minimum_recurse(
-			real cellsize, 
-			int j, 
-			real * curval,
-			real * out, 
-			real * result
-		) 
-		{
-			curval[j] = minbound[j];
-
-			while(curval[j] <= maxbound[j]) 
-			{
-				if (j == dim - 1) 
-				{
-					real value = minimized_function(curval);
-
-					if (value < *result) 
-					{
-						*result = value;
-						memcpy(out, curval, sizeof(real) * dim);
-					}
-				}
-				
-				else 
-				{
-					compute_cell_minimum_recurse(
-						cellsize, j + 1, curval, out, result);
-				}
-
-				curval[j] += cellsize;
-			}
+			minvalue = curval;
+			memcpy(tmpzone, point, sizeof(real) * dim);
 		}
 	}
 }
