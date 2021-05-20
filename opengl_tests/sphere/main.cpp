@@ -48,30 +48,30 @@ int main()
     );
 
     GLuint VBO, VAO, EBO;
-    auto mesh = rabbit::sphere_rubic_mesh(10, 10, 0.5);
+    auto mesh = rabbit::sphere_rubic_mesh(5, 5, 0.5);
 
 //    exit(0);
 
-    for (int i = 0; i < mesh.vertices.size(); ++i) 
+    for (int i = 0; i < mesh.vertices.size(); ++i)
         nos::println(mesh.vertices[i]);
-/*
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    //glGenBuffers(1, &EBO);
+    /*
+        glGenVertexArrays(1, &VAO);
+        glGenBuffers(1, &VBO);
+        //glGenBuffers(1, &EBO);
 
-    glBindVertexArray(VAO);
+        glBindVertexArray(VAO);
 
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER,
-                 mesh.vertices.size() * sizeof(float), mesh.vertices.data(), GL_STATIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glBufferData(GL_ARRAY_BUFFER,
+                     mesh.vertices.size() * sizeof(float), mesh.vertices.data(), GL_STATIC_DRAW);
 
-    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    //glBufferData(GL_ELEMENT_ARRAY_BUFFER,
-    //             mesh.triangles.size() * sizeof(float), mesh.triangles.data(), GL_STATIC_DRAW);
+        //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+        //glBufferData(GL_ELEMENT_ARRAY_BUFFER,
+        //             mesh.triangles.size() * sizeof(float), mesh.triangles.data(), GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
-    glEnableVertexAttribArray(0);
-    glBindVertexArray(0);*/
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+        glEnableVertexAttribArray(0);
+        glBindVertexArray(0);*/
 
 
     // Set up vertex data (and buffer(s)) and attribute pointers
@@ -79,32 +79,15 @@ int main()
     glGenBuffers(1, &VBO);
     glGenBuffers(1, &EBO);
     // Bind the Vertex Array Object first, then bind and set vertex buffer(s) and attribute pointer(s).
-    glBindVertexArray(VAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, 
-        mesh.vertices.size()*sizeof(float)*3, mesh.vertices.data(), GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
-    glEnableVertexAttribArray(0);
-
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER,
-                 mesh.triangles.size()*sizeof(float)*3, mesh.triangles.data(), GL_STATIC_DRAW);
-
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0); // Note that this is allowed, the call to glVertexAttribPointer registered VBO as the currently bound vertex buffer object so afterwards we can safely unbind
-
-    glBindVertexArray(0); // Unbind VAO (it's always a good thing to unbind any buffer/array to prevent strange bugs)
+    // Unbind VAO (it's always a good thing to unbind any buffer/array to prevent strange bugs)
 
     PRINT(mesh.vertices.size());
-    for (int i =0 ; i< mesh.triangles.size(); ++i) 
+    for (int i = 0 ; i < mesh.triangles.size(); ++i)
         nos::println(mesh.triangles[i]);
 
 
     glLineWidth(2);
-    
+
 
     // Game loop
     while (!glfwWindowShouldClose(window))
@@ -117,6 +100,29 @@ int main()
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+
+        glBindVertexArray(VAO);
+
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glBufferData(GL_ARRAY_BUFFER,
+                     mesh.vertices.size()*sizeof(float) * 3, mesh.vertices.data(), GL_DYNAMIC_DRAW);
+
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+        glEnableVertexAttribArray(0);
+
+
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER,
+                     mesh.triangles.size()*sizeof(float) * 3, mesh.triangles.data(), GL_DYNAMIC_DRAW);
+
+
+        glBindBuffer(GL_ARRAY_BUFFER, 0); // Note that this is allowed, the call to glVertexAttribPointer registered VBO as the currently bound vertex buffer object so afterwards we can safely unbind
+
+        glBindVertexArray(0);
+
+
+
+
         GLint vertexColorLocation = glGetUniformLocation(opengl_mesh_program.Program, "vertexColor");
         opengl_mesh_program.use();
 
@@ -125,18 +131,18 @@ int main()
 
         glEnable(GL_POLYGON_OFFSET_FILL);
 
-        glPolygonOffset(1,1);
+        glPolygonOffset(1, 1);
         glUniform4f(vertexColorLocation, 0.3f, 0.4f, 0.6f, 1.0f);
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-        glDrawElements(GL_TRIANGLES, mesh.triangles.size()*sizeof(float)*3, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, mesh.triangles.size()*sizeof(float) * 3, GL_UNSIGNED_INT, 0);
         //glDrawArrays(GL_TRIANGLES, 0, mesh.vertices.size()*sizeof(float)*3);
 
         //glDisable(GL_POLYGON_OFFSET_FILL);
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-        glPolygonOffset(0,0);
+        glPolygonOffset(0, 0);
         glUniform4f(vertexColorLocation, 0.0f, 0.0f, 0.0f, 1.0f);
-        glDrawElements(GL_TRIANGLES, mesh.triangles.size()*sizeof(float)*3, GL_UNSIGNED_INT, 0);
-        
+        glDrawElements(GL_TRIANGLES, mesh.triangles.size()*sizeof(float) * 3, GL_UNSIGNED_INT, 0);
+
         glBindVertexArray(0);
         glUseProgram(0);
 
