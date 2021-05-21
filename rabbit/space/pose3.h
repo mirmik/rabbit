@@ -16,6 +16,7 @@ namespace rabbit
 		pose3(const rabbit::screw<real, 3>& scr);
 
 		vec3 rotate(vec3 vec) const;
+		vec3 transform(vec3 vec) const;
 		vec3 rotate_vector(vec3 vec) const;
 
 		screw<real, 3> rotate_screw(screw<real, 3> v) const;
@@ -29,6 +30,7 @@ namespace rabbit
 
 		bool operator == (const pose3& oth) const;
 
+		vec3 operator()(vec3 vec) const;
 
 		pose3 inverse();
 

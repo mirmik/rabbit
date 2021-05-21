@@ -47,7 +47,9 @@ int main()
     );
 
     GLuint VBO, VAO, EBO;
-    auto mesh = rabbit::sphere_rubic_mesh(10, 10, 0.5);
+    
+    auto surf = rabbit::sphere_surface(0.5);
+    auto mesh = rabbit::surface_rubic_mesh(surf, 10, 10);
 
     for (int i = 0; i < mesh.vertices.size(); ++i)
         nos::println(mesh.vertices[i]);
@@ -56,20 +58,11 @@ int main()
     glGenBuffers(1, &VBO);
     glGenBuffers(1, &EBO);
 
-//    PRINT(mesh.vertices.size());
-    for (int i = 0 ; i < mesh.triangles.size(); ++i)
-        nos::println(mesh.triangles[i]);
-
-
     glLineWidth(2);
 
     rabbit::mat4 model = rabbit::rot3({0, 1, 0}, rabbit::deg(45)).to_mat4();
     rabbit::mat4 view = rabbit::pose3().to_mat4();
     rabbit::mat4 projection = rabbit::pose3().to_mat4();
-
-    PRINT(model);
-    PRINT(view);
-    PRINT(projection);
 
     while (!glfwWindowShouldClose(window))
     {

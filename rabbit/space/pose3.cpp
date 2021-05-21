@@ -108,7 +108,17 @@ pose3& pose3::operator*= (const pose3& oth)
 	return *this;
 }
 
-mat4 pose3::to_mat4() 
+mat4 pose3::to_mat4()
 {
-	return {{qxdir(ang),0}, {qydir(ang),0}, {qzdir(ang),0}, {lin,1}};
+	return {{qxdir(ang), 0}, {qydir(ang), 0}, {qzdir(ang), 0}, {lin, 1}};
+}
+
+vec3 pose3::transform(vec3 arg) const 
+{
+	return linalg::qrot(ang, arg) + lin; 
+}
+
+vec3 pose3::operator()(vec3 arg) const 
+{
+	return transform(arg);
 }
