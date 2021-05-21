@@ -1,4 +1,5 @@
 #include <rabbit/opengl/opengl_shader_program.h>
+#include <rabbit/opengl/projection.h>
 #include <rabbit/opengl/mesh_drawer.h>
 #include <rabbit/mesh.h>
 #include <rabbit/util.h>
@@ -48,15 +49,11 @@ int main()
 
     GLuint VBO, VAO, EBO;
     
-    auto surf = rabbit::round_parabolic_surface(0.5);
-    auto mesh = rabbit::surface_rubic_mesh(surf, 0, 2*M_PI, 40, 0, 0.5, 40);
-    //auto surf = rabbit::sphere_surface(0.5);
-    //auto mesh = rabbit::surface_rubic_mesh(surf, 10, 40);
+    //auto surf = rabbit::parabolic_surface(1,1, rabbit::mov3({0,0,-5}));
+    //auto mesh = rabbit::surface_rubic_mesh(surf, -2, 2, 20, -2, 2, 20);
+    auto surf = rabbit::sphere_surface(2);
+    auto mesh = rabbit::surface_rubic_mesh(surf, 20, 20);
     
-    
-    for (int i = 0; i < mesh.vertices.size(); ++i)
-        nos::println(mesh.vertices[i]);
-
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
     glGenBuffers(1, &EBO);
@@ -64,9 +61,11 @@ int main()
     glLineWidth(2);
 
     rabbit::mat4 model = rabbit::rot3({0, 1, 0}, rabbit::deg(45)).to_mat4();
-    rabbit::mat4 view = rabbit::pose3().to_mat4();
-    rabbit::mat4 projection = rabbit::pose3().to_mat4();
-
+    rabbit::mat4 view = rabbit::mov3({0,0,-10}).to_mat4();
+    
+    //rabbit::mat4 projection = rabbit::opengl_ortho(-10, 10, -10,10, -10000, 10000);
+    rabbit::mat4 projection = rabbit::opengl_perspective(rabbit::deg(90), 1, 0.01, 100);
+    
     while (!glfwWindowShouldClose(window))
     {
         model = rabbit::rot3({0, 1, 0}, rabbit::deg(glfwGetTime() * 16)).to_mat4();
