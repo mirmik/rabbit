@@ -34,6 +34,27 @@ namespace rabbit
 	using mat2 = linalg::mat<real, 2, 2>;
 	using mat3 = linalg::mat<real, 3, 3>;
 	using mat4 = linalg::mat<real, 4, 4>;
+
+	using ivec2 = linalg::vec<int, 2>;
+	using ivec3 = linalg::vec<int, 3>;
+	using ivec4 = linalg::vec<int, 4>;
+
+	using imat22 = linalg::mat<int, 2, 2>;
+	using imat23 = linalg::mat<int, 2, 3>;
+	using imat24 = linalg::mat<int, 2, 4>;
+
+	using imat32 = linalg::mat<int, 3, 2>;
+	using imat33 = linalg::mat<int, 3, 3>;
+	using imat34 = linalg::mat<int, 3, 4>;
+
+	using imat42 = linalg::mat<int, 4, 2>;
+	using imat43 = linalg::mat<int, 4, 3>;
+	using imat44 = linalg::mat<int, 4, 4>;
+
+	using imat2 = linalg::mat<int, 2, 2>;
+	using imat3 = linalg::mat<int, 3, 3>;
+	using imat4 = linalg::mat<int, 4, 4>;
+
 } 
 
 #endif

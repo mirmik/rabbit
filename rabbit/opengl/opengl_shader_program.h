@@ -17,7 +17,9 @@ namespace rabbit
 	public:
 		GLuint Program;
 
-		opengl_shader_program(const GLchar* vertexPath, const GLchar* fragmentPath);
+		opengl_shader_program();
+		opengl_shader_program(const char * vertexPath, const char * fragmentPath);
+		void open(const char * vertexPath, const char * fragmentPath);
 
 		void use();
 

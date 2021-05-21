@@ -1,43 +1,23 @@
 #include <rabbit/opengl/opengl_shader_program.h>
 
+rabbit::opengl_shader_program::opengl_shader_program() {}
+
 rabbit::opengl_shader_program::opengl_shader_program(
-    const GLchar* vertexPath,
-    const GLchar* fragmentPath)
+    const char * vShaderCode,
+    const char * fShaderCode) 
 {
-	// 1. Retrieve the vertex/fragment source code from filePath
-	std::string vertexCode;
-	std::string fragmentCode;
-	std::ifstream vShaderFile;
-	std::ifstream fShaderFile;
-	// ensures ifstream objects can throw exceptions:
-	vShaderFile.exceptions (std::ifstream::badbit);
-	fShaderFile.exceptions (std::ifstream::badbit);
-	try
-	{
-		// Open files
-		vShaderFile.open(vertexPath);
-		fShaderFile.open(fragmentPath);
-		std::stringstream vShaderStream, fShaderStream;
-		// Read file's buffer contents into streams
-		vShaderStream << vShaderFile.rdbuf();
-		fShaderStream << fShaderFile.rdbuf();
-		// close file handlers
-		vShaderFile.close();
-		fShaderFile.close();
-		// Convert stream into string
-		vertexCode = vShaderStream.str();
-		fragmentCode = fShaderStream.str();
-	}
-	catch (std::ifstream::failure e)
-	{
-		std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
-	}
-	const GLchar* vShaderCode = vertexCode.c_str();
-	const GLchar * fShaderCode = fragmentCode.c_str();
-	// 2. Compile shaders
+	open(vShaderCode, fShaderCode);
+}
+
+
+void rabbit::opengl_shader_program::open(
+    const char * vShaderCode,
+    const char * fShaderCode)
+{
 	GLuint vertex, fragment;
 	GLint success;
 	GLchar infoLog[512];
+
 	// Vertex Shader
 	vertex = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vertex, 1, &vShaderCode, NULL);
