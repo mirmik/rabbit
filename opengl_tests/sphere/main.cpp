@@ -48,9 +48,12 @@ int main()
 
     GLuint VBO, VAO, EBO;
     
-    auto surf = rabbit::sphere_surface(0.5);
-    auto mesh = rabbit::surface_rubic_mesh(surf, 10, 10);
-
+    auto surf = rabbit::round_parabolic_surface(0.5);
+    auto mesh = rabbit::surface_rubic_mesh(surf, 0, 2*M_PI, 40, 0, 0.5, 40);
+    //auto surf = rabbit::sphere_surface(0.5);
+    //auto mesh = rabbit::surface_rubic_mesh(surf, 10, 40);
+    
+    
     for (int i = 0; i < mesh.vertices.size(); ++i)
         nos::println(mesh.vertices[i]);
 
@@ -105,11 +108,11 @@ int main()
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         glDrawElements(GL_TRIANGLES, mesh.triangles.size()*sizeof(int) * 3, GL_UNSIGNED_INT, 0);
 
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        /*glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         glPolygonOffset(0, 0);
         glUniform4f(vertexColorLocation, 0.0f, 0.0f, 0.0f, 1.0f);
         glDrawElements(GL_TRIANGLES, mesh.triangles.size()*sizeof(int) * 3, GL_UNSIGNED_INT, 0);
-
+*/
         glBindVertexArray(0);
         glUseProgram(0);
 

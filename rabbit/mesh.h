@@ -105,10 +105,10 @@ namespace rabbit
 		{
 			for (int i = 0; i < utotal; ++i)
 			{
-				int a = i + (    j) * (vtotal + 1);
-				int b = i + (    j) * (vtotal + 1) + 1;
-				int c = i + (1 + j) * (vtotal + 1);
-				int d = i + (1 + j) * (vtotal + 1) + 1;
+				int a = i + (    j) * (utotal + 1);
+				int b = i + (    j) * (utotal + 1) + 1;
+				int c = i + (1 + j) * (utotal + 1);
+				int d = i + (1 + j) * (utotal + 1) + 1;
 
 				triangles[iter++] = {a, b, c};
 				triangles[iter++] = {d, c, b};
