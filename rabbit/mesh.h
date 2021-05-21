@@ -58,7 +58,6 @@ namespace rabbit
 		{
 			for (int i = 0; i < yaw_vertices; ++i)
 			{
-				nos::println(j,i);
 				int a = i + (    j) * (yaw_vertices+1);
 				int b = i + (    j) * (yaw_vertices+1) + 1;
 				int c = i + (1 + j) * (yaw_vertices+1);
