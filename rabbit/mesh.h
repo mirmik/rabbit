@@ -39,20 +39,16 @@ namespace rabbit
 		{
 			for (int i = 0; i < yaw_vertices + 1; ++i)
 			{
-				nos::println(j, i);
 				float k_yaw = ((float)i / (float)yaw_vertices);
 				float k_pitch = ((float)j / (float)pitch_vertices);
-				nos::println(k_yaw, k_pitch);
 
 				float yaw = 2 * M_PI * k_yaw;
 				float pitch = -(M_PI / 2) * (1.f - k_pitch) + (M_PI / 2) * k_pitch ;
 
-				nos::println(yaw, pitch);
 				float x = radius * cos(pitch) * cos(yaw);
 				float y = radius * cos(pitch) * sin(yaw);
 				float z = radius * sin(pitch);
 
-				nos::println(x, y, z);
 				vertices[iter++] = {x, y, z};
 			}
 		}
