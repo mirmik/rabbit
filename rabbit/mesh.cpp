@@ -1,5 +1,7 @@
 #include <rabbit/mesh.h>
 
+#include <rabbit/third/stl_reader.h>
+
 using namespace rabbit;
 
 rabbit::mesh::mesh(
@@ -70,4 +72,31 @@ mesh rabbit::surface_rubic_mesh(
 	           surf.umin(), surf.umax(), utotal,
 	           surf.vmin(), surf.vmax(), vtotal
 	       );
+}
+
+
+
+mesh rabbit::mesh_from_file(const char * path)
+{
+	std::vector<float> coords, normals;
+	std::vector<unsigned int> tris, solids;
+
+	std::vector<linalg::vec<real, 3>> vertices;
+	std::vector<linalg::vec<int, 3>> triangles;
+	
+	stl_reader::ReadStlFile ("bulbasaur_dual_body.STL", coords, normals, tris, solids);
+	
+	int vertices_total = coords.size() / 3;
+	int triangles_total = tris.size() / 3;
+
+	vertices.resize(vertices_total);
+	triangles.resize(triangles_total);
+
+	for (int i = 0; i < vertices_total; ++i) 
+		vertices[i] = { coords[i*3], coords[i*3+1], coords[i*3+2] };  
+
+	for (int i = 0; i < triangles_total; ++i) 
+		triangles[i] = { tris[i*3], tris[i*3+1], tris[i*3+2] };  
+
+	return mesh(std::move(vertices), std::move(triangles));
 }

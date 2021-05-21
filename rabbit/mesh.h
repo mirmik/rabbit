@@ -32,6 +32,9 @@ namespace rabbit
 	    surface & surf,
 	    int utotal,
 	    int vtotal);
+
+
+	mesh mesh_from_file(const char * path);
 }
 
 #endif

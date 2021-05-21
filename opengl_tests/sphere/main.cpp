@@ -71,7 +71,6 @@ int main()
     {
         auto model = rabbit::rot3({0, 0, 1}, rabbit::deg(glfwGetTime() * 16));
 
-        //camera.set_eye(2*rabbit::vec3{6*sin(glfwGetTime()/4),0, 4*cos(glfwGetTime()/4)});
         camera.set_eye({10,0,3});
         camera.set_target({0,0,0});
 
