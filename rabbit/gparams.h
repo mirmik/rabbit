@@ -2,7 +2,7 @@
 #define RABBIT_GPARAMS_H
 
 #include <rabbit/types.h>
-#include <rabbit/linalg.h>
+#include <rabbit/space/pose2.h>
 
 namespace rabbit
 {
@@ -10,15 +10,15 @@ namespace rabbit
 	{
 		class circ
 		{
-			trans2  pose;
+			pose2  pose;
 			r_float radius;
 
 		public:
-			circ(trans2 axes, r_float radius) :
+			circ(pose2 axes, r_float radius) :
 				pose(axes), radius(radius)
 			{}
 
-			circ transformed_by(trans2 trsf)
+			circ transformed_by(pose2 trsf)
 			{
 				return { trsf * pose, radius };
 			}
@@ -26,9 +26,9 @@ namespace rabbit
 
 		class lin
 		{
-			trans2  pose;
+			pose2  pose;
 
-			lin(const trans2& trsf)
+			lin(const pose2& trsf)
 				: pose(trsf)
 			{}
 
@@ -36,7 +36,7 @@ namespace rabbit
 				: pose(apnt, vector_angle(bpnt - apnt))
 			{}
 
-			lin transformed_by(trans2 trsf)
+			lin transformed_by(pose2 trsf)
 			{
 				return { trsf * pose };
 			}

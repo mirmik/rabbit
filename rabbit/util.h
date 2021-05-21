@@ -1,7 +1,8 @@
 #ifndef RABBIT_UTIL_H
 #define RABBIT_UTIL_H
 
-#include <linalg/linalg.h>
+#include <rabbit/linalg.h>
+#include <rabbit/types.h>
 
 namespace rabbit 
 {
@@ -30,6 +31,8 @@ namespace rabbit
 
 		return minit;
 	}
+
+	static real deg(real x) { return x * (real)M_PI / (real)180.; }
 }
 
 #endif

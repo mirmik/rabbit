@@ -57,11 +57,6 @@ namespace rabbit
 		linalg::vec<T,3> ydir() const { return linalg::qydir(ang); }
 		linalg::vec<T,3> zdir() const { return linalg::qzdir(ang); }
 
-/*		screw2<T> rotate_screw(screw2<T> scr)
-		{
-			return { scr.ang, linalg::rot(orient, scr.lin) };
-		};*/
-
 		htrans3 operator * (const htrans3& oth)
 		{
 			return htrans3(
@@ -74,29 +69,6 @@ namespace rabbit
 		{
 			return lin == oth.lin && ang == oth.ang;
 		}
-
-		/*
-		// В 2д пространстве сложение с бивектором аналогично
-		// композиции трансформаций.
-		// !!! Скорее всего в обратном порядке!!!
-		// Разность выполняется в общем базисе. Композиция
-		// В базисе левого объекта.
-
-		screw2<T> operator - (const htrans2<T>& oth)
-		{
-			//PRINT(*this);
-			//PRINT(oth);
-
-			return { orient - oth.orient,
-			         //linalg::rot(-oth.orient, center - oth.center)
-			         center - oth.center
-			     };
-		}
-
-		htrans2 integrate_speed(const screw2<T>& spd, T delta)
-		{
-			return *this + spd * delta;
-		}*/
 
 		htrans3 inverse()
 		{
@@ -125,25 +97,6 @@ namespace rabbit
 				lin
 			};
 		}
-
-		/*linalg::vec<T,2> rotate(const linalg::vec<T,2>& v)
-		{
-			return linalg::rot(orient, v);
-		}
-
-		rabbit::screw<T,2> rotate(const rabbit::screw<T,2>& v)
-		{
-			return {v.ang, linalg::rot(orient, v.lin)};
-		}
-
-		linalg::vec<T,2> inverse_rotate(const linalg::vec<T,2>& v)
-		{
-			return linalg::rot(-orient, v);
-		}
-
-		T rotation() { return orient; }
-
-		linalg::vec<T, 2> translation() { return center; }*/
 
 		ssize_t print_to(nos::ostream& out) const
 		{

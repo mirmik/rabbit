@@ -23,7 +23,6 @@ licant.cxx_shared_library("librabbit.so",
 	cc_flags="-fPIC"
 )
 
-
 licant.install.install_library(
 	tgt="install",
 	uninstall="uninstall",

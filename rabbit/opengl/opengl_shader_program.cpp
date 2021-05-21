@@ -1,8 +1,8 @@
-#include <opengl_shader_program.h>
+#include <rabbit/opengl/opengl_shader_program.h>
 
-opengl_shader_program::opengl_shader_program(
-	const GLchar* vertexPath, 
-	const GLchar* fragmentPath)
+rabbit::opengl_shader_program::opengl_shader_program(
+    const GLchar* vertexPath,
+    const GLchar* fragmentPath)
 {
 	// 1. Retrieve the vertex/fragment source code from filePath
 	std::string vertexCode;
@@ -78,7 +78,14 @@ opengl_shader_program::opengl_shader_program(
 }
 
 // Uses the current shader
-void opengl_shader_program::use()
+void rabbit::opengl_shader_program::use()
 {
 	glUseProgram(this->Program);
+}
+
+void rabbit::opengl_shader_program::uniform_mat4f(
+    const char * locname, const linalg::mat<float, 4, 4> & matrix)
+{
+	GLint modelLoc = glGetUniformLocation(Program, locname);
+	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, (GLfloat*) &matrix);
 }

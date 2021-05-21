@@ -7,44 +7,39 @@
 
 namespace rabbit
 {
-	template <class T>
 	class intersect_node
 	{
 		bool is_interval;
-		T aparam0;
-		T aparam1;
-		T bparam0;
-		T bparam1;
+		real aparam0;
+		real aparam1;
+		real bparam0;
+		real bparam1;
 	};
 
-	template <class T>
 	int intersect_point_segm2_segm2(
-	    const segm2<T>   * segment1,
-	    const segm2<T>   * segment2,
-	    linalg::vec<T, 2> * out_intersection,
-	    T epsilon = r_epsilon
+	    const segm2   * segment1,
+	    const segm2   * segment2,
+	    vec2 * out_intersection,
+	    real epsilon = rabbit::epsilon
 	);
 
-	template <class T>
 	int __intersect_points_segm2_polysegm2(
-	    const segm2<T>     * segm,
-	    const polysegm2<T> * poly,
-	    linalg::vec<T, 2>   * points
+	    const segm2     * segm,
+	    const polysegm2 * poly,
+	    vec2   * points
 	);
 
-	template <class T>
 	int intersect_points_segm2_polysegm2(
-	    const segm2<T>     * segm,
-	    const polysegm2<T> * poly,
-	    linalg::vec<T, 2>   * points,
-	    T epsilon = r_epsilon
+	    const segm2     * segm,
+	    const polysegm2 * poly,
+	    vec2   * points,
+	    real epsilon = rabbit::epsilon
 	);
 
 
-	template <class T>
-	linalg::vec<T, 2> intersect_point_line2_line2(
-	    const line2eq<T> & line1,
-	    const line2eq<T> & line2
+	vec2 intersect_point_line2_line2(
+	    const line2eq & line1,
+	    const line2eq & line2
 	);
 }
 
