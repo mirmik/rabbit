@@ -98,10 +98,10 @@ namespace rabbit
 			};
 		}
 
-		ssize_t print_to(nos::ostream& out) const
+		/*ssize_t print_to(nos::ostream& out) const
 		{
 			return nos::fprint_to(out, "htrans({},{})", ang, lin);
-		}
+		}*/
 
 		htrans3& operator*= (const htrans3& oth) 
 		{

@@ -3,7 +3,6 @@
 
 #include <rabbit/types.h>
 #include <rabbit/space/pose2.h>
-#include <nos/fprint.h>
 
 namespace rabbit
 {
@@ -68,10 +67,10 @@ namespace rabbit
 			return pnt.x * a + pnt.y * b + c;
 		}
 
-		ssize_t print_to(nos::ostream & os) const
+		/*ssize_t print_to(nos::ostream & os) const
 		{
 			return nos::fprint_to(os, "({}x+{}y+{}=0)", a, b, c);
-		}
+		}*/
 
 		bool equal(const line2eq & oth) 
 		{
@@ -108,10 +107,10 @@ namespace rabbit
 			return line2eq::from_points(apnt, bpnt);
 		}
 
-		ssize_t print_to(nos::ostream & os) const
+		/*ssize_t print_to(nos::ostream & os) const
 		{
 			return nos::fprint_to(os, "({},{})", apnt, bpnt);
-		}
+		}*/
 	};
 
 

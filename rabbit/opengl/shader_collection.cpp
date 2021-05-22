@@ -25,3 +25,24 @@ void main()
     color = vertexColor;
 } 
 )""";
+
+const char * rabbit::simple_vertex_shader = R"""(
+#version 330 core
+layout (location = 0) in vec3 position;
+
+void main()
+{
+    gl_Position = vec4(position, 1.0f);
+}
+)""";
+
+const char * rabbit::simple_fragment_shader = R"""(
+#version 330 core
+
+out vec4 color;
+
+void main()
+{
+    color = vec4(1,1,1,1);
+} 
+)""";

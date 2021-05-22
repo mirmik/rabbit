@@ -41,10 +41,10 @@ namespace rabbit
 			return _pose(vec3{x, y, z});
 		}
 
-		real umin() { return 0; }
-		real umax() { return M_PI * 2;}
-		real vmin() { return -M_PI / 2; }
-		real vmax() { return M_PI / 2; }
+		real umin() override { return 0; }
+		real umax() override { return M_PI * 2;}
+		real vmin() override { return -M_PI / 2; }
+		real vmax() override { return M_PI / 2; }
 	};
 
 
@@ -65,10 +65,10 @@ namespace rabbit
 			return _pose(vec3{x, y, z});
 		}
 
-		real umin() { return -std::numeric_limits<real>::infinity(); }
-		real umax() { return std::numeric_limits<real>::infinity();}
-		real vmin() { return -std::numeric_limits<real>::infinity(); }
-		real vmax() { return std::numeric_limits<real>::infinity(); }
+		real umin() override { return -std::numeric_limits<real>::infinity(); }
+		real umax() override { return std::numeric_limits<real>::infinity();}
+		real vmin() override { return -std::numeric_limits<real>::infinity(); }
+		real vmax() override { return std::numeric_limits<real>::infinity(); }
 	};
 
 	class round_parabolic_surface : public surface
@@ -89,10 +89,10 @@ namespace rabbit
 			return _pose(vec3{x, y, z});
 		}
 
-		real umin() { return 0; }
-		real umax() { return 2 * M_PI;}
-		real vmin() { return 0; }
-		real vmax() { return std::numeric_limits<real>::infinity(); }
+		real umin() override { return 0; }
+		real umax() override { return 2 * M_PI;}
+		real vmin() override { return 0; }
+		real vmax() override { return std::numeric_limits<real>::infinity(); }
 	};
 
 
@@ -114,10 +114,10 @@ namespace rabbit
 			return _pose(vec3{x, y, z});
 		}
 
-		real umin() { return 0; }
-		real umax() { return 2 * M_PI;}
-		real vmin() { return -M_PI; }
-		real vmax() { return M_PI; }
+		real umin() override { return 0; }
+		real umax() override { return 2 * M_PI;}
+		real vmin() override { return -M_PI; }
+		real vmax() override { return M_PI; }
 	};
 }
 

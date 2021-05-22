@@ -3,6 +3,7 @@
 
 #include <rabbit/third/linalg.h>
 #include <rabbit/geom/surface.h>
+#include <vector>
 
 namespace rabbit
 {

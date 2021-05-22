@@ -92,21 +92,21 @@ namespace rabbit
 
 		linalg::vec<T, 2> translation() { return center; }
 
-		ssize_t print_to(nos::ostream& out) const
+		/*ssize_t print_to(nos::ostream& out) const
 		{
 			return nos::fprint_to(out, "htrans({},{})",orient,center );
-		}
+		}*/
 	};
 
 	//namespace ostream_overloads
 	//{
-		template<class C, class T>
+		/*template<class C, class T>
 		std::basic_ostream<C> & operator << (
 		    std::basic_ostream<C> & out,
 		    const rabbit::htrans2<T> & tr)
 		{
 			return out << '{' << tr.orient << ',' << tr.center << '}';
-		}
+		}*/
 	//}
 }
 

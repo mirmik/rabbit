@@ -10,6 +10,12 @@ void rabbit::opengl_drawer::init_opengl_context()
 	    rabbit::mesh_fragment_shader
 	);
 
+	opengl_simple_program.open(
+	    rabbit::simple_vertex_shader,
+	    rabbit::simple_fragment_shader
+	);
+
+
 	glEnable(GL_DEPTH_TEST);
 
 	glGenVertexArrays(1, &VAO);
@@ -18,6 +24,56 @@ void rabbit::opengl_drawer::init_opengl_context()
 
 	glLineWidth(2);
 }
+
+void rabbit::opengl_drawer::create_buffers()
+{
+	glGenVertexArrays(1, &VAO);
+	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &EBO);
+}
+
+void rabbit::opengl_drawer::draw_simple_triangles(
+    float * vertices,
+    int vertices_total,
+    GLuint * triangles,
+    int triangles_total)
+{
+	glBindVertexArray(VAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, 3*sizeof(float)*vertices_total, vertices, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 3*sizeof(float)*triangles_total, triangles, GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	glBindVertexArray(0);
+
+	opengl_simple_program.use();
+	glBindVertexArray(VAO);
+
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
+
+	glUseProgram(0);
+}
+
+void rabbit::opengl_drawer::draw_simple_triangles(
+    const std::vector<vec3> & vertices,
+    const std::vector<ivec3> & triangles)
+{
+	draw_simple_triangles(
+	    (float*)vertices.data(),
+	    vertices.size(),
+	    (GLuint*)triangles.data(),
+	    triangles.size());
+}
+
+
 
 
 void rabbit::opengl_drawer::destroy_opengl_context()
@@ -31,6 +87,7 @@ void rabbit::opengl_drawer::clean(real r, real g, real b, real a)
 	glClearColor(r, g, b, a);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
+
 
 void rabbit::opengl_drawer::draw_mesh(
     const rabbit::mesh & mesh,
@@ -67,13 +124,13 @@ void rabbit::opengl_drawer::draw_mesh(
 
 	glPolygonOffset(1, 1);
 	glUniform4f(vertexColorLocation, 0.3f, 0.4f, 0.6f, 1.0f);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glDrawElements(GL_TRIANGLES, mesh.triangles.size()*sizeof(int) * 3, GL_UNSIGNED_INT, 0);
 
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	glPolygonOffset(0, 0);
-	glUniform4f(vertexColorLocation, 0.0f, 0.0f, 0.0f, 1.0f);
-	glDrawElements(GL_TRIANGLES, mesh.triangles.size()*sizeof(int) * 3, GL_UNSIGNED_INT, 0);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//glPolygonOffset(0, 0);
+	//glUniform4f(vertexColorLocation, 0.0f, 0.0f, 0.0f, 1.0f);
+	//glDrawElements(GL_TRIANGLES, mesh.triangles.size()*sizeof(int) * 3, GL_UNSIGNED_INT, 0);
 
 	glBindVertexArray(0);
 	glUseProgram(0);
@@ -86,12 +143,11 @@ void rabbit::opengl_drawer::draw_points(
     const mat4 & view,
     const mat4 & projection)
 {
-	glPointSize(3);
 	glBindVertexArray(VAO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER,
-	             count*sizeof(float) * 3, pnts, GL_DYNAMIC_DRAW);
+	             count * sizeof(float) * 3, pnts, GL_DYNAMIC_DRAW);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0);

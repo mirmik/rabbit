@@ -43,8 +43,8 @@ int main()
     glewInit();
 
     glViewport(0, 0, WIDTH, HEIGHT);
-    
-    rabbit::opengl_drawer drawer; 
+
+    rabbit::opengl_drawer drawer;
 
     drawer.init_opengl_context();
 
@@ -60,56 +60,82 @@ int main()
     auto mesh4 = rabbit::surface_rubic_mesh(surf4, 30, 20);
     auto mesh5 = rabbit::surface_rubic_mesh(surf5, 30, 20);
 
-    float aspect = (float)WIDTH/(float)HEIGHT;
-    rabbit::mat4 projection = 
-        rabbit::opengl_perspective(rabbit::deg(100)/aspect, aspect, 0.1, 100);
+    float aspect = (float)WIDTH / (float)HEIGHT;
+    rabbit::mat4 projection =
+        rabbit::opengl_perspective(rabbit::deg(100) / aspect, aspect, 0.1, 100);
 
     rabbit::camera camera;
-    PRINT(camera.view_matrix());
-    
+
+    GLfloat vertices[] =
+    {
+        0.5f,  0.5f, 0.0f,  // Top Right
+        0.5f, -0.5f, 0.0f,  // Bottom Right
+        -0.5f, -0.5f, 0.0f,  // Bottom Left
+        -0.5f,  0.5f, 0.0f   // Top Left
+    };
+    GLuint indices[] =    // Note that we start from 0!
+    {
+        0, 1, 3,  // First Triangle
+        1, 2, 3   // Second Triangle
+    };
+
     while (!glfwWindowShouldClose(window))
     {
         auto model = rabbit::rot3({0, 0, 1}, rabbit::deg(glfwGetTime() * 16));
 
-        camera.set_eye({10,0,3});
-        camera.set_target({0,0,0});
+        camera.set_eye({10, 0, 3});
+        camera.set_target({0, 0, 0});
 
         glfwPollEvents();
 
         drawer.clean(0.2f, 0.3f, 0.3f, 1.0f);
-        drawer.draw_mesh(
-            mesh, 
-            (rabbit::rot3(rabbit::vec3{0.3,0.7,0}, rabbit::deg(20)) * model).to_mat4(), 
-            camera.view_matrix(), 
+
+
+        //auto _surf = rabbit::sphere_surface(0.5);
+        //auto _mesh = rabbit::surface_rubic_mesh(_surf, 10, 10);
+
+        //drawer.opengl_simple_program.use();
+        drawer.draw_simple_triangles(vertices, 4, indices, 2);
+        //glUseProgram(0);
+        /*drawer.draw_mesh(_mesh,
+            rabbit::pose3().to_mat4(),
+            rabbit::pose3().to_mat4(),
+            rabbit::pose3().to_mat4()
+        );*/
+
+        /**drawer.draw_mesh(
+            mesh,
+            (rabbit::rot3(rabbit::vec3{0.3,0.7,0}, rabbit::deg(20)) * model).to_mat4(),
+            camera.view_matrix(),
             projection);
-        
+
         drawer.draw_mesh(
-            mesh2, 
-            model.inverse().to_mat4(), 
-            camera.view_matrix(), 
+            mesh2,
+            model.inverse().to_mat4(),
+            camera.view_matrix(),
             projection
         );
 
         drawer.draw_mesh(
-            mesh3, 
-            model.to_mat4(), 
-            camera.view_matrix(), 
+            mesh3,
+            model.to_mat4(),
+            camera.view_matrix(),
             projection
         );
 
         drawer.draw_mesh(
-            mesh4, 
-            (rabbit::rot3(rabbit::vec3{0.6,0.2,0}, rabbit::deg(20)) * model.inverse()).to_mat4(), 
-            camera.view_matrix(), 
+            mesh4,
+            (rabbit::rot3(rabbit::vec3{0.6,0.2,0}, rabbit::deg(20)) * model.inverse()).to_mat4(),
+            camera.view_matrix(),
             projection
         );
 
         drawer.draw_mesh(
-            mesh5, 
-            (rabbit::mov3({5.5*sin(glfwGetTime()), 5.5*cos(glfwGetTime()), 0}) * model).to_mat4(), 
-            camera.view_matrix(), 
+            mesh5,
+            (rabbit::mov3({5.5*sin(glfwGetTime()), 5.5*cos(glfwGetTime()), 0}) * model).to_mat4(),
+            camera.view_matrix(),
             projection
-        );
+        );*/
 
         glfwSwapBuffers(window);
     }

@@ -6,9 +6,20 @@
 #include <sstream>
 #include <iostream>
 
-#include <GL/glew.h>
-
 #include <rabbit/types.h>
+
+#if __has_include (<GL/glew.h>)
+#include <GL/glew.h>
+#else
+
+
+#if __has_include (<EGL/egl.h>)
+#include <EGL/egl.h>
+#include <EGL/eglext.h>
+#include <GLES3/gl3.h>
+#endif
+
+#endif
 
 namespace rabbit
 {
