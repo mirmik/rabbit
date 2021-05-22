@@ -23,6 +23,7 @@ namespace rabbit
 		);
 
 		vec3 center();
+		void correct_center();
 	};
 
 	mesh surface_rubic_mesh(

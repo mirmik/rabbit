@@ -105,12 +105,23 @@ mesh rabbit::mesh_from_file(const char * path)
 vec3 rabbit::mesh::center() 
 {
 	linalg::vec<double, 3> acc = { 0, 0, 0 };
-	int n = 0
+	int n = vertices.size();
 
 	for (auto & v : vertices) 
 	{
 		acc += v;
 	}
 
-	return acc / n;
+	return vec3 { acc / n };
+}
+
+
+void rabbit::mesh::correct_center() 
+{
+	auto c = center();
+
+	for (auto & v : vertices) 
+	{
+		v -= c;
+	}
 }

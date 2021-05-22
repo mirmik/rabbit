@@ -1,6 +1,6 @@
 #include <rabbit/opengl/opengl_shader_program.h>
 #include <rabbit/opengl/projection.h>
-#include <rabbit/opengl/mesh_drawer.h>
+#include <rabbit/opengl/drawer.h>
 #include <rabbit/opengl/shader_collection.h>
 #include <rabbit/mesh.h>
 #include <rabbit/util.h>
@@ -51,28 +51,35 @@ int main()
     auto surf = rabbit::sphere_surface(0.5);
 
     auto mesh = rabbit::mesh_from_file("bulbasaur_dual_body.STL");
+    mesh.correct_center();
 
     float aspect = (float)WIDTH / (float)HEIGHT;
     rabbit::mat4 projection =
         rabbit::opengl_perspective(rabbit::deg(100) / aspect, aspect, 0.1, 200);
 
     rabbit::camera camera;
-    camera.set_eye({0, -100, 50});
-    camera.set_target({-10, 10, 8});
-    PRINT(camera.view_matrix());
 
     while (!glfwWindowShouldClose(window))
     {
+        camera.set_eye({100*cos(glfwGetTime()), 100*sin(glfwGetTime()), 0});
+        camera.set_target({0, 0, 0});
         auto model = rabbit::rot3({0, 0, 1}, rabbit::deg(0));
 
         glfwPollEvents();
 
         drawer.clean(0.2f, 0.3f, 0.3f, 1.0f);
+        
         drawer.draw_mesh(
             mesh,
             (model).to_mat4(),
             camera.view_matrix(),
-            projection);
+            projection);        
+
+        /*drawer.draw_points(
+            mesh.vertices,
+            (model).to_mat4(),
+            camera.view_matrix(),
+            projection);*/
 
 
         glfwSwapBuffers(window);

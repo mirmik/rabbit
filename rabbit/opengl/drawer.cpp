@@ -78,3 +78,36 @@ void rabbit::opengl_drawer::draw_mesh(
 	glBindVertexArray(0);
 	glUseProgram(0);
 }
+
+void rabbit::opengl_drawer::draw_points(
+    const vec3 * pnts,
+    int count,
+    const mat4 & model,
+    const mat4 & view,
+    const mat4 & projection)
+{
+	glPointSize(3);
+	glBindVertexArray(VAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER,
+	             count*sizeof(float) * 3, pnts, GL_DYNAMIC_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(0);
+
+	GLint vertexColorLocation = glGetUniformLocation(opengl_mesh_program.Program, "vertexColor");
+	opengl_mesh_program.use();
+
+	opengl_mesh_program.uniform_mat4f("model", model);
+	opengl_mesh_program.uniform_mat4f("view", view);
+	opengl_mesh_program.uniform_mat4f("projection", projection);
+
+	glBindVertexArray(VAO);
+	glDisable(GL_POLYGON_OFFSET_FILL);
+
+	glDrawArrays(GL_POINTS, 0, count);
+
+	glBindVertexArray(0);
+	glUseProgram(0);
+}
