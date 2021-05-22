@@ -62,10 +62,3 @@ void rabbit::opengl_shader_program::use()
 {
 	glUseProgram(this->Program);
 }
-
-void rabbit::opengl_shader_program::uniform_mat4f(
-    const char * locname, const linalg::mat<float, 4, 4> & matrix)
-{
-	GLint modelLoc = glGetUniformLocation(Program, locname);
-	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, (GLfloat*) &matrix);
-}

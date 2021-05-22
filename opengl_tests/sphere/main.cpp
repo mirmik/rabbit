@@ -95,7 +95,7 @@ int main()
         //auto _mesh = rabbit::surface_rubic_mesh(_surf, 10, 10);
 
         //drawer.opengl_simple_program.use();
-        drawer.draw_simple_triangles(vertices, 4, indices, 2);
+        //drawer.draw_simple_triangles(vertices, 4, indices, 2);
         //glUseProgram(0);
         /*drawer.draw_mesh(_mesh,
             rabbit::pose3().to_mat4(),
@@ -103,7 +103,7 @@ int main()
             rabbit::pose3().to_mat4()
         );*/
 
-        /**drawer.draw_mesh(
+        drawer.draw_mesh(
             mesh,
             (rabbit::rot3(rabbit::vec3{0.3,0.7,0}, rabbit::deg(20)) * model).to_mat4(),
             camera.view_matrix(),
@@ -135,7 +135,7 @@ int main()
             (rabbit::mov3({5.5*sin(glfwGetTime()), 5.5*cos(glfwGetTime()), 0}) * model).to_mat4(),
             camera.view_matrix(),
             projection
-        );*/
+        );
 
         glfwSwapBuffers(window);
     }

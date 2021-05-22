@@ -32,7 +32,7 @@ void rabbit::opengl_drawer::create_buffers()
 	glGenBuffers(1, &EBO);
 }
 
-void rabbit::opengl_drawer::draw_simple_triangles(
+void rabbit::opengl_drawer::draw_triangles(
     float * vertices,
     int vertices_total,
     GLuint * triangles,
@@ -41,32 +41,23 @@ void rabbit::opengl_drawer::draw_simple_triangles(
 	glBindVertexArray(VAO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, 3*sizeof(float)*vertices_total, vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, vertices_stride * vertices_total * sizeof(GLfloat), vertices, GL_DYNAMIC_DRAW);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 3*sizeof(float)*triangles_total, triangles, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 3 * sizeof(GLuint) * triangles_total, triangles,
+	             GL_DYNAMIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
-	glEnableVertexAttribArray(0);
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glDrawElements(GL_TRIANGLES, 3 * sizeof(GLuint)*triangles_total, GL_UNSIGNED_INT, NULL);
 
 	glBindVertexArray(0);
 
-	opengl_simple_program.use();
-	glBindVertexArray(VAO);
-
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-	glBindVertexArray(0);
-
-	glUseProgram(0);
 }
 
-void rabbit::opengl_drawer::draw_simple_triangles(
+void rabbit::opengl_drawer::draw_triangles(
     const std::vector<vec3> & vertices,
     const std::vector<ivec3> & triangles)
 {
-	draw_simple_triangles(
+	draw_triangles(
 	    (float*)vertices.data(),
 	    vertices.size(),
 	    (GLuint*)triangles.data(),
@@ -115,9 +106,9 @@ void rabbit::opengl_drawer::draw_mesh(
 	GLint vertexColorLocation = glGetUniformLocation(opengl_mesh_program.Program, "vertexColor");
 	opengl_mesh_program.use();
 
-	opengl_mesh_program.uniform_mat4f("model", model);
-	opengl_mesh_program.uniform_mat4f("view", view);
-	opengl_mesh_program.uniform_mat4f("projection", projection);
+	uniform_mat4f("model", opengl_mesh_program.Program, model);
+	uniform_mat4f("view", opengl_mesh_program.Program, view);
+	uniform_mat4f("projection", opengl_mesh_program.Program, projection);
 
 	glBindVertexArray(VAO);
 	glEnable(GL_POLYGON_OFFSET_FILL);
@@ -155,9 +146,9 @@ void rabbit::opengl_drawer::draw_points(
 	GLint vertexColorLocation = glGetUniformLocation(opengl_mesh_program.Program, "vertexColor");
 	opengl_mesh_program.use();
 
-	opengl_mesh_program.uniform_mat4f("model", model);
-	opengl_mesh_program.uniform_mat4f("view", view);
-	opengl_mesh_program.uniform_mat4f("projection", projection);
+	uniform_mat4f("model", opengl_mesh_program.Program, model);
+	uniform_mat4f("view", opengl_mesh_program.Program, view);
+	uniform_mat4f("projection", opengl_mesh_program.Program, projection);
 
 	glBindVertexArray(VAO);
 	glDisable(GL_POLYGON_OFFSET_FILL);
@@ -166,4 +157,33 @@ void rabbit::opengl_drawer::draw_points(
 
 	glBindVertexArray(0);
 	glUseProgram(0);
+}
+
+
+
+void rabbit::opengl_drawer::uniform_mat4f(
+    const char * locname, int program, const linalg::mat<float, 4, 4> & matrix)
+{
+	GLint modelLoc = glGetUniformLocation(program, locname);
+	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, (GLfloat*) &matrix);
+}
+
+void rabbit::opengl_drawer::uniform_mat4f(
+    const char * locname, int program, const GLfloat* data)
+{
+	GLint modelLoc = glGetUniformLocation(program, locname);
+	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, data);
+}
+
+
+void rabbit::opengl_drawer::uniform_mat4f(
+    unsigned int location, const linalg::mat<float, 4, 4> & matrix)
+{
+	glUniformMatrix4fv(location, 1, GL_FALSE, (GLfloat*) &matrix);
+}
+
+void rabbit::opengl_drawer::uniform_mat4f(
+    unsigned int location, const GLfloat* data)
+{
+	glUniformMatrix4fv(location, 1, GL_FALSE, data);
 }

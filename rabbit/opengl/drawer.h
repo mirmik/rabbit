@@ -12,7 +12,12 @@ namespace rabbit
 	public:
 		opengl_drawer();
 
-		GLuint VBO, VAO, EBO;
+		GLuint VBO=0, VAO=0, EBO=0;
+		int vertices_stride = 3;
+
+		void set_buffers(int vao, int vbo, int ebo) { VAO = vao; VBO = vbo; EBO = ebo; }
+		void set_vertices_stride(int arg) { vertices_stride = arg; }
+
 		opengl_shader_program opengl_mesh_program;
 		opengl_shader_program opengl_simple_program;
 
@@ -51,15 +56,28 @@ namespace rabbit
 
 		void create_buffers();
 
-		void draw_simple_triangles(
+		void draw_triangles(
 		    float * vertices,
 		    int vertices_total,
 		    GLuint * triangles,
 		    int triangles_total);
 
-		void draw_simple_triangles(
+		void draw_triangles(
 		    const std::vector<vec3> & vertices,
 		    const std::vector<ivec3> & triangles);
+
+
+		void uniform_mat4f(
+			unsigned int loc, const linalg::mat<float, 4, 4> & matrix);
+		
+		void uniform_mat4f(
+			const char * locname, int program, const linalg::mat<float, 4, 4> & matrix);
+
+		void uniform_mat4f(
+			unsigned int loc, const GLfloat* matrix);
+		
+		void uniform_mat4f(
+			const char * locname, int program, const GLfloat* matrix);
 
 	};
 }

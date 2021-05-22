@@ -33,9 +33,6 @@ namespace rabbit
 		void open(const char * vertexPath, const char * fragmentPath);
 
 		void use();
-
-		void uniform_mat4f(
-			const char * locname, const linalg::mat<float, 4, 4> & matrix);
 	};
 }
 
