@@ -100,3 +100,17 @@ mesh rabbit::mesh_from_file(const char * path)
 
 	return mesh(std::move(vertices), std::move(triangles));
 }
+
+
+vec3 rabbit::mesh::center() 
+{
+	linalg::vec<double, 3> acc = { 0, 0, 0 };
+	int n = 0
+
+	for (auto & v : vertices) 
+	{
+		acc += v;
+	}
+
+	return acc / n;
+}

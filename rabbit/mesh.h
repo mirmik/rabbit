@@ -21,6 +21,8 @@ namespace rabbit
 		    std::vector<linalg::vec<real, 3>>&& _vertices,
 		    std::vector<linalg::vec<int, 3>>&& _triangles
 		);
+
+		vec3 center();
 	};
 
 	mesh surface_rubic_mesh(
