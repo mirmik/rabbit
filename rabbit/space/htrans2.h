@@ -2,7 +2,7 @@
 #define RABBIT_TRANS2_H
 
 #include <rabbit/space/screw.h>
-#include <rabbit/linalg.h>
+#include <rabbit/third/linalg.h>
 
 namespace rabbit
 {

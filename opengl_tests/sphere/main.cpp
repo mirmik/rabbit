@@ -1,6 +1,6 @@
 #include <rabbit/opengl/opengl_shader_program.h>
 #include <rabbit/opengl/projection.h>
-#include <rabbit/opengl/mesh_drawer.h>
+#include <rabbit/opengl/drawer.h>
 #include <rabbit/opengl/shader_collection.h>
 #include <rabbit/mesh.h>
 #include <rabbit/util.h>

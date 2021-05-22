@@ -1,7 +1,7 @@
 #ifndef RABBIT_UTIL_H
 #define RABBIT_UTIL_H
 
-#include <rabbit/linalg.h>
+#include <rabbit/third/linalg.h>
 #include <rabbit/types.h>
 
 namespace rabbit 

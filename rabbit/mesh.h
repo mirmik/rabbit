@@ -1,7 +1,7 @@
 #ifndef RABBIT_MESH_H
 #define RABBIT_MESH_H
 
-#include <linalg/linalg.h>
+#include <rabbit/third/linalg.h>
 #include <rabbit/geom/surface.h>
 
 namespace rabbit

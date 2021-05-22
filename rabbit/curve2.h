@@ -1,7 +1,7 @@
 #ifndef RABBIT_GEOM_CURVE2_H
 #define RABBIT_GEOM_CURVE2_H
 
-#include <rabbit/linalg.h>
+#include <rabbit/third/linalg.h>
 #include <rabbit/interval.h>
 
 #include <nos/print.h>

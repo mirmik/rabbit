@@ -45,13 +45,8 @@ namespace rabbit
 				_right = right();
 			}
 
-			PRINT(_up);
-			PRINT(_dir);
 			_up = cross(_dir, _right);
 			_up = normalize(_up);
-			
-			PRINT(_up);
-			PRINT(_dir);
 		}
 
 		void set_eye(const vec3& vec) { _eye = vec; }

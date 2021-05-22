@@ -1,7 +1,7 @@
 #ifndef RABBIT_TYPES_H
 #define RABBIT_TYPES_H
 
-#include <rabbit/linalg.h>
+#include <rabbit/third/linalg.h>
 
 #ifndef RABBIT_REAL_TYPE
 #define RABBIT_REAL_TYPE float

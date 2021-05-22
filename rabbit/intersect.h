@@ -1,7 +1,7 @@
 #ifndef RABBIT_INTERSECT_H
 #define RABBIT_INTERSECT_H
 
-#include <rabbit/linalg.h>
+#include <rabbit/third/linalg.h>
 #include <rabbit/types.h>
 #include <rabbit/prim2.h>
 
