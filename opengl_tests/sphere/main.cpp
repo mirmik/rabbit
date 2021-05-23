@@ -44,6 +44,11 @@ int main()
 
     glViewport(0, 0, WIDTH, HEIGHT);
 
+
+
+
+    
+
     rabbit::opengl_drawer drawer;
 
     drawer.init_opengl_context();
@@ -68,16 +73,20 @@ int main()
 
     GLfloat vertices[] =
     {
-        0.5f,  0.5f, 0.0f,  // Top Right
-        0.5f, -0.5f, 0.0f,  // Bottom Right
-        -0.5f, -0.5f, 0.0f,  // Bottom Left
-        -0.5f,  0.5f, 0.0f   // Top Left
+        0.5f,  0.5f, 0.999999f,  // Top Right
+        0.5f, -0.5f, 0.999999f,  // Bottom Right
+        -0.5f, -0.5f, 0.999999f,  // Bottom Left
+        -0.5f,  0.5f, 0.999999f   // Top Left
     };
     GLuint indices[] =    // Note that we start from 0!
     {
         0, 1, 3,  // First Triangle
         1, 2, 3   // Second Triangle
     };
+
+    rabbit::opengl_shader_program sprg(
+        rabbit::simple_vertex_shader,
+        rabbit::simple_fragment_shader);
 
     while (!glfwWindowShouldClose(window))
     {
@@ -90,18 +99,22 @@ int main()
 
         drawer.clean(0.2f, 0.3f, 0.3f, 1.0f);
 
+        sprg.use();
 
-        //auto _surf = rabbit::sphere_surface(0.5);
-        //auto _mesh = rabbit::surface_rubic_mesh(_surf, 10, 10);
+        drawer.set_vertices_stride(3);
+        drawer.draw_triangles(vertices, 4, indices, 2);
 
-        //drawer.opengl_simple_program.use();
+
         //drawer.draw_simple_triangles(vertices, 4, indices, 2);
-        //glUseProgram(0);
+        
+        glUseProgram(0);
         /*drawer.draw_mesh(_mesh,
             rabbit::pose3().to_mat4(),
             rabbit::pose3().to_mat4(),
             rabbit::pose3().to_mat4()
         );*/
+
+        drawer.opengl_mesh_program.use();
 
         drawer.draw_mesh(
             mesh,
@@ -136,6 +149,8 @@ int main()
             camera.view_matrix(),
             projection
         );
+
+        glUseProgram(0);
 
         glfwSwapBuffers(window);
     }

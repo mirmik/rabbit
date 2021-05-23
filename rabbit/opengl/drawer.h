@@ -79,6 +79,8 @@ namespace rabbit
 		void uniform_mat4f(
 			const char * locname, int program, const GLfloat* matrix);
 
+
+		//void draw_()
 	};
 }
 #endif

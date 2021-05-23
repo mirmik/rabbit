@@ -27,7 +27,7 @@ void main()
 )""";
 
 const char * rabbit::simple_vertex_shader = R"""(
-#version 330 core
+#version 300 es
 layout (location = 0) in vec3 position;
 
 void main()
@@ -37,9 +37,9 @@ void main()
 )""";
 
 const char * rabbit::simple_fragment_shader = R"""(
-#version 330 core
+#version 300 es
 
-out vec4 color;
+out lowp vec4 color;
 
 void main()
 {
