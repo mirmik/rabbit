@@ -37,7 +37,7 @@ namespace rabbit
 		screw<real, 3> to_screw() const;
 		mat4 to_mat4();
 
-		ssize_t print_to(nos::ostream& out) const;
+		//ssize_t print_to(nos::ostream& out) const;
 	};
 
 	pose3 rot3(vec3 vec, float angle);

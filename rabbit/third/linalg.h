@@ -716,7 +716,7 @@ namespace std
 {
     template<class T, int N> size_t size(const linalg::vec<T,N>&) { return N; }
 }
-
+/*
 #if __has_include(<nos/print.h>)
 #include <nos/print.h>
 #include <nos/fprint.h>
@@ -731,5 +731,6 @@ namespace nos {
     template <typename T, int N> struct print_implementation<linalg::mat<T,4,N>> { static ssize_t print_to(nos::ostream& os, const linalg::mat<T,4,N>& v) { return nos::fprint_to(os, "({},{},{},{})", v[0], v[1], v[2], v[3]); } }; 
 }
 #endif
+*/
 
 #endif

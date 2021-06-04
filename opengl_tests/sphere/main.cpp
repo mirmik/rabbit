@@ -1,5 +1,7 @@
 #include <rabbit/opengl/opengl_shader_program.h>
-#include <rabbit/opengl/mesh_drawer.h>
+#include <rabbit/opengl/projection.h>
+#include <rabbit/opengl/drawer.h>
+#include <rabbit/opengl/shader_collection.h>
 #include <rabbit/mesh.h>
 #include <rabbit/util.h>
 #include <rabbit/space/pose3.h>
@@ -19,9 +21,11 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <rabbit/opengl/util.h>
+#include <rabbit/opengl/drawer.h>
+#include <rabbit/camera.h>
 
 // Window dimensions
-const GLuint WIDTH = 800, HEIGHT = 800;
+const GLuint WIDTH = 1600, HEIGHT = 800;
 
 int main()
 {
@@ -39,81 +43,113 @@ int main()
     glewInit();
 
     glViewport(0, 0, WIDTH, HEIGHT);
-    glEnable(GL_DEPTH_TEST);
 
-    rabbit::opengl_shader_program opengl_mesh_program(
-        "../../rabbit/opengl/mesh_shader.vs",
-        "../../rabbit/opengl/mesh_shader.frag"
-    );
 
-    GLuint VBO, VAO, EBO;
+
+
     
-    auto surf = rabbit::round_parabolic_surface(0.5);
-    auto mesh = rabbit::surface_rubic_mesh(surf, 0, 2*M_PI, 40, 0, 0.5, 40);
-    //auto surf = rabbit::sphere_surface(0.5);
-    //auto mesh = rabbit::surface_rubic_mesh(surf, 10, 40);
-    
-    
-    for (int i = 0; i < mesh.vertices.size(); ++i)
-        nos::println(mesh.vertices[i]);
 
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
+    rabbit::opengl_drawer drawer;
 
-    glLineWidth(2);
+    drawer.init_opengl_context();
 
-    rabbit::mat4 model = rabbit::rot3({0, 1, 0}, rabbit::deg(45)).to_mat4();
-    rabbit::mat4 view = rabbit::pose3().to_mat4();
-    rabbit::mat4 projection = rabbit::pose3().to_mat4();
+    auto surf = rabbit::torus_surface(4, 0.2);
+    auto surf2 = rabbit::sphere_surface(2);
+    auto surf3 = rabbit::torus_surface(7, 0.2);
+    auto surf4 = rabbit::torus_surface(8, 0.2);
+    auto surf5 = rabbit::sphere_surface(0.6);
+
+    auto mesh = rabbit::surface_rubic_mesh(surf, 30, 20);
+    auto mesh2 = rabbit::surface_rubic_mesh(surf2, 30, 20);
+    auto mesh3 = rabbit::surface_rubic_mesh(surf3, 30, 20);
+    auto mesh4 = rabbit::surface_rubic_mesh(surf4, 30, 20);
+    auto mesh5 = rabbit::surface_rubic_mesh(surf5, 30, 20);
+
+    float aspect = (float)WIDTH / (float)HEIGHT;
+    rabbit::mat4 projection =
+        rabbit::opengl_perspective(rabbit::deg(100) / aspect, aspect, 0.1, 100);
+
+    rabbit::camera camera;
+
+    GLfloat vertices[] =
+    {
+        0.5f,  0.5f, 0.999999f,  // Top Right
+        0.5f, -0.5f, 0.999999f,  // Bottom Right
+        -0.5f, -0.5f, 0.999999f,  // Bottom Left
+        -0.5f,  0.5f, 0.999999f   // Top Left
+    };
+    GLuint indices[] =    // Note that we start from 0!
+    {
+        0, 1, 3,  // First Triangle
+        1, 2, 3   // Second Triangle
+    };
+
+    rabbit::opengl_shader_program sprg(
+        rabbit::simple_vertex_shader,
+        rabbit::simple_fragment_shader);
 
     while (!glfwWindowShouldClose(window))
     {
-        model = rabbit::rot3({0, 1, 0}, rabbit::deg(glfwGetTime() * 16)).to_mat4();
+        auto model = rabbit::rot3({0, 0, 1}, rabbit::deg(glfwGetTime() * 16));
+
+        camera.set_eye({10, 0, 3});
+        camera.set_target({0, 0, 0});
 
         glfwPollEvents();
 
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        drawer.clean(0.2f, 0.3f, 0.3f, 1.0f);
 
-        glBindVertexArray(VAO);
+        sprg.use();
 
-        glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glBufferData(GL_ARRAY_BUFFER,
-                     mesh.vertices.size()*sizeof(float) * 3, mesh.vertices.data(), GL_DYNAMIC_DRAW);
-
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
-        glEnableVertexAttribArray(0);
+        drawer.set_vertices_stride(3);
+        drawer.draw_triangles(vertices, 4, indices, 2);
 
 
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER,
-                     mesh.triangles.size()*sizeof(int) * 3, mesh.triangles.data(), GL_DYNAMIC_DRAW);
+        //drawer.draw_simple_triangles(vertices, 4, indices, 2);
+        
+        glUseProgram(0);
+        /*drawer.draw_mesh(_mesh,
+            rabbit::pose3().to_mat4(),
+            rabbit::pose3().to_mat4(),
+            rabbit::pose3().to_mat4()
+        );*/
 
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindVertexArray(0);
+        drawer.opengl_mesh_program.use();
 
-        GLint vertexColorLocation = glGetUniformLocation(opengl_mesh_program.Program, "vertexColor");
-        opengl_mesh_program.use();
+        drawer.draw_mesh(
+            mesh,
+            (rabbit::rot3(rabbit::vec3{0.3,0.7,0}, rabbit::deg(20)) * model).to_mat4(),
+            camera.view_matrix(),
+            projection);
 
-        opengl_mesh_program.uniform_mat4f("model", model);
-        opengl_mesh_program.uniform_mat4f("view", view);
-        opengl_mesh_program.uniform_mat4f("projection", projection);
+        drawer.draw_mesh(
+            mesh2,
+            model.inverse().to_mat4(),
+            camera.view_matrix(),
+            projection
+        );
 
-        glBindVertexArray(VAO);
-        glEnable(GL_POLYGON_OFFSET_FILL);
+        drawer.draw_mesh(
+            mesh3,
+            model.to_mat4(),
+            camera.view_matrix(),
+            projection
+        );
 
-        glPolygonOffset(1, 1);
-        glUniform4f(vertexColorLocation, 0.3f, 0.4f, 0.6f, 1.0f);
-        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-        glDrawElements(GL_TRIANGLES, mesh.triangles.size()*sizeof(int) * 3, GL_UNSIGNED_INT, 0);
+        drawer.draw_mesh(
+            mesh4,
+            (rabbit::rot3(rabbit::vec3{0.6,0.2,0}, rabbit::deg(20)) * model.inverse()).to_mat4(),
+            camera.view_matrix(),
+            projection
+        );
 
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-        glPolygonOffset(0, 0);
-        glUniform4f(vertexColorLocation, 0.0f, 0.0f, 0.0f, 1.0f);
-        glDrawElements(GL_TRIANGLES, mesh.triangles.size()*sizeof(int) * 3, GL_UNSIGNED_INT, 0);
+        drawer.draw_mesh(
+            mesh5,
+            (rabbit::mov3({5.5*sin(glfwGetTime()), 5.5*cos(glfwGetTime()), 0}) * model).to_mat4(),
+            camera.view_matrix(),
+            projection
+        );
 
-        glBindVertexArray(0);
         glUseProgram(0);
 
         glfwSwapBuffers(window);

@@ -1,7 +1,7 @@
 #ifndef RABBIT_SPACE_SCREW_H
 #define RABBIT_SPACE_SCREW_H
 
-#include <linalg/linalg.h>
+#include <rabbit/third/linalg.h>
 
 namespace rabbit
 {
@@ -111,8 +111,8 @@ namespace rabbit
 		bool operator == (const screw& b)
 		{ return ang == b.ang && lin == b.lin; }
 
-		ssize_t print_to(nos::ostream& os) const
-		{ return nos::fprint_to(os, "({},{})", ang, lin); }
+		/*ssize_t print_to(nos::ostream& os) const
+		{ return nos::fprint_to(os, "({},{})", ang, lin); }*/
 
 		screw kinematic_carry(linalg::vec<T, 2> arm)
 		{

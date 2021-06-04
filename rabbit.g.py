@@ -7,6 +7,7 @@ licant.module("rabbit",
 		"intersect.cpp",
 		"space/screw.cpp",
 		"space/pose3.cpp",
+		"mesh.cpp"
 	],
 	include_paths=["."]
 )
@@ -14,6 +15,8 @@ licant.module("rabbit",
 licant.module("rabbit.opengl",
 	sources=[
 		"rabbit/opengl/opengl_shader_program.cpp",
+		"rabbit/opengl/shader_collection.cpp",
+		"rabbit/opengl/drawer.cpp",
 	]
 )
 

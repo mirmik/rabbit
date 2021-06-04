@@ -97,10 +97,10 @@ screw<real, 3> pose3::to_screw() const
 	};
 }
 
-ssize_t pose3::print_to(nos::ostream& out) const
+/*ssize_t pose3::print_to(nos::ostream& out) const
 {
 	return nos::fprint_to(out, "htrans({},{})", ang, lin);
-}
+}*/
 
 pose3& pose3::operator*= (const pose3& oth)
 {

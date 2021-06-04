@@ -2,7 +2,7 @@
 #define RABBIT_TRANS2_H
 
 #include <rabbit/space/screw.h>
-#include <rabbit/linalg.h>
+#include <rabbit/third/linalg.h>
 
 namespace rabbit
 {
@@ -98,10 +98,10 @@ namespace rabbit
 			};
 		}
 
-		ssize_t print_to(nos::ostream& out) const
+		/*ssize_t print_to(nos::ostream& out) const
 		{
 			return nos::fprint_to(out, "htrans({},{})", ang, lin);
-		}
+		}*/
 
 		htrans3& operator*= (const htrans3& oth) 
 		{

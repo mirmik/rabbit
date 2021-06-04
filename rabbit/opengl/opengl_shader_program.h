@@ -6,9 +6,20 @@
 #include <sstream>
 #include <iostream>
 
-#include <GL/glew.h>
-
 #include <rabbit/types.h>
+
+#if __has_include (<GL/glew.h>)
+#include <GL/glew.h>
+#else
+
+
+#if __has_include (<EGL/egl.h>)
+#include <EGL/egl.h>
+#include <EGL/eglext.h>
+#include <GLES3/gl3.h>
+#endif
+
+#endif
 
 namespace rabbit
 {
@@ -17,12 +28,11 @@ namespace rabbit
 	public:
 		GLuint Program;
 
-		opengl_shader_program(const GLchar* vertexPath, const GLchar* fragmentPath);
+		opengl_shader_program();
+		opengl_shader_program(const char * vertexPath, const char * fragmentPath);
+		void open(const char * vertexPath, const char * fragmentPath);
 
 		void use();
-
-		void uniform_mat4f(
-			const char * locname, const linalg::mat<float, 4, 4> & matrix);
 	};
 }
 
