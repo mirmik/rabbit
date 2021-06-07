@@ -7,6 +7,7 @@ from licant.modules import submodule, module
 from licant.libs import include
 
 licant.execute("../rabbit.g.py")
+licant.include("ralgo")
 
 application("runtests",
 	sources = [
@@ -15,14 +16,15 @@ application("runtests",
 		"htrans3.cpp",		
 		"nearest.cpp",		
 		"line2.cpp",
-		"optimize.cpp"		
+		"optimize.cpp",
+		"fitting/*.cpp"		
 	],
 
 	cxx_flags = "-g",
 	cc_flags = "-g",
 
 	include_paths = ["."],
-	mdepends = [ "rabbit" ],
+	mdepends = [ "rabbit", "ralgo" ],
 
 	libs=["nos", "igris"]
 )
