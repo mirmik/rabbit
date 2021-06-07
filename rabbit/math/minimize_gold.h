@@ -38,7 +38,7 @@ namespace rabbit
 
 			while (maxiter-- && fabs(x2-x1) > eps)
 			{
-				nos::println(a, x1, x2, b, f1, f2);
+				//nos::println(a, x1, x2, b, f1, f2);
 				if ( f1 >= f2 )
 				{
 					a = x1;

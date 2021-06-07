@@ -8,8 +8,8 @@ TEST_CASE("line2")
 	linalg::vec<float,2> pnt(0,0);
 	linalg::vec<float,2> vec(1,2);
 
-	auto aline = rabbit::line2eq<float>::from_point_and_vector(pnt, vec);
-	auto bline = rabbit::line2eq<float>::from_points(pnt, vec);
+	auto aline = rabbit::line2eq::from_point_and_vector(pnt, vec);
+	auto bline = rabbit::line2eq::from_points(pnt, vec);
 	
 	CHECK(aline.equal(bline));
 }

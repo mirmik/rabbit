@@ -5,7 +5,7 @@ TEST_CASE("intersect")
 {
 	int sts;
 
-	auto lin = rabbit::segm2<float>(
+	auto lin = rabbit::segm2(
 	               linalg::vec<float,2>(0, 2),
 	               linalg::vec<float,2>(-2, 0)
 	           );
@@ -59,10 +59,10 @@ TEST_CASE("polysegment_intersect")
 
 	linalg::vec<float, 2> ipnts[10];
 
-	rabbit::segm2<float> segm({-1,0}, {10, 11});
-	rabbit::segm2<float> segm0({-1,-1}, {11, 11});
-	rabbit::segm2<float> segm1({0,0}, {10, 10});
-	rabbit::polysegm2<float> psegm(_psegm, 5);
+	rabbit::segm2 segm({-1,0}, {10, 11});
+	rabbit::segm2 segm0({-1,-1}, {11, 11});
+	rabbit::segm2 segm1({0,0}, {10, 10});
+	rabbit::polysegm2 psegm(_psegm, 5);
 
 	int retcount;
 
@@ -96,8 +96,8 @@ TEST_CASE("polysegment_intersect_nocenter")
 
 	linalg::vec<float, 2> ipnts[10];
 
-	rabbit::segm2<float> segm({-30,0}, {30, 0});
-	rabbit::polysegm2<float> psegm(_psegm, 5);
+	rabbit::segm2 segm({-30,0}, {30, 0});
+	rabbit::polysegm2 psegm(_psegm, 5);
 
 	int retcount;
 
@@ -121,8 +121,8 @@ TEST_CASE("polysegment_intersect_nocenter2")
 
 	linalg::vec<float, 2> ipnts[10];
 
-	rabbit::segm2<float> segm({0,-30}, {0, 30});
-	rabbit::polysegm2<float> psegm(_psegm, 5);
+	rabbit::segm2 segm({0,-30}, {0, 30});
+	rabbit::polysegm2 psegm(_psegm, 5);
 
 	int retcount;
 
@@ -146,8 +146,8 @@ TEST_CASE("polysegment_intersect_nocenter2_opposite")
 
 	linalg::vec<float, 2> ipnts[10];
 
-	rabbit::segm2<float> segm({0,-30}, {0, 30});
-	rabbit::polysegm2<float> psegm(_psegm, 5);
+	rabbit::segm2 segm({0,-30}, {0, 30});
+	rabbit::polysegm2 psegm(_psegm, 5);
 
 	int retcount;
 

@@ -72,7 +72,7 @@ namespace rabbit
 				c = b + (b - a);
 
 				c = limited(c);
-				nos::println("A", a, b, c, fa, fb, fc);
+				//nos::println("A", a, b, c, fa, fb, fc);
 				if ((sts = f->value(c, &fc))) return sts;
 
 				if (c == b)
@@ -93,7 +93,7 @@ namespace rabbit
 				fb = fc;
 			}
 
-			nos::println(a, b, c, fa, fb, fc);
+			//nos::println(a, b, c, fa, fb, fc);
 			if (a > c)
 			{
 				real tmp;
@@ -102,7 +102,9 @@ namespace rabbit
 			}
 
 
-			nos::println(a, b, c, fa, fb, fc);
+			//nos::println(a, b, c, fa, fb, fc);
+
+			return 0;
 		}
 	};
 }

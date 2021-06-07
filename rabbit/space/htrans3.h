@@ -1,6 +1,8 @@
 #ifndef RABBIT_TRANS2_H
 #define RABBIT_TRANS2_H
 
+#include <iostream>
+
 #include <rabbit/space/screw.h>
 #include <rabbit/third/linalg.h>
 

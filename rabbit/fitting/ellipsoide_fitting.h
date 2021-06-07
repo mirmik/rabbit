@@ -10,6 +10,8 @@ namespace rabbit
 	{
 		ralgo::matrix_view_ro<real> data;
 		ralgo::matrix<real, Allocator> D;
+		ralgo::vector<real> B;
+		ralgo::vector<real> X; // koefficients
 
 		ellipsoide_fitting(const std::vector & points, Matrix D = {})
 			:
@@ -50,16 +52,20 @@ namespace rabbit
 				D.at(i, 6) = 2. * y;
 				D.at(i, 7) = 2. * z;
 				D.at(i, 8) = 1;
+
+				B[i] = x_sq + y_sq + z_sq;
 			}
+		}
+
+		void doit() 
+		{
+			init();
+			solve();
 		}
 
 		void solve()
 		{
-			//auto d2 = (x_sq + y_sq + z_sq).eval(); // the RHS of the llsq problem (y's)
-			//auto u = (D.transpose() * D)
-			//         .bdcSvd(Eigen::ComputeFullU | Eigen::ComputeFullV)
-			//         .solve(D.transpose() * d2)
-			//         .eval(); // solution to the normal equations
+			X = ralgo::solve(D, B);
 		}
 	};
 }

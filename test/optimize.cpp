@@ -21,8 +21,6 @@ TEST_CASE("minbracket")
 	rabbit::minimize_bracket bracket(&foo, 5, 6);
 	bracket.doit();
 
-	PRINT(bracket.strt());
-	PRINT(bracket.fini());
 	rabbit::minimize_gold mingold(&foo, bracket.strt(), bracket.fini());
 	mingold.doit();
 }
