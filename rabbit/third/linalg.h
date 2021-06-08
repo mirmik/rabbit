@@ -1,4 +1,4 @@
-// linalg.h - v2.0 - Single-header public domain linear algebra library
+// linalg.h - 2.2-beta - Single-header public domain linear algebra library
 //
 // The intent of this library is to provide the bulk of the functionality
 // you need to write programs that frequently use small, fixed-size vectors
@@ -355,10 +355,10 @@ namespace linalg
 
     // Define a type which will convert to the multiplicative identity of any square matrix
     struct identity_t { constexpr explicit identity_t(int) {} };
-    template<class T> struct converter<mat<T,1,1>, identity_t> { mat<T,1,1> operator() (identity_t) const { return {vec<T,1>{1}}; } };
-    template<class T> struct converter<mat<T,2,2>, identity_t> { mat<T,2,2> operator() (identity_t) const { return {{1,0},{0,1}}; } };
-    template<class T> struct converter<mat<T,3,3>, identity_t> { mat<T,3,3> operator() (identity_t) const { return {{1,0,0},{0,1,0},{0,0,1}}; } };
-    template<class T> struct converter<mat<T,4,4>, identity_t> { mat<T,4,4> operator() (identity_t) const { return {{1,0,0,0},{0,1,0,0},{0,0,1,0},{0,0,0,1}}; } };
+    template<class T> struct converter<mat<T,1,1>, identity_t> { constexpr mat<T,1,1> operator() (identity_t) const { return {vec<T,1>{1}}; } };
+    template<class T> struct converter<mat<T,2,2>, identity_t> { constexpr mat<T,2,2> operator() (identity_t) const { return {{1,0},{0,1}}; } };
+    template<class T> struct converter<mat<T,3,3>, identity_t> { constexpr mat<T,3,3> operator() (identity_t) const { return {{1,0,0},{0,1,0},{0,0,1}}; } };
+    template<class T> struct converter<mat<T,4,4>, identity_t> { constexpr mat<T,4,4> operator() (identity_t) const { return {{1,0,0,0},{0,1,0,0},{0,0,1,0},{0,0,0,1}}; } };
     constexpr identity_t identity {1};
 
     // Produce a scalar by applying f(A,B) -> A to adjacent pairs of elements from a vec/mat in left-to-right/column-major order (matching the associativity of arithmetic and logical operators)
@@ -501,7 +501,6 @@ namespace linalg
     template<class T, int M> constexpr T dot      (const vec<T,M> & a, const vec<T,M> & b)      { return sum(a*b); }
     template<class T, int M> constexpr T length2  (const vec<T,M> & a)                          { return dot(a,a); }
     template<class T, int M> T           length   (const vec<T,M> & a)                          { return std::sqrt(length2(a)); }
-    template<class T, int M> T           length0  (const vec<T,M> & a)                          { return maxelem(abs(a)); }
     template<class T, int M> vec<T,M>    normalize(const vec<T,M> & a)                          { return a / length(a); }
     template<class T, int M> constexpr T distance2(const vec<T,M> & a, const vec<T,M> & b)      { return length2(b-a); }
     template<class T, int M> T           distance (const vec<T,M> & a, const vec<T,M> & b)      { return length(b-a); }
@@ -588,6 +587,7 @@ namespace linalg
     template<class T> mat<T,4,4> rotation_matrix   (const vec<T,4> & rotation)              { return {{qxdir(rotation),0}, {qydir(rotation),0}, {qzdir(rotation),0}, {0,0,0,1}}; }
     template<class T> mat<T,4,4> scaling_matrix    (const vec<T,3> & scaling)               { return {{scaling.x,0,0,0}, {0,scaling.y,0,0}, {0,0,scaling.z,0}, {0,0,0,1}}; }
     template<class T> mat<T,4,4> pose_matrix       (const vec<T,4> & q, const vec<T,3> & p) { return {{qxdir(q),0}, {qydir(q),0}, {qzdir(q),0}, {p,1}}; }
+    template<class T> mat<T,4,4> lookat_matrix     (const vec<T,3> & eye, const vec<T,3> & center, const vec<T,3> & view_y_dir, fwd_axis fwd = neg_z);
     template<class T> mat<T,4,4> frustum_matrix    (T x0, T x1, T y0, T y1, T n, T f, fwd_axis a = neg_z, z_range z = neg_one_to_one);
     template<class T> mat<T,4,4> perspective_matrix(T fovy, T aspect, T n, T f, fwd_axis a = neg_z, z_range z = neg_one_to_one) { T y = n*std::tan(fovy / 2), x = y*aspect; return frustum_matrix(-x, x, -y, y, n, f, a, z); }
 
@@ -706,31 +706,16 @@ template<class T> linalg::vec<T,4> linalg::rotation_quat(const mat<T,3,3> & m)
     return copysign(normalize(sqrt(max(T(0), T(1)+q))), s[argmax(q)]);
 }
 
+template<class T> linalg::mat<T,4,4> linalg::lookat_matrix(const vec<T,3> & eye, const vec<T,3> & center, const vec<T,3> & view_y_dir, fwd_axis a)
+{
+    const vec<T,3> f = normalize(center - eye), z = a == pos_z ? f : -f, x = normalize(cross(view_y_dir, z)), y = cross(z, x);
+    return inverse(mat<T,4,4>{{x,0},{y,0},{z,0},{eye,1}});
+}
+
 template<class T> linalg::mat<T,4,4> linalg::frustum_matrix(T x0, T x1, T y0, T y1, T n, T f, fwd_axis a, z_range z) 
 {
     const T s = a == pos_z ? T(1) : T(-1), o = z == neg_one_to_one ? n : 0;
     return {{2*n/(x1-x0),0,0,0}, {0,2*n/(y1-y0),0,0}, {-s*(x0+x1)/(x1-x0),-s*(y0+y1)/(y1-y0),s*(f+o)/(f-n),s}, {0,0,-(n+o)*f/(f-n),0}};
 }
-
-namespace std 
-{
-    template<class T, int N> size_t size(const linalg::vec<T,N>&) { return N; }
-}
-/*
-#if __has_include(<nos/print.h>)
-#include <nos/print.h>
-#include <nos/fprint.h>
-
-namespace nos {
-    template <typename T> struct print_implementation<linalg::vec<T,2>> { static ssize_t print_to(nos::ostream& os, const linalg::vec<T,2>& v) { return nos::fprint_to(os, "({},{})", v[0], v[1]); } }; 
-    template <typename T> struct print_implementation<linalg::vec<T,3>> { static ssize_t print_to(nos::ostream& os, const linalg::vec<T,3>& v) { return nos::fprint_to(os, "({},{},{})", v[0], v[1], v[2]); } }; 
-    template <typename T> struct print_implementation<linalg::vec<T,4>> { static ssize_t print_to(nos::ostream& os, const linalg::vec<T,4>& v) { return nos::fprint_to(os, "({},{},{},{})", v[0], v[1], v[2], v[3]); } }; 
-
-    template <typename T, int N> struct print_implementation<linalg::mat<T,2,N>> { static ssize_t print_to(nos::ostream& os, const linalg::mat<T,4,N>& v) { return nos::fprint_to(os, "({},{})", v[0], v[1]); } }; 
-    template <typename T, int N> struct print_implementation<linalg::mat<T,3,N>> { static ssize_t print_to(nos::ostream& os, const linalg::mat<T,4,N>& v) { return nos::fprint_to(os, "({},{},{})", v[0], v[1], v[2]); } }; 
-    template <typename T, int N> struct print_implementation<linalg::mat<T,4,N>> { static ssize_t print_to(nos::ostream& os, const linalg::mat<T,4,N>& v) { return nos::fprint_to(os, "({},{},{},{})", v[0], v[1], v[2], v[3]); } }; 
-}
-#endif
-*/
 
 #endif

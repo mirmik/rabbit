@@ -4,28 +4,32 @@
 #include <ralgo/linalg/svd.h>
 #include <rabbit/types.h>
 #include <ralgo/linalg/matrix.h>
+#include <ralgo/linalg/matrix_view.h>
 #include <ralgo/linalg/solve.h>
 
 namespace rabbit
 {
-	template <class Allocator>
+	template <class T, class Allocator = std::allocator<real>>
 	class ellipsoide_fit
 	{
-		ralgo::matrix_view_ro<real> data;
-		ralgo::matrix<real, Allocator> _D;
-		std::vector<real> _B;
-		std::vector<real> _X;
-		std::vector<vec3> _points;
+		ralgo::matrix_view_ro<T> data;
+		ralgo::matrix<T, ralgo::row_order<T>, Allocator> _D;
+		std::vector<T> _B;
+		std::vector<T> _X;
+		std::vector<linalg::vec<T,3>> _points;
 
 	public:
-		ellipsoide_fit(const std::vector<vec3> & points)
+		ellipsoide_fit(const std::vector<linalg::vec<T,3>> & points)
 			:
 			_points(points)
 		{
-			data = ralgo::matrix_view_ro<real>(&points[0], points.size(), 3);
-			_D.resize(_points.size(), 9);
-			_B.resize(9);
-			init_D();
+			data = ralgo::matrix_view_ro<real>((real*)&points[0], points.size(), 3);
+			_D.resize(_points.size(), 8);
+			_B.resize(_points.size());
+			_X.resize(8);
+
+			init();
+			solve();
 		}
 
 		void init()
@@ -48,22 +52,20 @@ namespace rabbit
 				_D.at(i, 5) = 2. * x;
 				_D.at(i, 6) = 2. * y;
 				_D.at(i, 7) = 2. * z;
-				_D.at(i, 8) = 1;
+				//_D.at(i, 8) = 1;
 
-				_B[i] = x_sq + y_sq + z_sq;
+				_B[i] = -1;//x_sq + y_sq + z_sq;
 			}
-		}
-
-		void doit() 
-		{
-			init();
-			solve();
+			nos::print_matrix(_D); nos::println();
+			nos::print_list(_B); nos::println();
 		}
 
 		void solve()
 		{
-			X = ralgo::solve(_D, _B);
+			_X = ralgo::linalg::solve(_D, _B);
 		}
+
+		std::vector<real> & result() { return _X; }
 	};
 }
 

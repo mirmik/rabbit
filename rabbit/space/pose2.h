@@ -8,21 +8,21 @@ namespace rabbit
 	class pose2
 	{
 		vec2        lin;
-		r_float     ang;
+		real     ang;
 		
 	public:
-		pose2(vec2 lin, r_float ang)
+		pose2(vec2 lin, real ang)
 			: lin(lin), ang(ang) {}
 
 		pose2 inverse()
 		{
-			return { linalg::rot(-ang, -lin), -ang };
+			return { linalg::rot<real>(-ang, -lin), -ang };
 		}
 
 		pose2 operator * (const pose2& oth)
 		{
 			return pose2(
-			           linalg::rot(ang, oth.lin) + lin,
+			           linalg::rot<real>(ang, oth.lin) + lin,
 			           ang + oth.ang);
 		}
 
@@ -43,7 +43,7 @@ namespace rabbit
 	};
 
 	static inline
-	r_float vector_angle(vec2 vec) 
+	real vector_angle(vec2 vec) 
 	{
 		return atan2(vec.y, vec.x);
 	}

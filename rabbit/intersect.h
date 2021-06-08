@@ -7,7 +7,7 @@
 
 namespace rabbit
 {
-	class intersect_node
+/*	class intersect_node
 	{
 		bool is_interval;
 		real aparam0;
@@ -15,7 +15,7 @@ namespace rabbit
 		real bparam0;
 		real bparam1;
 	};
-
+*/
 	int intersect_point_segm2_segm2(
 	    const segm2   * segment1,
 	    const segm2   * segment2,

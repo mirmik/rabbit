@@ -99,14 +99,14 @@ int rabbit::intersect_points_segm2_polysegm2(
 
 	for (int i = 1; i < count; ++i)
 	{
-		if (i >= 1 && linalg::length0(points[i] - points[i - 1]) >= r_epsilon)
+		if (i >= 1 && linalg::length(points[i] - points[i - 1]) >= r_epsilon)
 		{
 			points[write_it++] = points[i];
 			count2++;
 		}
 	}
 
-	if (count2 != 1 && linalg::length0(points[0] - points[count2 - 1]) < r_epsilon)
+	if (count2 != 1 && linalg::length(points[0] - points[count2 - 1]) < r_epsilon)
 	{
 		count2--;
 	}
