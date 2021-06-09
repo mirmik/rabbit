@@ -7,8 +7,8 @@ TEST_CASE("svd")
 {
 	float angle = M_PI/4;
 	float arr[] = { 
-		cos(angle)/4,sin(angle)/2,
-		sin(angle)/4,-cos(angle)/2 };
+		cosf(angle)/4,sinf(angle)/2,
+		sinf(angle)/4,-cosf(angle)/2 };
 	auto svdmat = ralgo::matrix_view_ro<float>(arr, 2, 2);
 	auto svd = ralgo::svd(svdmat);
 
