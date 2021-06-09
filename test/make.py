@@ -17,6 +17,7 @@ application("runtests",
 		"nearest.cpp",		
 		"line2.cpp",
 		"optimize.cpp",
+		"svd.cpp",
 		"fitting/*.cpp"		
 	],
 
