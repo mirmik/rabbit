@@ -11,16 +11,16 @@ namespace rabbit
 	{
 	public:
 		std::vector<linalg::vec<real, 3>> vertices;
-		std::vector<linalg::vec<int, 3>> triangles;
+		std::vector<linalg::vec<unsigned int, 3>> triangles;
 
 		mesh(
 		    const std::vector<linalg::vec<real, 3>>& _vertices,
-		    const std::vector<linalg::vec<int, 3>>& _triangles
+		    const std::vector<linalg::vec<unsigned int, 3>>& _triangles
 		);
 
 		mesh(
 		    std::vector<linalg::vec<real, 3>>&& _vertices,
-		    std::vector<linalg::vec<int, 3>>&& _triangles
+		    std::vector<linalg::vec<unsigned int, 3>>&& _triangles
 		);
 
 		vec3 center();

@@ -6,13 +6,13 @@ using namespace rabbit;
 
 rabbit::mesh::mesh(
     const std::vector<linalg::vec<real, 3>>& _vertices,
-    const std::vector<linalg::vec<int, 3>>& _triangles
+    const std::vector<linalg::vec<unsigned int, 3>>& _triangles
 ) : vertices(_vertices), triangles(_triangles)
 {}
 
 rabbit::mesh::mesh(
     std::vector<linalg::vec<real, 3>>&& _vertices,
-    std::vector<linalg::vec<int, 3>>&& _triangles
+    std::vector<linalg::vec<unsigned int, 3>>&& _triangles
 ) : vertices(std::move(_vertices)), triangles(std::move(_triangles))
 {}
 
@@ -24,7 +24,7 @@ mesh rabbit::surface_rubic_mesh(
 	int iter;
 
 	std::vector<linalg::vec<real, 3>> vertices;
-	std::vector<linalg::vec<int, 3>> triangles;
+	std::vector<linalg::vec<unsigned int, 3>> triangles;
 
 	vertices.resize((utotal + 1) * (vtotal + 1));
 	triangles.resize(2 * utotal * vtotal);
@@ -49,10 +49,10 @@ mesh rabbit::surface_rubic_mesh(
 	{
 		for (int i = 0; i < utotal; ++i)
 		{
-			int a = i + (    j) * (utotal + 1);
-			int b = i + (    j) * (utotal + 1) + 1;
-			int c = i + (1 + j) * (utotal + 1);
-			int d = i + (1 + j) * (utotal + 1) + 1;
+			unsigned int a = i + (    j) * (utotal + 1);
+			unsigned int b = i + (    j) * (utotal + 1) + 1;
+			unsigned int c = i + (1 + j) * (utotal + 1);
+			unsigned int d = i + (1 + j) * (utotal + 1) + 1;
 
 			triangles[iter++] = {a, b, c};
 			triangles[iter++] = {d, c, b};
@@ -82,7 +82,7 @@ mesh rabbit::mesh_from_file(const char * path)
 	std::vector<unsigned int> tris, solids;
 
 	std::vector<linalg::vec<real, 3>> vertices;
-	std::vector<linalg::vec<int, 3>> triangles;
+	std::vector<linalg::vec<unsigned int, 3>> triangles;
 	
 	stl_reader::ReadStlFile ("bulbasaur_dual_body.STL", coords, normals, tris, solids);
 	
@@ -92,10 +92,10 @@ mesh rabbit::mesh_from_file(const char * path)
 	vertices.resize(vertices_total);
 	triangles.resize(triangles_total);
 
-	for (int i = 0; i < vertices_total; ++i) 
+	for (unsigned int i = 0; i < vertices_total; ++i) 
 		vertices[i] = { coords[i*3], coords[i*3+1], coords[i*3+2] };  
 
-	for (int i = 0; i < triangles_total; ++i) 
+	for (unsigned int i = 0; i < triangles_total; ++i) 
 		triangles[i] = { tris[i*3], tris[i*3+1], tris[i*3+2] };  
 
 	return mesh(std::move(vertices), std::move(triangles));
