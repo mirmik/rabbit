@@ -40,7 +40,7 @@ namespace rabbit
 		//ssize_t print_to(nos::ostream& out) const;
 	};
 
-	pose3 rot3(vec3 vec, float angle);
+	pose3 rot3(vec3 vec, real angle);
 	pose3 mov3(vec3 vec);
 }
 
