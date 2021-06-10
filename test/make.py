@@ -9,25 +9,30 @@ from licant.libs import include
 licant.execute("../rabbit.g.py")
 licant.include("ralgo")
 
-application("runtests",
-	sources = [
-		"main.cpp",
-		"intersect.cpp",	
-		"htrans3.cpp",		
-		"nearest.cpp",		
-		"line2.cpp",
-		"optimize.cpp",
-		"svd.cpp",
-		"fitting/*.cpp"		
-	],
 
-	cxx_flags = "-g",
-	cc_flags = "-g",
+for real in ["double", "float"]:
+	application("runtests_" + real,
+		sources = [
+			"main.cpp",
+			"intersect.cpp",	
+			"htrans3.cpp",		
+			"nearest.cpp",		
+			"line2.cpp",
+			"optimize.cpp",
+			"svd.cpp",
+			"fitting/*.cpp"		
+		],
 
-	include_paths = ["."],
-	mdepends = [ "rabbit", "ralgo" ],
+		cxx_flags = "-g",
+		cc_flags = "-g",
 
-	libs=["nos", "igris"]
+		include_paths = ["."],
+		mdepends = [ "rabbit", "ralgo" ],
+
+		libs=["nos", "igris"],
+		defines=["RABBIT_REAL_TYPE=" + real]
 )
 
-licant.ex("runtests")
+licant.fileset("all", ["runtests_float", "runtests_double"])
+
+licant.ex("all")
