@@ -66,6 +66,13 @@ namespace rabbit
 		    const std::vector<vec3> & vertices,
 		    const std::vector<ivec3> & triangles);
 
+		void draw_lines(
+		    float * vertices,
+		    int vertices_total, GLint style);
+
+		void draw_lines(
+		    const std::vector<vec3> & lines, GLint style);
+
 
 		void uniform_mat4f(
 			unsigned int loc, const linalg::mat<float, 4, 4> & matrix);

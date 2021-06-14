@@ -62,3 +62,11 @@ void rabbit::opengl_shader_program::use()
 {
 	glUseProgram(this->Program);
 }
+
+
+void rabbit::opengl_shader_program::uniform_vec3f(
+    const char * locname, const linalg::vec<float, 3> & v)
+{
+	GLint modelLoc = glGetUniformLocation(Program, locname);
+	glUniform3fv(modelLoc, 1, (GLfloat*) &v);
+}

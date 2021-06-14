@@ -43,6 +43,9 @@ void rabbit::opengl_drawer::draw_triangles(
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, vertices_stride * vertices_total * sizeof(GLfloat), vertices, GL_DYNAMIC_DRAW);
 
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(0);
+
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 3 * sizeof(GLuint) * triangles_total, triangles,
 	             GL_DYNAMIC_DRAW);
@@ -64,6 +67,33 @@ void rabbit::opengl_drawer::draw_triangles(
 	    triangles.size());
 }
 
+
+void rabbit::opengl_drawer::draw_lines(
+    float * vertices,
+    int vertices_total, GLint style)
+{
+	glBindVertexArray(VAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, vertices_stride * vertices_total * sizeof(GLfloat), vertices, GL_DYNAMIC_DRAW);
+
+	glVertexAttribPointer(0, vertices_stride, GL_FLOAT, GL_FALSE, vertices_stride * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(0);
+
+	glDrawArrays(style, 0, vertices_total);
+
+	glBindVertexArray(0);
+
+}
+
+void rabbit::opengl_drawer::draw_lines(
+    const std::vector<vec3> & vertices, GLint style)
+{
+	draw_lines(
+	    (float*)vertices.data(),
+	    vertices.size(),
+	    style);
+}
 
 
 

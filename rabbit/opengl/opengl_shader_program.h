@@ -32,6 +32,9 @@ namespace rabbit
 		opengl_shader_program(const char * vertexPath, const char * fragmentPath);
 		void open(const char * vertexPath, const char * fragmentPath);
 
+		void uniform_vec3f(
+		    const char * locname, const linalg::vec<float, 3> & v);
+
 		void use();
 	};
 }
