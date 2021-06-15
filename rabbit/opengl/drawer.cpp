@@ -1,5 +1,6 @@
 #include <rabbit/opengl/drawer.h>
 #include <rabbit/opengl/shader_collection.h>
+#include <nos/print.h>
 
 rabbit::opengl_drawer::opengl_drawer() {}
 
@@ -15,12 +16,14 @@ void rabbit::opengl_drawer::init_opengl_context()
 	    rabbit::simple_fragment_shader
 	);
 
-
+	nos::println("HERE11");
 	glEnable(GL_DEPTH_TEST);
+	nos::println("HERE112");
 
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 	glGenBuffers(1, &EBO);
+	nos::println("HERE22");
 
 	glLineWidth(2);
 }

@@ -1,3 +1,7 @@
+// GLEW
+#define GLEW_STATIC
+#include <GL/glew.h>
+
 #include <rabbit/opengl/opengl_shader_program.h>
 #include <rabbit/opengl/projection.h>
 #include <rabbit/opengl/drawer.h>
@@ -6,11 +10,8 @@
 #include <rabbit/util.h>
 #include <rabbit/space/pose3.h>
 
+#include <nos/print.h>
 #include <rabbit/space/htrans.h>
-
-// GLEW
-#define GLEW_STATIC
-#include <GL/glew.h>
 
 // GLFW
 #include <GLFW/glfw3.h>
@@ -51,7 +52,9 @@ int main()
 
     rabbit::opengl_drawer drawer;
 
+    nos::println("HERE");
     drawer.init_opengl_context();
+    nos::println("HERE2");
 
     auto surf = rabbit::torus_surface(4, 0.2);
     auto surf2 = rabbit::sphere_surface(2);
