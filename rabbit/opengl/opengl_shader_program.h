@@ -28,6 +28,8 @@ namespace rabbit
 	public:
 		GLuint Program;
 
+		GLuint id() { return Program; }
+
 		opengl_shader_program();
 		opengl_shader_program(const char * vertexPath, const char * fragmentPath);
 		void open(const char * vertexPath, const char * fragmentPath);

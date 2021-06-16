@@ -74,7 +74,7 @@ int main()
 
     rabbit::camera camera;
 
-    GLfloat vertices[] =
+    /*GLfloat vertices[] =
     {
         0.5f,  0.5f, 0.999999f,  // Top Right
         0.5f, -0.5f, 0.999999f,  // Bottom Right
@@ -85,7 +85,13 @@ int main()
     {
         0, 1, 3,  // First Triangle
         1, 2, 3   // Second Triangle
-    };
+    };*/
+
+//    rabbit::opengl_drawer drawer;
+
+    rabbit::opengl_texture texture;
+    texture.resize(50,50);
+    texture.set_test_texture();
 
     rabbit::opengl_shader_program sprg(
         rabbit::simple_vertex_shader,
@@ -102,20 +108,10 @@ int main()
 
         drawer.clean(0.2f, 0.3f, 0.3f, 1.0f);
 
-        sprg.use();
-
-        drawer.set_vertices_stride(3);
-        drawer.draw_triangles(vertices, 4, indices, 2);
-
-
-        //drawer.draw_simple_triangles(vertices, 4, indices, 2);
         
-        glUseProgram(0);
-        /*drawer.draw_mesh(_mesh,
-            rabbit::pose3().to_mat4(),
-            rabbit::pose3().to_mat4(),
-            rabbit::pose3().to_mat4()
-        );*/
+        drawer.draw_onecolored_texture_2d()
+
+
 
         drawer.opengl_mesh_program.use();
 
@@ -148,7 +144,7 @@ int main()
 
         drawer.draw_mesh(
             mesh5,
-            (rabbit::mov3({5.5*sin(glfwGetTime()), 5.5*cos(glfwGetTime()), 0}) * model).to_mat4(),
+            (rabbit::mov3({5.5f*sinf(glfwGetTime()), 5.5f*cosf(glfwGetTime()), 0}) * model).to_mat4(),
             camera.view_matrix(),
             projection
         );

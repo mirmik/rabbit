@@ -4,6 +4,7 @@
 #include <rabbit/types.h>
 #include <rabbit/opengl/opengl_shader_program.h>
 #include <rabbit/interactive/interactive_object.h>
+#include <rabbit/opengl/texture.h>
 
 namespace rabbit
 {
@@ -12,7 +13,7 @@ namespace rabbit
 	public:
 		opengl_drawer();
 
-		GLuint VBO=0, VAO=0, EBO=0;
+		GLuint VBO = 0, VAO = 0, EBO = 0;
 		int vertices_stride = 3;
 
 		void set_buffers(int vao, int vbo, int ebo) { VAO = vao; VBO = vbo; EBO = ebo; }
@@ -20,6 +21,7 @@ namespace rabbit
 
 		opengl_shader_program opengl_mesh_program;
 		opengl_shader_program opengl_simple_program;
+		opengl_shader_program opengl_onecolored_texture;
 
 		void draw_interactive_object(interactive_object & iobj);
 
@@ -75,19 +77,30 @@ namespace rabbit
 
 
 		void uniform_mat4f(
-			unsigned int loc, const linalg::mat<float, 4, 4> & matrix);
-		
-		void uniform_mat4f(
-			const char * locname, int program, const linalg::mat<float, 4, 4> & matrix);
+		    unsigned int loc, const linalg::mat<float, 4, 4> & matrix);
 
 		void uniform_mat4f(
-			unsigned int loc, const GLfloat* matrix);
-		
+		    const char * locname, int program, const linalg::mat<float, 4, 4> & matrix);
+
 		void uniform_mat4f(
-			const char * locname, int program, const GLfloat* matrix);
+		    unsigned int loc, const GLfloat* matrix);
+
+		void uniform_mat4f(
+		    const char * locname, int program, const GLfloat* matrix);
 
 
-		//void draw_()
+		void draw_char_texture(
+		    const std::vector<vec3> & vertices,
+		    const std::vector<ivec3> & triangles,
+		    const rabbit::opengl_texture
+		);
+
+		void draw_onecolored_texture_2d(
+		    const std::vector<std::pair<
+		    linalg::vec<float, 3>, linalg::vec<float, 2>>> & vertices,
+		    const rabbit::opengl_texture & texture,
+		    const linalg::vec<float, 3> & color
+		);
 	};
 }
 #endif

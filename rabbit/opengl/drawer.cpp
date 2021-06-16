@@ -16,14 +16,16 @@ void rabbit::opengl_drawer::init_opengl_context()
 	    rabbit::simple_fragment_shader
 	);
 
-	nos::println("HERE11");
+	opengl_onecolored_texture.open(
+	    rabbit::onecolored_texture_vertex_shader,
+	    rabbit::onecolored_texture_fragment_shader
+	);
+
 	glEnable(GL_DEPTH_TEST);
-	nos::println("HERE112");
 
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 	glGenBuffers(1, &EBO);
-	nos::println("HERE22");
 
 	glLineWidth(2);
 }
@@ -219,4 +221,40 @@ void rabbit::opengl_drawer::uniform_mat4f(
     unsigned int location, const GLfloat* data)
 {
 	glUniformMatrix4fv(location, 1, GL_FALSE, data);
+}
+
+void rabbit::opengl_drawer::draw_onecolored_texture_2d(
+    const std::vector<std::pair<linalg::vec<float, 3>, linalg::vec<float, 2>>> & vertices,
+    const std::vector<ivec3> triangles,
+    const rabbit::opengl_texture & texture,
+    const linalg::vec<float, 3> & color
+)
+{
+	glBindVertexArray(VAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER,
+	             vertices.size() * sizeof(float) * 5, vertices.data(), GL_DYNAMIC_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(0);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER,
+	             triangles.size()*sizeof(int) * 3, triangles.data(), GL_DYNAMIC_DRAW);
+
+	texture.activate(opengl_onecolored_texture.id(), "ourTexture", 0);
+
+	opengl_onecolored_texture.use();
+
+	glBindVertexArray(VAO);
+	glDisable(GL_POLYGON_OFFSET_FILL);
+
+	//glDrawArrays(GL_POINTS, 0, vertices.size());
+	glDrawElements(GL_TRIANGLES, mesh.triangles.size()*sizeof(int) * 3, GL_UNSIGNED_INT, 0);
+
+
+	glBindVertexArray(0);
+	glUseProgram(0);
 }
