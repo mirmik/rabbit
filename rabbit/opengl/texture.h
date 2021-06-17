@@ -1,13 +1,25 @@
 #ifndef RABBIT_OPENGL_TEXTURE_H
 #define RABBIT_OPENGL_TEXTURE_H
 
+#if __has_include(<GL/glew.h>)
 #define GLEW_STATIC
 #include <GL/glew.h>
-
 #include <GL/gl.h>
+#else
+
+#if __has_include(<EGL/egl.h>)
+#include <EGL/egl.h>
+#include <EGL/eglext.h>
+#include <GLES3/gl3.h>
+#endif
+
+#endif
 
 #include <cassert>
 #include <cstring>
+
+#include <rabbit/mesh.h>
+#include <rabbit/cell3d.h>
 
 namespace rabbit
 {
@@ -157,6 +169,11 @@ namespace rabbit
 			glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D, texture);
 			glUniform1i(glGetUniformLocation(program_id, name), no);
+		}
+
+		rabbit::mesh produce_mesh_for_cell(rabbit::cell3d cell) 
+		{
+
 		}
 	};
 }

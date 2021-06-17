@@ -37,6 +37,9 @@ namespace rabbit
 		void uniform_vec3f(
 		    const char * locname, const linalg::vec<float, 3> & v);
 
+		void uniform_mat4f(
+		    const char * locname, const linalg::mat<float, 4, 4> & v);
+
 		void use();
 	};
 }

@@ -1,6 +1,5 @@
 #include <rabbit/opengl/drawer.h>
 #include <rabbit/opengl/shader_collection.h>
-#include <nos/print.h>
 
 rabbit::opengl_drawer::opengl_drawer() {}
 
@@ -48,7 +47,7 @@ void rabbit::opengl_drawer::draw_triangles(
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, vertices_stride * vertices_total * sizeof(GLfloat), vertices, GL_DYNAMIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vertices_stride * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
@@ -227,7 +226,8 @@ void rabbit::opengl_drawer::draw_onecolored_texture_2d(
     const std::vector<std::pair<linalg::vec<float, 3>, linalg::vec<float, 2>>> & vertices,
     const std::vector<ivec3> triangles,
     const rabbit::opengl_texture & texture,
-    const linalg::vec<float, 3> & color
+    const linalg::vec<float, 3> & color,
+    const linalg::mat<float, 4, 4> & transform
 )
 {
 	glBindVertexArray(VAO);
@@ -248,6 +248,7 @@ void rabbit::opengl_drawer::draw_onecolored_texture_2d(
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 
 	opengl_onecolored_texture.use();
+	opengl_onecolored_texture.uniform_mat4f("transform", transform);
 	texture.activate(opengl_onecolored_texture.id(), "ourTexture", 0);
 	opengl_onecolored_texture.uniform_vec3f("textColor", color);
 
@@ -259,4 +260,31 @@ void rabbit::opengl_drawer::draw_onecolored_texture_2d(
 
 	glBindVertexArray(0);
 	glUseProgram(0);
+}
+
+void rabbit::opengl_drawer::print_text(
+	const rabbit::font & font,
+	rabbit::textzone_cursor & cursor,
+	const std::string_view & view,
+	const linalg::vec<float,3> & color,
+	const linalg::mat<float,4,4> & matrix) 
+{
+	for (unsigned int i = 0; i < view.size(); ++i) 
+	{
+		char c = view[i];
+		auto & texture = font[c];
+		auto cell = cursor.get(); 
+
+        draw_onecolored_texture_2d(
+        {
+            {cell.ll, {0, 0}},
+            {cell.lh, {0, 1}},
+            {cell.hl, {1, 0}},
+            {cell.hh, {1, 1}},
+        },
+        {{0, 1, 2}, {1, 3, 2}},
+        texture, color, matrix);
+
+        cursor.increment();
+	}
 }

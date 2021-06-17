@@ -1,48 +1,99 @@
 #ifndef RABBIT_TEXTZONE_H
 #define RABBIT_TEXTZONE_H
 
+#include <ralgo/linspace.h>
+#include <rabbit/cell3d.h>
+
 namespace rabbit
 {
+
 	class textzone
 	{
-		int width;
-		int heignt;
+		int _width;
+		int _height;
 
-		linalg::vec<float, 3> lt = {0, 1, 0};
-		linalg::vec<float, 3> rt = {1, 1, 0};
-		linalg::vec<float, 3> lb = {0, 0, 0};
-		linalg::vec<float, 3> rb = {1, 0, 0};
+		linalg::vec<float, 3> ll = { -1, -1, 0.99999};
+		linalg::vec<float, 3> hl = { 1, -1, 0.99999};
+		linalg::vec<float, 3> lh = { -1,  1, 0.99999};
+		linalg::vec<float, 3> hh = { 1,  1, 0.99999};
+
+	public:
+		int width() { return _width; }
+		int height() { return _height; }
+
+		textzone() = default;
+		textzone(int w, int h) : _width(w), _height(h) {}
+		textzone(
+		    int w, int h,
+		    const linalg::vec<float, 3> & ll,
+		    const linalg::vec<float, 3> & hl,
+		    const linalg::vec<float, 3> & lh,
+		    const linalg::vec<float, 3> & hh
+		) : _width(w), _height(h), ll(ll), hl(hl), lh(lh), hh(hh)
+		{}
+
+		void init(int w, int h) 
+		{
+			_width = w;
+			_height = h;
+		}
 
 		void bind_coords(
-		    linalg::vec<float, 3> lt,
-		    linalg::vec<float, 3> rt,
-		    linalg::vec<float, 3> lb,
-		    linalg::vec<float, 3> rb) 
+		    linalg::vec<float, 3> ll,
+		    linalg::vec<float, 3> hl,
+		    linalg::vec<float, 3> lh,
+		    linalg::vec<float, 3> hh)
 		{
-			this->lt = lt;
-			this->rt = rt;
-			this->lb = lb;
-			this->rb = rb;
+			this->ll = ll;
+			this->hl = hl;
+			this->lh = lh;
+			this->hh = hh;
 		}
 
-		void zone_for_cell(
-			int row, 
-			int column,
-		    linalg::vec<float, 3> & _lt,
-		    linalg::vec<float, 3> & _rt,
-		    linalg::vec<float, 3> & _lb,
-		    linalg::vec<float, 3> & _rb) 
+		cell3d zone_for_cell(
+		    int column,
+		    int row)
 		{
-			float rkoeff1 = (float)row / (float)(height);  
-			float сkoeff1 = (float)column / (float)(width);
-			float rkoeff2 = (float)(row+1) / (float)(height);  
-			float сkoeff2 = (float)(column+1) / (float)(width);
-			
-			_lt = ralgo::bilinear_interpolation(rkoeff1, ckoeff1, lt, rt, lb, rb);
-			_rt = ralgo::bilinear_interpolation(rkoeff1, ckoeff2, lt, rt, lb, rb);
-			_lb = ralgo::bilinear_interpolation(rkoeff2, ckoeff1, lt, rt, lb, rb);
-			_rb = ralgo::bilinear_interpolation(rkoeff2, ckoeff2, lt, rt, lb, rb);
+			cell3d cell;
+			row = _height - row - 1;
+
+			float rkoeff1 = (float)row / (float)(_height);
+			float ckoeff1 = (float)column / (float)(_width);
+			float rkoeff2 = (float)(row + 1) / (float)(_height);
+			float ckoeff2 = (float)(column + 1) / (float)(_width);
+
+			cell.ll = ralgo::bilinear_interpolation(ckoeff1, rkoeff1, ll, hl, lh, hh);
+			cell.hl = ralgo::bilinear_interpolation(ckoeff2, rkoeff1, ll, hl, lh, hh);
+			cell.lh = ralgo::bilinear_interpolation(ckoeff1, rkoeff2, ll, hl, lh, hh);
+			cell.hh = ralgo::bilinear_interpolation(ckoeff2, rkoeff2, ll, hl, lh, hh);
+
+			return cell;
 		}
+
+		cell3d operator()(int i, int j) { return zone_for_cell(i, j); }
+	};
+
+	class textzone_cursor
+	{
+		int col = 0;
+		int row = 0;
+		textzone * zone;
+
+	public:
+		textzone_cursor(textzone * zone, int col = 0, int row = 0) :
+			zone(zone), col(col), row(row) {}
+
+		void increment()
+		{
+			col++;
+			if (col >= zone->width())
+			{
+				col = 0;
+				row++;
+			}
+		}
+
+		cell3d get() { return zone->zone_for_cell(col, row); }
 	};
 }
 

@@ -10,7 +10,7 @@
 #include <rabbit/util.h>
 #include <rabbit/space/pose3.h>
 
-#include <nos/print.h>
+#include <nos/fprint.h>
 #include <rabbit/space/htrans.h>
 
 // GLFW
@@ -26,6 +26,9 @@
 #include <rabbit/font/naive.h>
 #include <rabbit/camera.h>
 #include <rabbit/font/font.h>
+#include <rabbit/font/textzone.h>
+
+#include <igris/systime.h>
 
 // Window dimensions
 const GLuint WIDTH = 1600, HEIGHT = 800;
@@ -55,9 +58,7 @@ int main()
 
     rabbit::opengl_drawer drawer;
 
-    nos::println("HERE");
     drawer.init_opengl_context();
-    nos::println("HERE2");
 
     auto surf = rabbit::torus_surface(4, 0.2);
     auto surf2 = rabbit::sphere_surface(2);
@@ -94,15 +95,25 @@ int main()
 
     //rabbit::opengl_texture texture = rabbit::naive_font16x26_texture('B');
     rabbit::font font(rabbit::naive_font16x26_texture);
-    rabbit::opengl_texture & texture = font['Y'];
-    //texture.create(16, 16, GL_RED, GL_RED, GL_UNSIGNED_BYTE);
-    //texture.set_finish_flag_texture(16, 16);
-    texture.bind();
+    //rabbit::opengl_texture & texture = font['Y'];
+
+    rabbit::textzone textzone(30,30, 
+        
+            {-0.9,-0.9,0.99999},
+            {0.9,-0.5,0.99999},
+            {-0.9,0.9,0.99999},
+            {0.9,0.5,0.99999}            
+        );
+    //auto cell = textzone(1,0);
 
     rabbit::opengl_shader_program sprg(
         rabbit::simple_vertex_shader,
         rabbit::simple_fragment_shader);
 
+    int i = 0;
+    igris::start_local_time();
+
+    double last_time = 0;
     while (!glfwWindowShouldClose(window))
     {
         auto model = rabbit::rot3({0, 0, 1}, rabbit::deg(glfwGetTime() * 16));
@@ -117,16 +128,23 @@ int main()
         float lo = 0.7;
         float hi = 0.9;
 
-        drawer.draw_onecolored_texture_2d(
-        {
-            {{lo, lo, 0.99999}, {0, 0}},
-            {{lo, hi, 0.99999}, {0, 1}},
-            {{hi, lo, 0.99999}, {1, 0}},
-            {{hi, hi, 0.99999}, {1, 1}},
-        },
-        {{0, 1, 2}, {1, 3, 2}},
-        texture, {0, 1, 0});
+        double curtime =  igris::local_time();
 
+        auto cursor = rabbit::textzone_cursor(&textzone, 0, 1);
+        auto str = nos::format("Mirmik was here : {}", i++);
+        drawer.print_text(font, cursor, str, {0,1,0});
+
+        cursor = rabbit::textzone_cursor(&textzone, 0, 2);
+        str = nos::format("fps : {}", 1.f/(curtime - last_time));
+        drawer.print_text(font, cursor, str, {0,1,0}, 
+            {
+                { 1,0,0,0}, 
+                { 0,1,0,0}, 
+                { 0,0,1,0}, 
+                { 0,0,0,1}
+            });
+
+        last_time = curtime;
 
 
         drawer.opengl_mesh_program.use();

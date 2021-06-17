@@ -5,6 +5,8 @@
 #include <rabbit/opengl/opengl_shader_program.h>
 #include <rabbit/interactive/interactive_object.h>
 #include <rabbit/opengl/texture.h>
+#include <rabbit/font/font.h>
+#include <rabbit/font/textzone.h>
 
 namespace rabbit
 {
@@ -99,7 +101,16 @@ namespace rabbit
 		    const std::vector<std::pair<linalg::vec<float, 3>, linalg::vec<float, 2>>> & vertices,
 		    const std::vector<ivec3> triangles,
 		    const rabbit::opengl_texture & texture,
-		    const linalg::vec<float, 3> & color
+		    const linalg::vec<float, 3> & color,
+		    const linalg::mat<float,4,4> & transform = linalg::identity
+		);
+
+		void print_text(
+		    const rabbit::font & font,
+		    rabbit::textzone_cursor & cursor,
+		    const std::string_view & message,
+		    const linalg::vec<float,3> & color,
+		    const linalg::mat<float,4,4> & transform = linalg::identity
 		);
 	};
 }

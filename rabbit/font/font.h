@@ -10,7 +10,14 @@ namespace rabbit
 	public:
 		opengl_texture textures[256];
 		
+		font() = default;
+
 		font(font_producer_t producer) 
+		{
+			init(producer);
+		}
+
+		void init(font_producer_t producer) 
 		{
 			for (int i = 0; i < 256; ++i) 
 			{
@@ -19,7 +26,7 @@ namespace rabbit
 			}
 		}
 
-		opengl_texture & operator[] (int code) 
+		const opengl_texture & operator[] (int code) const
 		{
 			return textures[code];
 		}
