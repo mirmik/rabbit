@@ -96,8 +96,8 @@ namespace rabbit
 		);
 
 		void draw_onecolored_texture_2d(
-		    const std::vector<std::pair<
-		    linalg::vec<float, 3>, linalg::vec<float, 2>>> & vertices,
+		    const std::vector<std::pair<linalg::vec<float, 3>, linalg::vec<float, 2>>> & vertices,
+		    const std::vector<ivec3> triangles,
 		    const rabbit::opengl_texture & texture,
 		    const linalg::vec<float, 3> & color
 		);

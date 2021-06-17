@@ -2,14 +2,15 @@
 #define RABBIT_OPENGL_TEXTURE_H
 
 #include <GL/gl.h>
+#include <assert.h>
 
 namespace rabbit
 {
 	class opengl_texture
 	{
 		unsigned char * data = nullptr;
-		int width;
-		int height;
+		int width = 0;
+		int height = 0;
 
 		GLuint texture;
 
@@ -18,20 +19,23 @@ namespace rabbit
 		GLint type;
 
 	public:
-		void resize(int w, int h) 
+		void resize(int w, int h)
 		{
 			if (data) delete[] (data);
 
-			data = new unsigned char[w*h];
+			data = new unsigned char[w * h];
 			width = w;
 			height = h;
 		}
 
-		void set_test_texture() 
+		void set_test_texture()
 		{
-			for (int i = 0; i < width; ++i) 
-				for (int j = 0; j < height; ++j) 
-					data[i * width + j] = (i+j) % 2 ? 255 : 0;
+			assert(width > 0);
+			assert(height > 0);
+
+			for (int i = 0; i < width; ++i)
+				for (int j = 0; j < height; ++j)
+					data[i * width + j] = (i + j) % 2 ? 255 : 0;
 		}
 
 		void bind()
@@ -50,11 +54,12 @@ namespace rabbit
 			    data
 			);
 
+			glGenerateMipmap(GL_TEXTURE_2D);
 		}
 
 		void activate(int program_id, const char * name, int no = 0) const
 		{
-			glActiveTexture(GL_TEXTURE1);
+			glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D, texture);
 			glUniform1i(glGetUniformLocation(program_id, name), no);
 		}

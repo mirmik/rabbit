@@ -176,7 +176,7 @@ void rabbit::opengl_drawer::draw_points(
 	             count * sizeof(float) * 3, pnts, GL_DYNAMIC_DRAW);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
-	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(VAO);
 
 	GLint vertexColorLocation = glGetUniformLocation(opengl_mesh_program.Program, "vertexColor");
 	opengl_mesh_program.use();
@@ -238,7 +238,7 @@ void rabbit::opengl_drawer::draw_onecolored_texture_2d(
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
-	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(VAO);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER,
@@ -249,10 +249,9 @@ void rabbit::opengl_drawer::draw_onecolored_texture_2d(
 	opengl_onecolored_texture.use();
 
 	glBindVertexArray(VAO);
-	glDisable(GL_POLYGON_OFFSET_FILL);
 
 	//glDrawArrays(GL_POINTS, 0, vertices.size());
-	glDrawElements(GL_TRIANGLES, mesh.triangles.size()*sizeof(int) * 3, GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, triangles.size()*sizeof(int) * 3, GL_UNSIGNED_INT, 0);
 
 
 	glBindVertexArray(0);

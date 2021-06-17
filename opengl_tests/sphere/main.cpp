@@ -46,9 +46,10 @@ int main()
     glViewport(0, 0, WIDTH, HEIGHT);
 
 
+    glEnable(GL_BLEND);
 
 
-    
+
 
     rabbit::opengl_drawer drawer;
 
@@ -90,8 +91,9 @@ int main()
 //    rabbit::opengl_drawer drawer;
 
     rabbit::opengl_texture texture;
-    texture.resize(50,50);
+    texture.resize(50, 50);
     texture.set_test_texture();
+    texture.bind();
 
     rabbit::opengl_shader_program sprg(
         rabbit::simple_vertex_shader,
@@ -108,8 +110,16 @@ int main()
 
         drawer.clean(0.2f, 0.3f, 0.3f, 1.0f);
 
-        
-        drawer.draw_onecolored_texture_2d()
+
+        drawer.draw_onecolored_texture_2d(
+        {
+            {{ -0.5, -0.5, 0.99999}, { -1, -1}},
+            {{ -0.5, 0.5, 0.99999}, { -1, 1}},
+            {{0.5, -0.5, 0.99999}, {1, 1}},
+            {{0.5, 0.5, 0.99999}, {1, -1}},
+        },
+        {{0, 1, 2}, {1, 3, 2}},
+        texture, {0, 1, 0});
 
 
 
@@ -117,7 +127,7 @@ int main()
 
         drawer.draw_mesh(
             mesh,
-            (rabbit::rot3(rabbit::vec3{0.3,0.7,0}, rabbit::deg(20)) * model).to_mat4(),
+            (rabbit::rot3(rabbit::vec3{0.3, 0.7, 0}, rabbit::deg(20)) * model).to_mat4(),
             camera.view_matrix(),
             projection);
 
@@ -137,14 +147,14 @@ int main()
 
         drawer.draw_mesh(
             mesh4,
-            (rabbit::rot3(rabbit::vec3{0.6,0.2,0}, rabbit::deg(20)) * model.inverse()).to_mat4(),
+            (rabbit::rot3(rabbit::vec3{0.6, 0.2, 0}, rabbit::deg(20)) * model.inverse()).to_mat4(),
             camera.view_matrix(),
             projection
         );
 
         drawer.draw_mesh(
             mesh5,
-            (rabbit::mov3({5.5f*sinf(glfwGetTime()), 5.5f*cosf(glfwGetTime()), 0}) * model).to_mat4(),
+            (rabbit::mov3({5.5f * sinf(glfwGetTime()), 5.5f * cosf(glfwGetTime()), 0}) * model).to_mat4(),
             camera.view_matrix(),
             projection
         );
