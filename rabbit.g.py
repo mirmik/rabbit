@@ -17,6 +17,7 @@ licant.module("rabbit.opengl",
 		"rabbit/opengl/opengl_shader_program.cpp",
 		"rabbit/opengl/shader_collection.cpp",
 		"rabbit/opengl/drawer.cpp",
+		"rabbit/font/naive.cpp",
 	]
 )
 

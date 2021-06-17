@@ -1,8 +1,13 @@
 #ifndef RABBIT_OPENGL_TEXTURE_H
 #define RABBIT_OPENGL_TEXTURE_H
 
+#define GLEW_STATIC
+#include <GL/glew.h>
+
 #include <GL/gl.h>
-#include <assert.h>
+
+#include <cassert>
+#include <cstring>
 
 namespace rabbit
 {
@@ -14,28 +19,118 @@ namespace rabbit
 
 		GLuint texture;
 
-		GLint opengl_format;
-		GLint format;
-		GLint type;
+		GLint opengl_format = GL_RED;
+		GLint format = GL_RED;
+		GLint type = GL_UNSIGNED_BYTE;
 
 	public:
-		void resize(int w, int h)
+		opengl_texture() = default;
+
+		opengl_texture(const opengl_texture & oth)
+			:
+			width(oth.width),
+			height(oth.height),
+			texture(oth.texture),
+			opengl_format(oth.opengl_format),
+			format(oth.format),
+			type(oth.type)
+		{
+			resize(width, height, point_size());
+			memcpy(data, oth.data, point_size());
+		}
+
+		opengl_texture(opengl_texture && oth)
+			:
+			width(oth.width),
+			height(oth.height),
+			texture(oth.texture),
+			opengl_format(oth.opengl_format),
+			format(oth.format),
+			type(oth.type),
+			data(oth.data)
+		{
+			oth.data = nullptr;
+		}
+
+		opengl_texture & operator= (opengl_texture && oth) 
+		{
+			width = oth.width;
+			height = oth.height;
+			texture = oth.texture;
+			opengl_format = oth.opengl_format;
+			format = oth.format;
+			type = oth.type;
+			data = oth.data;
+
+			oth.data = nullptr;
+			return *this;
+		}
+
+		~opengl_texture() 
+		{
+			delete[](data);
+		}
+
+		int point_size() 
+		{
+			return component_size() * components_count();
+		}
+
+		int components_count()
+		{
+			switch (format)
+			{
+				case GL_RED: return 1;
+				case GL_RGB: return 3;
+			}
+			return 1;
+		}
+
+		int component_size()
+		{
+			switch (type)
+			{
+				case GL_UNSIGNED_BYTE: return 1;
+				case GL_UNSIGNED_SHORT: return 2;
+			}
+			return 1;
+		}
+
+		void resize(int w, int h, int per_point)
 		{
 			if (data) delete[] (data);
 
-			data = new unsigned char[w * h];
+			data = new unsigned char[w * h * per_point];
 			width = w;
 			height = h;
 		}
 
-		void set_test_texture()
+		uint8_t& at8(int i, int j)
+		{
+			return ((uint8_t *)data) [i * width + j];
+		}
+
+		void create(int w, int h, GLint _opengl_format, GLint _format, GLint _type)
+		{
+			opengl_format = _format;
+			format = _format;
+			type = _type;
+
+			resize(w, h, components_count() * component_size());
+		}
+
+		void set_finish_flag_texture(int w, int h)
 		{
 			assert(width > 0);
 			assert(height > 0);
 
+			float wkoeff = (float)w / (float)width;
+			float hkoeff = (float)h / (float)height;
+
 			for (int i = 0; i < width; ++i)
 				for (int j = 0; j < height; ++j)
-					data[i * width + j] = (i + j) % 2 ? 255 : 0;
+					data[i * width + j] =
+					    (int)(i * wkoeff) % 2 != (int)(j * hkoeff) % 2  ? 255 : 0;
 		}
 
 		void bind()
@@ -45,12 +140,12 @@ namespace rabbit
 			glTexImage2D(
 			    GL_TEXTURE_2D,
 			    0,
-			    GL_RED,
+			    opengl_format,
 			    width,
 			    height,
 			    0,
-			    GL_RED,
-			    GL_UNSIGNED_BYTE,
+			    format,
+			    type,
 			    data
 			);
 

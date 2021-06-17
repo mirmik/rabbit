@@ -67,12 +67,10 @@ in vec2 TexCoords;
 out vec4 color;
 
 uniform sampler2D ourTexture;
-//uniform vec3 textColor;
-vec3 textColor;
+uniform vec3 textColor;
 
 void main()
 {    
-	textColor = vec3(0,0,1);
 	float transparenty = texture(ourTexture, TexCoords).r;
 
 	if (transparenty < 0.5)

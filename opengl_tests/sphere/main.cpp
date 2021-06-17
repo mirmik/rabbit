@@ -23,7 +23,9 @@
 
 #include <rabbit/opengl/util.h>
 #include <rabbit/opengl/drawer.h>
+#include <rabbit/font/naive.h>
 #include <rabbit/camera.h>
+#include <rabbit/font/font.h>
 
 // Window dimensions
 const GLuint WIDTH = 1600, HEIGHT = 800;
@@ -90,9 +92,11 @@ int main()
 
 //    rabbit::opengl_drawer drawer;
 
-    rabbit::opengl_texture texture;
-    texture.resize(50, 50);
-    texture.set_test_texture();
+    //rabbit::opengl_texture texture = rabbit::naive_font16x26_texture('B');
+    rabbit::font font(rabbit::naive_font16x26_texture);
+    rabbit::opengl_texture & texture = font['Y'];
+    //texture.create(16, 16, GL_RED, GL_RED, GL_UNSIGNED_BYTE);
+    //texture.set_finish_flag_texture(16, 16);
     texture.bind();
 
     rabbit::opengl_shader_program sprg(
@@ -110,13 +114,15 @@ int main()
 
         drawer.clean(0.2f, 0.3f, 0.3f, 1.0f);
 
+        float lo = 0.7;
+        float hi = 0.9;
 
         drawer.draw_onecolored_texture_2d(
         {
-            {{ -0.5, -0.5, 0.99999}, { -1, -1}},
-            {{ -0.5, 0.5, 0.99999}, { -1, 1}},
-            {{0.5, -0.5, 0.99999}, {1, 1}},
-            {{0.5, 0.5, 0.99999}, {1, -1}},
+            {{lo, lo, 0.99999}, {0, 0}},
+            {{lo, hi, 0.99999}, {0, 1}},
+            {{hi, lo, 0.99999}, {1, 0}},
+            {{hi, hi, 0.99999}, {1, 1}},
         },
         {{0, 1, 2}, {1, 3, 2}},
         texture, {0, 1, 0});

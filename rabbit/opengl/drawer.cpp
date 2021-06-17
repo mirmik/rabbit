@@ -237,16 +237,19 @@ void rabbit::opengl_drawer::draw_onecolored_texture_2d(
 	             vertices.size() * sizeof(float) * 5, vertices.data(), GL_DYNAMIC_DRAW);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
-	glEnableVertexAttribArray(VAO);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER,
 	             triangles.size()*sizeof(int) * 3, triangles.data(), GL_DYNAMIC_DRAW);
 
-	texture.activate(opengl_onecolored_texture.id(), "ourTexture", 0);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 
 	opengl_onecolored_texture.use();
+	texture.activate(opengl_onecolored_texture.id(), "ourTexture", 0);
+	opengl_onecolored_texture.uniform_vec3f("textColor", color);
 
 	glBindVertexArray(VAO);
 
