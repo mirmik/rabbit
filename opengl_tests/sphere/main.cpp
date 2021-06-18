@@ -49,16 +49,13 @@ int main()
     glewInit();
 
     glViewport(0, 0, WIDTH, HEIGHT);
-
-
     glEnable(GL_BLEND);
 
-
-
-
     rabbit::opengl_drawer drawer;
+    rabbit::opengl_drawer drawer1;
 
     drawer.init_opengl_context();
+    drawer1.init_opengl_context();
 
     auto surf = rabbit::torus_surface(4, 0.2);
     auto surf2 = rabbit::sphere_surface(2);
@@ -77,25 +74,7 @@ int main()
         rabbit::opengl_perspective(rabbit::deg(100) / aspect, aspect, 0.1, 100);
 
     rabbit::camera camera;
-
-    /*GLfloat vertices[] =
-    {
-        0.5f,  0.5f, 0.999999f,  // Top Right
-        0.5f, -0.5f, 0.999999f,  // Bottom Right
-        -0.5f, -0.5f, 0.999999f,  // Bottom Left
-        -0.5f,  0.5f, 0.999999f   // Top Left
-    };
-    GLuint indices[] =    // Note that we start from 0!
-    {
-        0, 1, 3,  // First Triangle
-        1, 2, 3   // Second Triangle
-    };*/
-
-//    rabbit::opengl_drawer drawer;
-
-    //rabbit::opengl_texture texture = rabbit::naive_font16x26_texture('B');
     rabbit::font font(rabbit::naive_font16x26_texture);
-    //rabbit::opengl_texture & texture = font['Y'];
 
     rabbit::textzone textzone(30,30, 
         
@@ -104,11 +83,6 @@ int main()
             {-0.9,0.9,0.99999},
             {0.9,0.5,0.99999}            
         );
-    //auto cell = textzone(1,0);
-
-    rabbit::opengl_shader_program sprg(
-        rabbit::simple_vertex_shader,
-        rabbit::simple_fragment_shader);
 
     int i = 0;
     igris::start_local_time();
@@ -136,7 +110,7 @@ int main()
 
         cursor = rabbit::textzone_cursor(&textzone, 0, 2);
         str = nos::format("fps : {}", 1.f/(curtime - last_time));
-        drawer.print_text(font, cursor, str, {0,1,0}, 
+        drawer1.print_text(font, cursor, str, {0,1,0}, 
             {
                 { 1,0,0,0}, 
                 { 0,1,0,0}, 

@@ -17,12 +17,12 @@ namespace rabbit
 			init(producer);
 		}
 
-		void init(font_producer_t producer) 
+		void init(font_producer_t producer, GLint channel=GL_RED) 
 		{
 			for (int i = 0; i < 256; ++i) 
 			{
 				textures[i] = producer(i);
-				textures[i].bind();
+				textures[i].bind(channel);
 			}
 		}
 

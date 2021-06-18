@@ -152,11 +152,30 @@ namespace rabbit
 			glTexImage2D(
 			    GL_TEXTURE_2D,
 			    0,
-			    opengl_format,
+			   	opengl_format,
 			    width,
 			    height,
 			    0,
 			    format,
+			    type,
+			    data
+			);
+
+			glGenerateMipmap(GL_TEXTURE_2D);
+		}
+
+		void bind(GLint channel)
+		{
+			glGenTextures(1, &texture);
+			glBindTexture(GL_TEXTURE_2D, texture);
+			glTexImage2D(
+			    GL_TEXTURE_2D,
+			    0,
+			   	channel,
+			    width,
+			    height,
+			    0,
+			    channel,
 			    type,
 			    data
 			);
