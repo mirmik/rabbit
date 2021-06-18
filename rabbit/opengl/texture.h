@@ -64,7 +64,7 @@ namespace rabbit
 			oth.data = nullptr;
 		}
 
-		opengl_texture & operator= (opengl_texture && oth) 
+		opengl_texture & operator= (opengl_texture && oth)
 		{
 			width = oth.width;
 			height = oth.height;
@@ -78,12 +78,12 @@ namespace rabbit
 			return *this;
 		}
 
-		~opengl_texture() 
+		~opengl_texture()
 		{
 			delete[](data);
 		}
 
-		int point_size() 
+		int point_size()
 		{
 			return component_size() * components_count();
 		}
@@ -171,9 +171,18 @@ namespace rabbit
 			glUniform1i(glGetUniformLocation(program_id, name), no);
 		}
 
-		rabbit::mesh produce_mesh_for_cell(rabbit::cell3d cell) 
+		rabbit::mesh mesh_for_cell(rabbit::cell3d cell)
 		{
+			for (int row = 0; row < height; ++row)
+			{
+				for (int col = 0; col < width;  ++col)
+				{
+					if (*data[row * width + col]) 
+					{
 
+					}
+				}
+			}
 		}
 	};
 }
