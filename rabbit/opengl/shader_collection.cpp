@@ -1,7 +1,7 @@
 #include <rabbit/opengl/shader_collection.h>
 
 const char * rabbit::mesh_vertex_shader = R"""(
-#version 330 core
+#version 300 es
 layout (location = 0) in vec3 position;
 
 uniform mat4 model;
@@ -15,10 +15,10 @@ void main()
 )""";
 
 const char * rabbit::mesh_fragment_shader = R"""(
-#version 330 core
+#version 300 es
 
-uniform vec4 vertexColor;
-out vec4 color;
+uniform lowp vec4 vertexColor;
+out lowp vec4 color;
 
 void main()
 {

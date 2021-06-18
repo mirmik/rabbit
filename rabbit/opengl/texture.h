@@ -171,7 +171,7 @@ namespace rabbit
 			glUniform1i(glGetUniformLocation(program_id, name), no);
 		}
 
-		rabbit::mesh mesh_for_cell(rabbit::cell3d cell)
+		/*rabbit::mesh mesh_for_cell(rabbit::cell3d cell)
 		{
 			for (int row = 0; row < height; ++row)
 			{
@@ -183,7 +183,7 @@ namespace rabbit
 					}
 				}
 			}
-		}
+		}*/
 	};
 }
 
