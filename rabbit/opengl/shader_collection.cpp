@@ -65,15 +65,15 @@ void main()
 
 const char * rabbit::onecolored_texture_fragment_shader = R"""(
 #version 300 es
-in vec2 TexCoords;
-out vec4 color;
+in lowp vec2 TexCoords;
+out lowp vec4 color;
 
 uniform sampler2D ourTexture;
-uniform vec3 textColor;
+uniform lowp vec3 textColor;
 
 void main()
 {    
-	float transparenty = texture(ourTexture, TexCoords).r;
+	lowp float transparenty = texture(ourTexture, TexCoords).r;
 
 	if (transparenty < 0.5)
 		discard;
