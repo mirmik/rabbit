@@ -97,13 +97,13 @@ int main()
     rabbit::font font(rabbit::naive_font16x26_texture);
     //rabbit::opengl_texture & texture = font['Y'];
 
-    rabbit::textzone textzone(30,30, 
-        
-            {-0.9,-0.9,0.99999},
-            {0.9,-0.5,0.99999},
-            {-0.9,0.9,0.99999},
-            {0.9,0.5,0.99999}            
-        );
+    rabbit::textzone textzone(30, 30,
+
+    { -1, -1, -0.5},
+    {1, -1, -0.5},
+    { -1, 1, -0.5},
+    {1, 1, -0.5}
+                             );
     //auto cell = textzone(1,0);
 
     rabbit::opengl_shader_program sprg(
@@ -130,19 +130,53 @@ int main()
 
         double curtime =  igris::local_time();
 
+        /*        auto texttrans = mul(
+                    linalg::rotation_matrix(linalg::rotation_quat<float>({0,1,0}, M_PI/4)),
+                    linalg::scaling_matrix<float>({0.5,0.5,0.5}));*/
+
+        auto texttrans = mul(
+            projection, 
+            mul(
+                mul(
+                    linalg::rotation_matrix(linalg::rotation_quat<float>({0,1,0}, -M_PI/10)),
+                    linalg::rotation_matrix(linalg::rotation_quat<float>({1,0,0}, -M_PI/10))
+                ),
+                linalg::translation_matrix<float>({0,0,-2})
+            )
+        );
+
+
+        //linalg::scaling_matrix<float>({0.2,0.2,1})),
+        //linalg::rotation_matrix(linalg::rotation_quat<float>({0,1,0},-M_PI/10))),
+        //linalg::rotation_matrix(linalg::rotation_quat<float>({1,0,0},-M_PI/20))
+        ;
+
         auto cursor = rabbit::textzone_cursor(&textzone, 0, 1);
         auto str = nos::format("Mirmik was here : {}", i++);
-        drawer.print_text(font, cursor, str, {0,1,0});
+        drawer.print_text(font, cursor, str, {0, 1, 0}, texttrans);
 
         cursor = rabbit::textzone_cursor(&textzone, 0, 2);
-        str = nos::format("fps : {}", 1.f/(curtime - last_time));
-        drawer.print_text(font, cursor, str, {0,1,0}, 
-            {
-                { 1,0,0,0}, 
-                { 0,1,0,0}, 
-                { 0,0,1,0}, 
-                { 0,0,0,1}
-            });
+        str = nos::format("fps : {}", 1.f / (curtime - last_time));
+        str = nos::format("Mirmik was here : {}", i++);
+        drawer.print_text(font, cursor, str, {0, 1, 0}, texttrans);
+        drawer.print_text(font, cursor, str, {0, 1, 0}, texttrans);
+        drawer.print_text(font, cursor, str, {0, 1, 0}, texttrans);
+        drawer.print_text(font, cursor, str, {0, 1, 0}, texttrans);
+        drawer.print_text(font, cursor, str, {0, 1, 0}, texttrans);
+        drawer.print_text(font, cursor, str, {0, 1, 0}, texttrans);
+        drawer.print_text(font, cursor, str, {0, 1, 0}, texttrans);
+        drawer.print_text(font, cursor, str, {0, 1, 0}, texttrans);
+        drawer.print_text(font, cursor, str, {0, 1, 0}, texttrans);
+        drawer.print_text(font, cursor, str, {0, 1, 0}, texttrans);
+        drawer.print_text(font, cursor, str, {0, 1, 0}, texttrans);
+        drawer.print_text(font, cursor, str, {0, 1, 0}, texttrans);
+        drawer.print_text(font, cursor, str, {0, 1, 0}, texttrans);
+        drawer.print_text(font, cursor, str, {0, 1, 0}, texttrans);
+        drawer.print_text(font, cursor, str, {0, 1, 0}, texttrans);
+        drawer.print_text(font, cursor, str, {0, 1, 0}, texttrans);
+        drawer.print_text(font, cursor, str, {0, 1, 0}, texttrans);
+        drawer.print_text(font, cursor, str, {0, 1, 0}, texttrans);
+        drawer.print_text(font, cursor, str, {0, 1, 0}, texttrans);
 
         last_time = curtime;
 
