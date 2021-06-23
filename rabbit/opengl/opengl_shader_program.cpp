@@ -28,6 +28,7 @@ void rabbit::opengl_shader_program::open(
 	{
 		glGetShaderInfoLog(vertex, 512, NULL, infoLog);
 		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+		abort();
 	}
 	// Fragment Shader
 	fragment = glCreateShader(GL_FRAGMENT_SHADER);
@@ -39,6 +40,7 @@ void rabbit::opengl_shader_program::open(
 	{
 		glGetShaderInfoLog(fragment, 512, NULL, infoLog);
 		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
+		abort();
 	}
 	// Shader Program
 	this->Program = glCreateProgram();
@@ -51,6 +53,7 @@ void rabbit::opengl_shader_program::open(
 	{
 		glGetProgramInfoLog(this->Program, 512, NULL, infoLog);
 		std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
+		abort();
 	}
 	// Delete the shaders as they're linked into our program now and no longer necessery
 	glDeleteShader(vertex);
