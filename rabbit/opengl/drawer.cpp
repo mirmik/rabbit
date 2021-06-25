@@ -20,6 +20,11 @@ void rabbit::opengl_drawer::init_opengl_context()
 	    rabbit::onecolored_texture_fragment_shader
 	);
 
+	opengl_rgb_texture.open(
+	    rabbit::rgb_texture_vertex_shader,
+	    rabbit::rgb_texture_fragment_shader
+	);
+
 	glEnable(GL_DEPTH_TEST);
 
 	glGenVertexArrays(1, &VAO);
@@ -253,8 +258,43 @@ void rabbit::opengl_drawer::draw_onecolored_texture_2d(
 	opengl_onecolored_texture.uniform_vec3f("textColor", color);
 
 	glBindVertexArray(VAO);
+	glDrawElements(GL_TRIANGLES, triangles.size()*sizeof(int) * 3, GL_UNSIGNED_INT, 0);
 
-	//glDrawArrays(GL_POINTS, 0, vertices.size());
+
+	glBindVertexArray(0);
+	glUseProgram(0);
+}
+
+
+void rabbit::opengl_drawer::draw_rgb_texture_2d(
+    const std::vector<std::pair<linalg::vec<float, 3>, linalg::vec<float, 2>>> & vertices,
+    const std::vector<ivec3> triangles,
+    const rabbit::opengl_texture & texture,
+    const linalg::mat<float, 4, 4> & transform
+)
+{
+	glBindVertexArray(VAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER,
+	             vertices.size() * sizeof(float) * 5, vertices.data(), GL_DYNAMIC_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER,
+	             triangles.size()*sizeof(int) * 3, triangles.data(), GL_DYNAMIC_DRAW);
+
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+
+	opengl_rgb_texture.use();
+	opengl_rgb_texture.uniform_mat4f("transform", transform);
+	texture.activate(opengl_onecolored_texture.id(), "ourTexture", 0);
+
+	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, triangles.size()*sizeof(int) * 3, GL_UNSIGNED_INT, 0);
 
 

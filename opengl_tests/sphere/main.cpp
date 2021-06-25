@@ -86,6 +86,12 @@ int main()
     int i = 0;
     igris::start_local_time();
 
+
+    rabbit::opengl_texture left_eye_texture;
+    left_eye_texture.create(60, 60, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
+    left_eye_texture.set_finish_flag_texture(60, 60);
+    left_eye_texture.bind();
+
     double last_time = 0;
     while (!glfwWindowShouldClose(window))
     {
@@ -108,15 +114,28 @@ int main()
                     linalg::scaling_matrix<float>({0.5,0.5,0.5}));*/
 
         auto texttrans = mul(
-            projection, 
-            mul(
-                mul(
-                    linalg::rotation_matrix(linalg::rotation_quat<float>({0,1,0}, -M_PI/10)),
-                    linalg::rotation_matrix(linalg::rotation_quat<float>({1,0,0}, -M_PI/10))
-                ),
-                linalg::translation_matrix<float>({0,0,-2})
-            )
-        );
+                             projection,
+                             mul(
+                                 mul(
+                                     linalg::rotation_matrix(linalg::rotation_quat<float>({0, 1, 0}, -M_PI / 10)),
+                                     linalg::rotation_matrix(linalg::rotation_quat<float>({1, 0, 0}, -M_PI / 10))
+                                 ),
+                                 linalg::translation_matrix<float>({0, 0, -2})
+                             )
+                         );
+
+
+        drawer.draw_rgb_texture_2d(
+            {
+                {{-1,-1,0.99999}, {0,0}},
+                {{-1, 1,0.99999}, {0,1}},
+                {{ 1,-1,0.99999}, {1,0}},
+                {{ 1, 1,0.99999}, {1,1}},
+            },
+            {{0,1,2}, {1,2,3}},
+            left_eye_texture,
+            linalg::identity
+        )
 
 
         //linalg::scaling_matrix<float>({0.2,0.2,1})),

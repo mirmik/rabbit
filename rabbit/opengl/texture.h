@@ -139,7 +139,7 @@ namespace rabbit
 			float wkoeff = (float)w / (float)width;
 			float hkoeff = (float)h / (float)height;
 
-			for (int i = 0; i < width; ++i)
+			for (int i = 0; i < width * point_size(); ++i)
 				for (int j = 0; j < height; ++j)
 					data[i * width + j] =
 					    (int)(i * wkoeff) % 2 != (int)(j * hkoeff) % 2  ? 255 : 0;

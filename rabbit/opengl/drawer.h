@@ -24,6 +24,7 @@ namespace rabbit
 		opengl_shader_program opengl_mesh_program;
 		opengl_shader_program opengl_simple_program;
 		opengl_shader_program opengl_onecolored_texture;
+		opengl_shader_program opengl_rgb_texture;
 
 		void draw_interactive_object(interactive_object & iobj);
 
@@ -102,6 +103,13 @@ namespace rabbit
 		    const std::vector<ivec3> triangles,
 		    const rabbit::opengl_texture & texture,
 		    const linalg::vec<float, 3> & color,
+		    const linalg::mat<float,4,4> & transform = linalg::identity
+		);
+
+		void draw_rgb_texture_2d(
+		    const std::vector<std::pair<linalg::vec<float, 3>, linalg::vec<float, 2>>> & vertices,
+		    const std::vector<ivec3> triangles,
+		    const rabbit::opengl_texture & texture,
 		    const linalg::mat<float,4,4> & transform = linalg::identity
 		);
 
