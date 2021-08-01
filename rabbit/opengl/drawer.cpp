@@ -291,8 +291,8 @@ void rabbit::opengl_drawer::draw_rgb_texture_2d(
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 
 	opengl_rgb_texture.use();
-	opengl_rgb_texture.uniform_mat4f("transform", transform);
-	texture.activate(opengl_onecolored_texture.id(), "ourTexture", 0);
+	opengl_rgb_texture.uniform_mat4f("transform22", transform);
+	texture.activate(opengl_rgb_texture.id(), "ourTexture", 0);
 
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, triangles.size()*sizeof(int) * 3, GL_UNSIGNED_INT, 0);

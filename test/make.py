@@ -20,6 +20,7 @@ for real in ["double", "float"]:
 			"line2.cpp",
 			"optimize.cpp",
 			"svd.cpp",
+			"pose3.cpp",
 			"fitting/*.cpp"		
 		],
 

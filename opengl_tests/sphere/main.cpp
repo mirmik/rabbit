@@ -93,6 +93,7 @@ int main()
     left_eye_texture.bind();
 
     double last_time = 0;
+    int iiii = 0;
     while (!glfwWindowShouldClose(window))
     {
         auto model = rabbit::rot3({0, 0, 1}, rabbit::deg(glfwGetTime() * 16));
@@ -125,6 +126,12 @@ int main()
                          );
 
 
+        iiii ++;
+        if (iiii == 30) iiii = 2;
+
+        left_eye_texture.set_finish_flag_texture(iiii, 20);
+        left_eye_texture.rebind();
+
         drawer.draw_rgb_texture_2d(
             {
                 {{-1,-1,0.99999}, {0,0}},
@@ -135,13 +142,8 @@ int main()
             {{0,1,2}, {1,2,3}},
             left_eye_texture,
             linalg::identity
-        )
+        );
 
-
-        //linalg::scaling_matrix<float>({0.2,0.2,1})),
-        //linalg::rotation_matrix(linalg::rotation_quat<float>({0,1,0},-M_PI/10))),
-        //linalg::rotation_matrix(linalg::rotation_quat<float>({1,0,0},-M_PI/20))
-        ;
 
         auto cursor = rabbit::textzone_cursor(&textzone, 0, 1);
         auto str = nos::format("Mirmik was here : {}", i++);

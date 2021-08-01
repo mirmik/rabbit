@@ -9,11 +9,11 @@ namespace rabbit
 	class surface
 	{
 	protected:
-		pose3 _pose;
+		pose3<real> _pose;
 
 	public:
 		surface(){}
-		surface(const pose3& pose) : _pose(pose) {}
+		surface(const pose3<real>& pose) : _pose(pose) {}
 		virtual ~surface() = default;
 
 		virtual real umin() = 0;
@@ -30,7 +30,7 @@ namespace rabbit
 
 	public:
 		sphere_surface(real radius) : _radius(radius), surface() {}
-		sphere_surface(real radius, const pose3 & pose) : _radius(radius), surface(pose) {}
+		sphere_surface(real radius, const pose3<real> & pose) : _radius(radius), surface(pose) {}
 
 		vec3 value(real u, real v) override
 		{
@@ -54,7 +54,7 @@ namespace rabbit
 
 	public:
 		parabolic_surface(real a, real b) : _a(a), _b(b), surface() {}
-		parabolic_surface(real a, real b, const pose3 & pose) : _a(a), _b(b), surface(pose) {}
+		parabolic_surface(real a, real b, const pose3<real> & pose) : _a(a), _b(b), surface(pose) {}
 
 		vec3 value(real u, real v) override
 		{
@@ -77,7 +77,7 @@ namespace rabbit
 
 	public:
 		round_parabolic_surface(real a) : _a(a), surface() {}
-		round_parabolic_surface(real a, const pose3 & pose) : _a(a), surface(pose) {}
+		round_parabolic_surface(real a, const pose3<real> & pose) : _a(a), surface(pose) {}
 
 		vec3 value(real u, real v) override
 		{
@@ -102,7 +102,7 @@ namespace rabbit
 
 	public:
 		torus_surface(real r1, real r2) : _r1(r1), _r2(r2), surface() {}
-		torus_surface(real r1, real r2, const pose3 & pose) :
+		torus_surface(real r1, real r2, const pose3<real> & pose) :
 			_r1(r1), _r2(r2), surface(pose) {}
 
 		vec3 value(real u, real v) override

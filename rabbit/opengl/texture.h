@@ -29,6 +29,7 @@ namespace rabbit
 		int width = 0;
 		int height = 0;
 
+		int allocated_buffer = 0;
 		GLuint texture;
 
 		GLint opengl_format = GL_RED;
@@ -98,6 +99,34 @@ namespace rabbit
 			return 1;
 		}
 
+		void invalidate()
+		{
+			if (data && allocated_buffer) delete[] (data);
+			data = nullptr;
+			allocated_buffer = 0;
+		}
+
+		void reference_buffer(
+		    unsigned char * buffer,
+		    int w,
+		    int h,
+		    GLint _opengl_format,
+		    GLint _format,
+		    GLint _type
+		)
+		{
+			invalidate();
+
+			data = buffer;
+			width = w;
+			height = h;
+			allocated_buffer = 0;
+
+			opengl_format = _format;
+			format = _format;
+			type = _type;
+		}
+
 		int component_size()
 		{
 			switch (type)
@@ -110,9 +139,10 @@ namespace rabbit
 
 		void resize(int w, int h, int per_point)
 		{
-			if (data) delete[] (data);
+			invalidate();
 
 			data = new unsigned char[w * h * per_point];
+			allocated_buffer = 1;
 			width = w;
 			height = h;
 		}
@@ -152,7 +182,7 @@ namespace rabbit
 			glTexImage2D(
 			    GL_TEXTURE_2D,
 			    0,
-			   	opengl_format,
+			    opengl_format,
 			    width,
 			    height,
 			    0,
@@ -162,7 +192,7 @@ namespace rabbit
 			);
 
 			glGenerateMipmap(GL_TEXTURE_2D);
-		}	
+		}
 
 		void bind(GLint channel)
 		{
@@ -171,7 +201,7 @@ namespace rabbit
 			glTexImage2D(
 			    GL_TEXTURE_2D,
 			    0,
-			   	channel,
+			    channel,
 			    width,
 			    height,
 			    0,
@@ -183,13 +213,31 @@ namespace rabbit
 			glGenerateMipmap(GL_TEXTURE_2D);
 		}
 
+		void rebind()
+		{
+			glBindTexture(GL_TEXTURE_2D, texture);
+			glTexImage2D(
+			    GL_TEXTURE_2D,
+			    0,
+			    opengl_format,
+			    width,
+			    height,
+			    0,
+			    format,
+			    type,
+			    data
+			);
+
+			//glGenerateMipmap(GL_TEXTURE_2D);
+		}
+
 		void rebind(GLint channel)
 		{
 			glBindTexture(GL_TEXTURE_2D, texture);
-			glTexSubImage2D(
+			glTexImage2D(
 			    GL_TEXTURE_2D,
 			    0,
-			   	channel,
+			    channel,
 			    width,
 			    height,
 			    0,
@@ -207,20 +255,6 @@ namespace rabbit
 			glBindTexture(GL_TEXTURE_2D, texture);
 			glUniform1i(glGetUniformLocation(program_id, name), no);
 		}
-
-		/*rabbit::mesh mesh_for_cell(rabbit::cell3d cell)
-		{
-			for (int row = 0; row < height; ++row)
-			{
-				for (int col = 0; col < width;  ++col)
-				{
-					if (*data[row * width + col]) 
-					{
-
-					}
-				}
-			}
-		}*/
 	};
 }
 

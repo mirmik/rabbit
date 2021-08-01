@@ -6,6 +6,7 @@
 namespace rabbit
 {
 	template <class T> class htrans3;
+	template <class T> class pose3;
 
 	template< class T, int N >
 	struct screw;
@@ -55,13 +56,18 @@ namespace rabbit
 
 		screw rotate_by(const htrans3<T>&);
 
-		screw kinematic_carry(linalg::vec<T, 3> arm)
+		screw kinematic_carry(const linalg::vec<T, 3>& arm)
 		{
 			return screw(
 			           ang,
 			           lin + cross(ang, arm)
 			       );
 		}
+
+
+		/// |w v||R r| = |w*R w*r+v| 
+		/// |0 0||0 1|   |  0     0|
+		screw kinematic_carry(const pose3<T>& pose);
 	};
 
 	template <class T>
@@ -154,6 +160,17 @@ namespace rabbit
 	{
 		return out << '{' << tr.ang << ',' << tr.lin << '}';
 	}
+}
+
+#include <rabbit/space/pose3.h>
+
+template <class T>
+rabbit::screw<T,3> rabbit::screw<T,3>::kinematic_carry(const rabbit::pose3<T>& pose)
+{
+	return screw(
+	           pose.rotate_vector(ang),
+	           lin + cross(ang, pose.lin)
+	       );
 }
 
 #endif

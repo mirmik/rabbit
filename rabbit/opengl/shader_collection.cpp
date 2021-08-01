@@ -90,11 +90,11 @@ layout (location = 1) in vec2 texcoords;
 
 out vec2 TexCoords;
 
-uniform mat4 transform;
+uniform mat4 transform22;
 
 void main()
 {
-    gl_Position = transform * vec4(vertex, 1);
+    gl_Position = transform22 * vec4(vertex, 1);
     TexCoords = texcoords;
 }  
 )""";
