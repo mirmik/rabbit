@@ -60,7 +60,7 @@ namespace rabbit
 
 		void solve()
 		{
-			_X = ralgo::linalg::solve(_D, _B);
+			_X = ralgo::solve(_D, _B);
 
 			auto a = _X[0];
 			auto b = _X[1];
@@ -79,7 +79,7 @@ namespace rabbit
 				_points[i] = _points[i] - _center;
 
 			init();
-			_X = ralgo::linalg::solve(_D, _B);
+			_X = ralgo::solve(_D, _B);
 
 			{
 				auto a = _X[0];

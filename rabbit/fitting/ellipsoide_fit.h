@@ -62,7 +62,7 @@ namespace rabbit
 
 		void solve()
 		{
-			_X = ralgo::linalg::solve(_D, _B);
+			_X = ralgo::solve(_D, _B);
 		}
 
 		std::vector<real> & result() { return _X; }

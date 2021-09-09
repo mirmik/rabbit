@@ -33,4 +33,7 @@
 
 
 test/runtests
+test/runtests_float
+test/runtests_double
+
 opengl_tests/sphere/target
