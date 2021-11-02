@@ -13,5 +13,5 @@ TEST_CASE("pose3")
 
 	auto c = a.kinematic_carry(b); 
 
-	CHECK_EQ(c, rabbit::screw3<double>{{0,0,1},{1,0,0}});
+	CHECK_EQ(c, rabbit::screw3<double>{{0,0,1},{0,1,0}});
 } 
