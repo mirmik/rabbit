@@ -32,8 +32,8 @@
 *.app
 
 
-test/runtests
-test/runtests_float
-test/runtests_double
+tests/runtests
+tests/runtests_float
+tests/runtests_double
 
 opengl_tests/sphere/target
