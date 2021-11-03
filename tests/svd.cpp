@@ -11,13 +11,4 @@ TEST_CASE("svd")
 		sinf(angle)/4,-cosf(angle)/2 };
 	auto svdmat = ralgo::matrix_view_ro<float>(arr, 2, 2);
 	auto svd = ralgo::svd(svdmat);
-
-	nos::println("U:");
-	nos::print_matrix(svd.u);
-
-	nos::println("V:");
-	nos::print_matrix(svd.v);
-
-	nos::println("W:");
-	nos::print_list(svd.w);
 }

@@ -19,8 +19,9 @@ licant.cxx_shared_library("librabbit.so",
 	mdepends=[
 		"rabbit"
 	],
-	cxx_flags="-fPIC -fconcepts",
-	cc_flags="-fPIC"
+	cxx_flags="-fPIC",
+	cc_flags="-fPIC",
+	cxxstd = "c++20"
 )
 
 licant.install.install_library(

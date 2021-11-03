@@ -56,8 +56,6 @@ namespace rabbit
 
 				_B[i] = -1;//x_sq + y_sq + z_sq;
 			}
-			nos::print_matrix(_D); nos::println();
-			nos::print_list(_B); nos::println();
 		}
 
 		void solve()

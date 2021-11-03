@@ -1,7 +1,8 @@
 #ifndef RABBIT_SPACE_SCREW_H
 #define RABBIT_SPACE_SCREW_H
 
-#include <rabbit/third/linalg.h>
+#include <ralgo/linalg/linalg.h>
+namespace linalg { using linalg::ostream_overloads::operator <<; }
 
 namespace rabbit
 {

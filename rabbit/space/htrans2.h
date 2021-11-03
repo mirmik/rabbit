@@ -44,9 +44,6 @@ namespace rabbit
 
 		screw2<T> operator - (const htrans2<T>& oth)
 		{
-			//PRINT(*this);
-			//PRINT(oth);
-
 			return { orient - oth.orient,
 			         //linalg::rot(-oth.orient, center - oth.center)
 			         center - oth.center 
