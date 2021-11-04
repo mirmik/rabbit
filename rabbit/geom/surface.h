@@ -2,7 +2,7 @@
 #define RABBIT_SURFACE_H
 
 #include <rabbit/types.h>
-#include <rabbit/space/pose3.h>
+#include <ralgo/space/pose3.h>
 
 namespace rabbit
 {

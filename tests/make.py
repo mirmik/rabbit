@@ -13,15 +13,9 @@ licant.include("ralgo")
 for real in ["double", "float"]:
 	application("runtests_" + real,
 		sources = [
-			"main.cpp",
-			"intersect.cpp",	
-			"htrans3.cpp",		
-			"nearest.cpp",		
-			"line2.cpp",
-			"optimize.cpp",
-			"svd.cpp",
-			"pose3.cpp",
-			"fitting/*.cpp"		
+			"*.cpp",
+			"fitting/*.cpp",
+			"geom/*.cpp"		
 		],
 
 		cxx_flags = "-g",

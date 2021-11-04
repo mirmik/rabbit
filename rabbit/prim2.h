@@ -2,7 +2,7 @@
 #define RABBIT_PRIM2_H
 
 #include <rabbit/types.h>
-#include <rabbit/space/pose2.h>
+#include <ralgo/space/pose2.h>
 
 namespace rabbit
 {
@@ -93,7 +93,7 @@ namespace rabbit
 		segm2(vec2 apnt, vec2 bpnt)
 			: apnt(apnt), bpnt(bpnt) {}
 
-		segm2 transformed(const pose2& trsf) const
+		segm2 transformed(const ralgo::pose2<real>& trsf) const
 		{
 			return
 			{
