@@ -2,13 +2,14 @@
 #define RABBIT_GEOM_CURVE_H
 
 #include <rabbit/types.h>
+#include <ralgo/space/pose3.h>
 
 namespace rabbit
 {
 	class curve
 	{
 	protected:
-		pose3<real> _pose;
+		ralgo::pose3<real> _pose;
 
 	public:
 		curve() {};
@@ -27,7 +28,7 @@ namespace rabbit
 		real  _b;
 
 	public:
-		ellipse_curve(real a, real b, pose3<real> pose)
+		ellipse_curve(real a, real b, ralgo::pose3<real> pose)
 			: curve(pose), _a(a), _b(b)
 		{}
 
