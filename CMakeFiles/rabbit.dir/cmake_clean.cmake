@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/rabbit.dir/rabbit/intersect.cpp.o"
-  "CMakeFiles/rabbit.dir/rabbit/space/screw.cpp.o"
   "librabbit.pdb"
   "librabbit.so"
 )

@@ -25,16 +25,16 @@ file(GLOB RABBIT_SOURCES
 set(RABBIT_SOURCES ${RABBIT_SOURCES} PARENT_SCOPE)
 
 file(GLOB SOURCES_TEST 
-	test/*.cpp
+	tests/*.cpp
 )
 
 
-add_executable(rabbit_test ${SOURCES_TEST})
+add_executable(rabbit_test ${SOURCES_TEST} ${RABBIT_SOURCES})
 add_library(rabbit SHARED ${RABBIT_SOURCES})
 
-target_include_directories(rabbit_test PRIVATE . test)
+target_include_directories(rabbit_test PRIVATE . tests)
 target_include_directories(rabbit PRIVATE .)
-target_link_libraries(rabbit_test rabbit ralgo nos igris)
+target_link_libraries(rabbit_test ralgo nos igris)
 
 if (UNIX AND NOT APPLE)
 	install(TARGETS ${PROJECT_NAME}
