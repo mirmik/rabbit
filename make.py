@@ -21,7 +21,7 @@ licant.cxx_shared_library("librabbit.so",
 	],
 	cxx_flags="-fPIC",
 	cc_flags="-fPIC",
-	cxxstd = "c++20"
+	cxxstd = "c++2a"
 )
 
 licant.install.install_library(
