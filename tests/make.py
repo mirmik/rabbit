@@ -7,7 +7,6 @@ from licant.modules import submodule, module
 from licant.libs import include
 
 licant.execute("../rabbit.g.py")
-licant.include("ralgo")
 
 
 for real in ["double", "float"]:
@@ -22,9 +21,9 @@ for real in ["double", "float"]:
 		cc_flags = "-g",
 
 		include_paths = ["."],
-		mdepends = [ "rabbit", "ralgo" ],
+		mdepends = [ "rabbit" ],
 
-		libs=["nos", "igris"],
+		libs=["nos", "igris", "ralgo"],
 		defines=["RABBIT_REAL_TYPE=" + real]
 )
 
