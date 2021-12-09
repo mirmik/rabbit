@@ -2,6 +2,7 @@
 #define RABBIT_GAZEBO_H
 
 #include <rabbit/space/htrans3.h>
+#include <rabbit/space/screw.h>
 
 #include <gazebo/gazebo.hh>
 #include <gazebo/physics/physics.hh>
