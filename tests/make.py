@@ -14,11 +14,13 @@ for real in ["double", "float"]:
 		sources = [
 			"*.cpp",
 			"fitting/*.cpp",
-			"geom/*.cpp"		
+			"geom/*.cpp",	
+			"nd/*.cpp"	
 		],
 
 		cxx_flags = "-g",
 		cc_flags = "-g",
+		cxxstd = "c++20",
 
 		include_paths = ["."],
 		mdepends = [ "rabbit" ],
