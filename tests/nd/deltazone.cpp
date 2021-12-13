@@ -31,4 +31,10 @@ TEST_CASE("deltazone")
 	CHECK_EQ(ndindexes[5], ralgo::vector<int>{4,6,2});
 	CHECK_EQ(ndindexes[6], ralgo::vector<int>{4,7,1});
 	CHECK_EQ(ndindexes[7], ralgo::vector<int>{4,7,2});
+
+	auto idxs = deltacloud.grid().point_in_cell_indices({7, 15, 25});
+	CHECK_EQ(idxs, ralgo::vector<int>{1,1,1});
+
+	idxs = deltacloud.grid().point_in_cell_indices({-7, -15, -25});
+	CHECK_EQ(idxs, ralgo::vector<int>{0,0,0});
 }

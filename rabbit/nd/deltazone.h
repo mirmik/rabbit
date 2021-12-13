@@ -98,22 +98,28 @@ namespace rabbit
 
 			size_t dim() const { return coords.size(); }
 
-			ralgo::vector<int> point_in_cell_indices(nd::point point)
+			auto point_in_cell_indices(nd::point point)
 			{
-				for (int i = 0; i < dim(); ++i)
-				{
-					if (is_collapsed_dim(i))
-					{
+				ralgo::vector<int> indexes(dim());
 
+				for (size_t i = 0; i < coords.size(); ++i) 
+				{
+					double minc = *coords[i].begin();
+					double maxc = *coords[i].rbegin();
+
+					if (point[i] < minc || point[i] > maxc) 
+					{
+						//not in zone
+						throw std::logic_error("not in zone");
 					}
 
-					//
+					auto git = std::lower_bound(coords[i].begin(), coords[i].end(), point[i]);
+					auto lit = std::next(git, -1);
+					
+					indexes[i] = std::distance(coords[i].begin(), lit);
 				}
 
-				throw std::runtime_error("not in zone");
-
-
-				std::vector<int> indexes;
+				return indexes;
 			}
 
 			cartesian_cell cellzone(ralgo::vector<int> indexes)
@@ -140,13 +146,15 @@ namespace rabbit
 		{
 			int dim;
 			igris::ndarray<nd::vector> deltas;
-			cartesian_sliced_zone grid;
+			cartesian_sliced_zone _grid;
 
 		public:
+			cartesian_sliced_zone& grid() { return _grid; }
+
 			deltacloud(){}
 
 			deltacloud(std::vector<std::vector<double>> gridcoords)
-				: grid(gridcoords) {}
+				: _grid(gridcoords) {}
 
 			rabbit::nd::polysegment delta_correction(
 			    const rabbit::nd::segment& segm,
@@ -160,9 +168,9 @@ namespace rabbit
 
 				for (const auto& pnt : uniform)
 				{
-					ralgo::vector<int> cellzone_indices = grid.point_in_cell_indices(pnt);
+					ralgo::vector<int> cellzone_indices = _grid.point_in_cell_indices(pnt);
 					auto ndarray_indices = multidim_cell_indices(cellzone_indices);
-					cartesian_cell cellzone = grid.cellzone(cellzone_indices);
+					cartesian_cell cellzone = _grid.cellzone(cellzone_indices);
 
 					ralgo::vector<double> coeffs =
 					    nd::linear_interpolation_coefficients(pnt, cellzone);
@@ -171,11 +179,13 @@ namespace rabbit
 
 					polysegm.add_last_point(pnt + correction);
 				}
+
+				return polysegm;
 			}
 
 			void set_zone(const std::vector<std::vector<double>>& zone) 
 			{
-				this->grid.set_zone(zone);
+				_grid.set_zone(zone);
 			}
 		};
 	}
