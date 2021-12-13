@@ -10,21 +10,32 @@ namespace rabbit
 	{
 		class polysegment
 		{
-			std::vector<double> data;
+			std::vector<nd::point> data;
 			int dim;
 			int points;
 
 		public:
+			polysegment() = default;
+			polysegment(const polysegment&) = default;
+			polysegment(polysegment&&) = default;
+			polysegment& operator=(const polysegment&) = default;
+			polysegment& operator=(polysegment&&) = default;
+
 			polysegment(int dim, int points)
 			{
 				this->dim = dim;
 				this->points = points; 
-				data.resize(dim*points);
+				data.resize(points);
 			}
 
-			nd::point operator[](int i) 
+			nd::point& operator[](int i) 
 			{
-				return nd::point(data.data() + dim * i, dim);
+				return data[i];
+			}
+
+			void add_last_point(const nd::point& point) 
+			{
+				data.push_back(point);
 			}
 		};
 	}

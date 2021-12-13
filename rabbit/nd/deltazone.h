@@ -12,37 +12,52 @@ namespace rabbit
 {
 	namespace nd
 	{
-
-		// Вернуть коэфициенты точек, из которых нужно извлекать
-		// значения для коррекции в правильном порядке.
-		static inline 
-		std::vector<std::vector<int>> multidim_cell_indices(std::vector<int> indices)
+		static inline
+		auto binary_hypercube_vertices(int dim)
 		{
-			std::vector <std::vector<int>> wided;
-			int dim = indices.size();
+			std::vector<ralgo::vector<int>> vect;
+			vect.resize(pow(2, dim));
 
-			wided.resize(pow(2, dim));
-
-			for (int i = 0; i < indices.size(); i++)
+			for (int i = 0; i < vect.size(); i++)
 			{
-				wided[i].resize(dim);
+				vect[i].resize(dim);
 				int shift = 1;
 				for (int j = 0; j < dim; j++)
 				{
-					auto val = i & shift;
+					auto val = !!(i & shift);
 					shift <<= 1;
-					wided[i][j] = val;
+					vect[i][dim - j - 1] = val;
 				}
 			}
 
-			return wided;
+			return vect;
+		}
+
+		// Вернуть коэфициенты точек, из которых нужно извлекать
+		// значения для коррекции в правильном порядке.
+		static inline
+		auto multidim_cell_indices(ralgo::vector<int> indices)
+		{
+			std::vector<ralgo::vector<int>> ret = binary_hypercube_vertices(indices.size());
+			for (auto& r : ret) 
+			{
+				r += indices;
+			}			
+			return ret;
 		}
 
 
-		class cartesian_space_cell
+		class cartesian_cell
 		{
-			std::vector<double> min;
-			std::vector<double> max;
+			ralgo::vector<double> mins;
+			ralgo::vector<double> maxs;
+
+		public:
+			cartesian_cell(
+			    ralgo::vector<double> mins,
+			    ralgo::vector<double> maxs
+			) : mins(mins), maxs(maxs) 
+			{}
 		};
 
 		class cartesian_sliced_zone
@@ -51,18 +66,26 @@ namespace rabbit
 			std::vector<int> collapsed_dims;
 
 		public:
-			cartesian_sliced_zone(std::vector<std::vector<double>> coords) 
+			cartesian_sliced_zone(std::vector<std::vector<double>> coords)
 				: coords(coords)
 			{
 
+			}
+
+			cartesian_sliced_zone()
+			{}
+
+			void set_zone(const std::vector<std::vector<double>>& zone) 
+			{
+				this->coords = zone;
 			}
 
 			// определяет принадлежность к измерению,
 			// сетка по которому не построена.
 			bool is_collapsed_dim(int i)
 			{
-				return std::find(collapsed_dims.begin(), collapsed_dims.end(), i) 
-					!= collapsed_dims.end();
+				return std::find(collapsed_dims.begin(), collapsed_dims.end(), i)
+				       != collapsed_dims.end();
 			}
 
 			// определяет измерению
@@ -75,7 +98,7 @@ namespace rabbit
 
 			size_t dim() const { return coords.size(); }
 
-			std::vector<int> point_in_cell_indices(nd::point point)
+			ralgo::vector<int> point_in_cell_indices(nd::point point)
 			{
 				for (int i = 0; i < dim(); ++i)
 				{
@@ -91,9 +114,27 @@ namespace rabbit
 
 
 				std::vector<int> indexes;
+			}
 
+			cartesian_cell cellzone(ralgo::vector<int> indexes)
+			{
+				ralgo::vector<double> mins(indexes.size());
+				ralgo::vector<double> maxs(indexes.size());
+
+				for (int i = 0; i < dim(); ++i)
+				{
+					mins[i] = coords[i][indexes[i]];
+					maxs[i] = coords[i][indexes[i] + 1];
+				}
+
+				return { mins, maxs };
 			}
 		};
+
+		static ralgo::vector<double> linear_interpolation_coefficients(
+			nd::point const & pnt,
+			cartesian_cell& cell
+		);
 
 		class deltacloud
 		{
@@ -102,6 +143,8 @@ namespace rabbit
 			cartesian_sliced_zone grid;
 
 		public:
+			deltacloud(){}
+
 			deltacloud(std::vector<std::vector<double>> gridcoords)
 				: grid(gridcoords) {}
 
@@ -112,21 +155,27 @@ namespace rabbit
 			{
 				rabbit::nd::polysegment polysegm;
 
-				auto uniform =
-				    ralgo::linspace(segm.apnt, segm.bpnt, segm.length() / step);
+				ralgo::linspace<ralgo::vector<double>> uniform =
+				                                        ralgo::linspace(segm.apnt, segm.bpnt, segm.length() / step);
 
-				for (auto& pnt : uniform)
+				for (const auto& pnt : uniform)
 				{
-					std::vector<int> cellzone_indices = grid.point_in_cell_indices(pnt);
-					std::vector<int> ndarray_indices = multidim_cell_indices(cellzone_indices);
+					ralgo::vector<int> cellzone_indices = grid.point_in_cell_indices(pnt);
+					auto ndarray_indices = multidim_cell_indices(cellzone_indices);
+					cartesian_cell cellzone = grid.cellzone(cellzone_indices);
 
-					std::vector<std::pair<double, double>> cellzone = grid.cellzone(cellzone_indices);
+					ralgo::vector<double> coeffs =
+					    nd::linear_interpolation_coefficients(pnt, cellzone);
 
-					std:: nd::linear_interpolation_coefficients(pnt, cellzone);
+					nd::vector correction;
 
-
-					polysegm.push_back(pnt + correction);
+					polysegm.add_last_point(pnt + correction);
 				}
+			}
+
+			void set_zone(const std::vector<std::vector<double>>& zone) 
+			{
+				this->grid.set_zone(zone);
 			}
 		};
 	}
