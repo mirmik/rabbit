@@ -150,6 +150,7 @@ namespace rabbit
 
 		public:
 			cartesian_sliced_zone& grid() { return _grid; }
+			igris::ndarray<nd::vector>& deltas() { return _deltas; }
 
 			deltacloud(){}
 

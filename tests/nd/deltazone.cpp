@@ -12,6 +12,12 @@ TEST_CASE("deltazone")
 		{-30,0,30}
 	});
 
+	deltacloud.set_deltas(igris::ndarray<rabbit::nd::vector>{
+		{rabbit::nd::vector{-1,1,0,}, rabbit::nd::vector{0,1,0}, rabbit::nd::vector{1,1,0}},
+		{rabbit::nd::vector{-1,0,0,}, rabbit::nd::vector{0,0,0}, rabbit::nd::vector{1,0,0}},
+		{rabbit::nd::vector{-1,-1,0,}, rabbit::nd::vector{0,-1,0}, rabbit::nd::vector{1,-1,0}},
+	});
+
 	auto ndindexes = rabbit::nd::binary_hypercube_vertices(3);
 	CHECK_EQ(ndindexes[0], ralgo::vector<int>{0,0,0});
 	CHECK_EQ(ndindexes[1], ralgo::vector<int>{0,0,1});
@@ -37,4 +43,7 @@ TEST_CASE("deltazone")
 
 	idxs = deltacloud.grid().point_in_cell_indices({-7, -15, -25});
 	CHECK_EQ(idxs, ralgo::vector<int>{0,0,0});
+
+	CHECK_EQ(deltacloud.deltas()({0,0,0}), ralgo::vector<double>{-1,1,0});
+	CHECK_EQ(deltacloud.deltas()({1,0,0}), ralgo::vector<double>{0,1,0});
 }
