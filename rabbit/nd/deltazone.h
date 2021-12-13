@@ -145,7 +145,7 @@ namespace rabbit
 		class deltacloud
 		{
 			int dim;
-			igris::ndarray<nd::vector> deltas;
+			igris::ndarray<nd::vector> _deltas;
 			cartesian_sliced_zone _grid;
 
 		public:
@@ -155,6 +155,11 @@ namespace rabbit
 
 			deltacloud(std::vector<std::vector<double>> gridcoords)
 				: _grid(gridcoords) {}
+
+			void set_deltas(igris::ndarray<nd::vector> deltas) 
+			{
+				_deltas = deltas;
+			}
 
 			rabbit::nd::polysegment delta_correction(
 			    const rabbit::nd::segment& segm,
