@@ -77,5 +77,6 @@ TEST_CASE("deltazone")
 		CHECK_EQ(cell.mins, ralgo::vector<double>{-10,0,-30});
 
 		CHECK_EQ(idxs, ralgo::vector<int> {0, 1, 0});
+		CHECK_EQ(cell.lerpcoeffs({ -5, 10, -15}), ralgo::vector<double>{0.5,0.5,0.5});
 	}
 }

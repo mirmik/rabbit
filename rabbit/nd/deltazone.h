@@ -39,10 +39,10 @@ namespace rabbit
 		auto multidim_cell_indices(ralgo::vector<int> indices)
 		{
 			std::vector<ralgo::vector<int>> ret = binary_hypercube_vertices(indices.size());
-			for (auto& r : ret) 
+			for (auto& r : ret)
 			{
 				r += indices;
-			}			
+			}
 			return ret;
 		}
 
@@ -57,8 +57,18 @@ namespace rabbit
 			cartesian_cell(
 			    ralgo::vector<double> mins,
 			    ralgo::vector<double> maxs
-			) : mins(mins), maxs(maxs) 
+			) : mins(mins), maxs(maxs)
 			{}
+
+			ralgo::vector<double> lerpcoeffs(nd::point const & pnt) 
+			{
+				ralgo::vector<double> coeffs(pnt.size());
+				for (int i = 0; i < pnt.size(); i++) 
+				{
+					coeffs[i] = ralgo::lerpcoeff(mins[i], maxs[i], pnt[i]);
+				}
+				return coeffs;
+			}
 		};
 
 		class cartesian_sliced_zone
@@ -76,7 +86,7 @@ namespace rabbit
 			cartesian_sliced_zone()
 			{}
 
-			void set_zone(const std::vector<std::vector<double>>& zone) 
+			void set_zone(const std::vector<std::vector<double>>& zone)
 			{
 				this->coords = zone;
 			}
@@ -103,12 +113,12 @@ namespace rabbit
 			{
 				ralgo::vector<int> indexes(dim());
 
-				for (size_t i = 0; i < coords.size(); ++i) 
+				for (size_t i = 0; i < coords.size(); ++i)
 				{
 					double minc = *coords[i].begin();
 					double maxc = *coords[i].rbegin();
 
-					if (point[i] < minc || point[i] > maxc) 
+					if (point[i] < minc || point[i] > maxc)
 					{
 						//not in zone
 						throw std::logic_error("not in zone");
@@ -116,7 +126,7 @@ namespace rabbit
 
 					auto git = std::lower_bound(coords[i].begin(), coords[i].end(), point[i]);
 					auto lit = std::next(git, -1);
-					
+
 					indexes[i] = std::distance(coords[i].begin(), lit);
 				}
 
@@ -138,11 +148,6 @@ namespace rabbit
 			}
 		};
 
-		static ralgo::vector<double> linear_interpolation_coefficients(
-			nd::point const & pnt,
-			cartesian_cell& cell
-		);
-
 		class deltacloud
 		{
 			int dim;
@@ -153,12 +158,12 @@ namespace rabbit
 			cartesian_sliced_zone& grid() { return _grid; }
 			igris::ndarray<nd::vector>& deltas() { return _deltas; }
 
-			deltacloud(){}
+			deltacloud() {}
 
 			deltacloud(std::vector<std::vector<double>> gridcoords)
 				: _grid(gridcoords) {}
 
-			void set_deltas(igris::ndarray<nd::vector> deltas) 
+			void set_deltas(igris::ndarray<nd::vector> deltas)
 			{
 				_deltas = deltas;
 			}
@@ -178,19 +183,16 @@ namespace rabbit
 					ralgo::vector<int> cellzone_indices = _grid.point_in_cell_indices(pnt);
 					auto ndarray_indices = multidim_cell_indices(cellzone_indices);
 					cartesian_cell cellzone = _grid.cellzone(cellzone_indices);
-
-					ralgo::vector<double> coeffs =
-					    nd::linear_interpolation_coefficients(pnt, cellzone);
+					ralgo::vector<double> coeffs = cellzone.lerpcoeffs(pnt);
 
 					nd::vector correction;
-
 					polysegm.add_last_point(pnt + correction);
 				}
 
 				return polysegm;
 			}
 
-			void set_zone(const std::vector<std::vector<double>>& zone) 
+			void set_zone(const std::vector<std::vector<double>>& zone)
 			{
 				_grid.set_zone(zone);
 			}
