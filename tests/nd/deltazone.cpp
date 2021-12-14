@@ -41,22 +41,34 @@ TEST_CASE("deltazone")
 
 	deltacloud.set_deltas(igris::ndarray<rabbit::nd::vector>
 	{
-		{rabbit::nd::vector{ -1, 1, 0,}, rabbit::nd::vector{0, 1, 0}, rabbit::nd::vector{1, 1, 0}},
-		{rabbit::nd::vector{ -1, 0, 0,}, rabbit::nd::vector{0, 0, 0}, rabbit::nd::vector{1, 0, 0}},
-		{rabbit::nd::vector{ -1, -1, 0,}, rabbit::nd::vector{0, -1, 0}, rabbit::nd::vector{1, -1, 0}},
+		{
+			{rabbit::nd::vector{ -1, 1, 0,}, rabbit::nd::vector{0, 1, 0}, rabbit::nd::vector{1, 1, 0}},
+			{rabbit::nd::vector{ -1, 0, 0,}, rabbit::nd::vector{0, 0, 0}, rabbit::nd::vector{1, 0, 0}},
+			{rabbit::nd::vector{ -1, -1, 0,}, rabbit::nd::vector{0, -1, 0}, rabbit::nd::vector{1, -1, 0}},
+		},
+		{
+			{rabbit::nd::vector{ -1, 1, 0,}, rabbit::nd::vector{0, 1, 0}, rabbit::nd::vector{1, 1, 0}},
+			{rabbit::nd::vector{ -1, 0, 0,}, rabbit::nd::vector{0, 0, 0}, rabbit::nd::vector{1, 0, 0}},
+			{rabbit::nd::vector{ -1, -1, 0,}, rabbit::nd::vector{0, -1, 0}, rabbit::nd::vector{1, -1, 0}},
+		},
+		{
+			{rabbit::nd::vector{ -1, 1, 0,}, rabbit::nd::vector{0, 1, 0}, rabbit::nd::vector{1, 1, 0}},
+			{rabbit::nd::vector{ -1, 0, 0,}, rabbit::nd::vector{0, 0, 0}, rabbit::nd::vector{1, 0, 0}},
+			{rabbit::nd::vector{ -1, -1, 0,}, rabbit::nd::vector{0, -1, 0}, rabbit::nd::vector{1, -1, 0}},
+		}
 	});
 
 	SUBCASE("deltas")
 	{
-		CHECK_EQ(deltacloud.deltas()({0, 0}), ralgo::vector<double> { -1, 1, 0});
-		CHECK_EQ(deltacloud.deltas()({0, 1}), ralgo::vector<double> {0, 1, 0});
-		CHECK_EQ(deltacloud.deltas()({0, 2}), ralgo::vector<double> {1, 1, 0});
-		CHECK_EQ(deltacloud.deltas()({1, 0}), ralgo::vector<double> { -1, 0, 0});
-		CHECK_EQ(deltacloud.deltas()({1, 1}), ralgo::vector<double> {0, 0, 0});
-		CHECK_EQ(deltacloud.deltas()({1, 2}), ralgo::vector<double> {1, 0, 0});
-		CHECK_EQ(deltacloud.deltas()({2, 0}), ralgo::vector<double> { -1, -1, 0});
-		CHECK_EQ(deltacloud.deltas()({2, 1}), ralgo::vector<double> {0, -1, 0});
-		CHECK_EQ(deltacloud.deltas()({2, 2}), ralgo::vector<double> {1, -1, 0});
+		CHECK_EQ(deltacloud.deltas()({0, 0, 0}), ralgo::vector<double> { -1, 1, 0});
+		CHECK_EQ(deltacloud.deltas()({0, 0, 1}), ralgo::vector<double> {0, 1, 0});
+		CHECK_EQ(deltacloud.deltas()({0, 0, 2}), ralgo::vector<double> {1, 1, 0});
+		CHECK_EQ(deltacloud.deltas()({0, 1, 0}), ralgo::vector<double> { -1, 0, 0});
+		CHECK_EQ(deltacloud.deltas()({0, 1, 1}), ralgo::vector<double> {0, 0, 0});
+		CHECK_EQ(deltacloud.deltas()({0, 1, 2}), ralgo::vector<double> {1, 0, 0});
+		CHECK_EQ(deltacloud.deltas()({0, 2, 0}), ralgo::vector<double> { -1, -1, 0});
+		CHECK_EQ(deltacloud.deltas()({0, 2, 1}), ralgo::vector<double> {0, -1, 0});
+		CHECK_EQ(deltacloud.deltas()({0, 2, 2}), ralgo::vector<double> {1, -1, 0});
 	}
 
 	SUBCASE("point_indices")
@@ -73,10 +85,82 @@ TEST_CASE("deltazone")
 		auto idxs = deltacloud.grid().point_in_cell_indices({ -7, 15, -25});
 		auto cell = deltacloud.grid().cellzone(idxs);
 
-		CHECK_EQ(cell.maxs, ralgo::vector<double>{0,20,0});
-		CHECK_EQ(cell.mins, ralgo::vector<double>{-10,0,-30});
+		CHECK_EQ(cell.maxs, ralgo::vector<double> {0, 20, 0});
+		CHECK_EQ(cell.mins, ralgo::vector<double> { -10, 0, -30});
 
 		CHECK_EQ(idxs, ralgo::vector<int> {0, 1, 0});
-		CHECK_EQ(cell.lerpcoeffs({ -5, 10, -15}), ralgo::vector<double>{0.5,0.5,0.5});
+		CHECK_EQ(cell.lerpcoeffs({ -5, 10, -15}), ralgo::vector<double> {0.5, 0.5, 0.5});
+	}
+}
+
+
+TEST_CASE("deltacloud.correction")
+{
+	rabbit::nd::deltacloud deltacloud;
+
+	deltacloud.set_zone(
+	{
+		{ -10, 0, 10},
+		{ -20, 0, 20}
+	});
+
+	SUBCES("zero deltas")
+	{
+		deltacloud.set_deltas(igris::ndarray<rabbit::nd::vector>
+		{
+			{ rabbit::nd::vector{  0,  0 }, rabbit::nd::vector{  0,  1 }, rabbit::nd::vector{  1,  1 } },
+			{ rabbit::nd::vector{ -1,  0 }, rabbit::nd::vector{  0,  0 }, rabbit::nd::vector{  1,  0 } },
+			{ rabbit::nd::vector{ -1, -1 }, rabbit::nd::vector{  0, -1 }, rabbit::nd::vector{  1, -1 } },
+		});
+
+		rabbit::nd::point apnt{ -5, 10 };
+		rabbit::nd::point bpnt{  5, 10 };
+
+		rabbit::nd::segment segm(apnt, bpnt);
+		CHECK_EQ(segm.length(), 10);
+
+		auto polysegm = deltacloud.delta_correction(segm, 11);
+		CHECK_EQ(polysegm[0][0], doctest::Approx(-5));
+		CHECK_EQ(polysegm[1][0], doctest::Approx(-4));
+		CHECK_EQ(polysegm[2][0], doctest::Approx(-3));
+		CHECK_EQ(polysegm[3][0], doctest::Approx(-2));
+		CHECK_EQ(polysegm[4][0], doctest::Approx(-1));
+		CHECK_EQ(polysegm[5][0], doctest::Approx(0));
+		CHECK_EQ(polysegm[6][0], doctest::Approx(1));
+		CHECK_EQ(polysegm[7][0], doctest::Approx(2));
+		CHECK_EQ(polysegm[8][0], doctest::Approx(3));
+		CHECK_EQ(polysegm[9][0], doctest::Approx(4));
+		CHECK_EQ(polysegm[10][0], doctest::Approx(5));
+		CHECK_EQ(polysegm[6][1], doctest::Approx(10));
+	}
+
+	SUBCES("nonzero deltas")
+	{
+		deltacloud.set_deltas(igris::ndarray<rabbit::nd::vector>
+		{
+			{rabbit::nd::vector{ -1, 1, 0,}, rabbit::nd::vector{0, 1, 0}, rabbit::nd::vector{1, 1, 0}},
+			{rabbit::nd::vector{ -1, 0, 0,}, rabbit::nd::vector{0, 0, 0}, rabbit::nd::vector{1, 0, 0}},
+			{rabbit::nd::vector{ -1, -1, 0,}, rabbit::nd::vector{0, -1, 0}, rabbit::nd::vector{1, -1, 0}},
+		});
+
+		rabbit::nd::point apnt{ -5, 10 };
+		rabbit::nd::point bpnt{  5, 10 };
+
+		rabbit::nd::segment segm(apnt, bpnt);
+		CHECK_EQ(segm.length(), 10);
+
+		auto polysegm = deltacloud.delta_correction(segm, 11);
+		CHECK_EQ(polysegm[0][0], doctest::Approx(-5));
+		CHECK_EQ(polysegm[1][0], doctest::Approx(-4));
+		CHECK_EQ(polysegm[2][0], doctest::Approx(-3));
+		CHECK_EQ(polysegm[3][0], doctest::Approx(-2));
+		CHECK_EQ(polysegm[4][0], doctest::Approx(-1));
+		CHECK_EQ(polysegm[5][0], doctest::Approx(0));
+		CHECK_EQ(polysegm[6][0], doctest::Approx(1));
+		CHECK_EQ(polysegm[7][0], doctest::Approx(2));
+		CHECK_EQ(polysegm[8][0], doctest::Approx(3));
+		CHECK_EQ(polysegm[9][0], doctest::Approx(4));
+		CHECK_EQ(polysegm[10][0], doctest::Approx(5));
+		CHECK_EQ(polysegm[6][1], doctest::Approx(10));
 	}
 }

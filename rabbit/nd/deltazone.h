@@ -60,10 +60,10 @@ namespace rabbit
 			) : mins(mins), maxs(maxs)
 			{}
 
-			ralgo::vector<double> lerpcoeffs(nd::point const & pnt) 
+			ralgo::vector<double> lerpcoeffs(nd::point const & pnt)
 			{
 				ralgo::vector<double> coeffs(pnt.size());
-				for (int i = 0; i < pnt.size(); i++) 
+				for (int i = 0; i < pnt.size(); i++)
 				{
 					coeffs[i] = ralgo::lerpcoeff(mins[i], maxs[i], pnt[i]);
 				}
@@ -170,13 +170,12 @@ namespace rabbit
 
 			rabbit::nd::polysegment delta_correction(
 			    const rabbit::nd::segment& segm,
-			    double step
+			    size_t points
 			)
 			{
 				rabbit::nd::polysegment polysegm;
-
-				ralgo::linspace<ralgo::vector<double>> uniform =
-				                                        ralgo::linspace(segm.apnt, segm.bpnt, segm.length() / step);
+				auto uniform =
+				    ralgo::linspace(segm.apnt, segm.bpnt, points);
 
 				for (const auto& pnt : uniform)
 				{
@@ -186,7 +185,7 @@ namespace rabbit
 					ralgo::vector<double> coeffs = cellzone.lerpcoeffs(pnt);
 
 					nd::vector correction;
-					polysegm.add_last_point(pnt + correction);
+					polysegm.add_last_point(pnt);
 				}
 
 				return polysegm;
