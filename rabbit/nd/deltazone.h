@@ -49,6 +49,7 @@ namespace rabbit
 
 		class cartesian_cell
 		{
+		public:
 			ralgo::vector<double> mins;
 			ralgo::vector<double> maxs;
 
