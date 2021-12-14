@@ -9,8 +9,7 @@ from licant.libs import include
 licant.execute("../rabbit.g.py")
 
 
-for real in ["double", "float"]:
-	application("runtests_" + real,
+application("runtests",
 		sources = [
 			"*.cpp",
 			"fitting/*.cpp",
@@ -26,9 +25,7 @@ for real in ["double", "float"]:
 		mdepends = [ "rabbit" ],
 
 		libs=["nos", "igris", "ralgo"],
-		defines=["RABBIT_REAL_TYPE=" + real]
+		defines=["RABBIT_REAL_TYPE=double"]
 )
 
-licant.fileset("all", ["runtests_float", "runtests_double"])
-
-licant.ex("all")
+licant.ex("runtests")

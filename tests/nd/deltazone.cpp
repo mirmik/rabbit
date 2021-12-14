@@ -44,6 +44,13 @@ TEST_CASE("deltazone")
 	idxs = deltacloud.grid().point_in_cell_indices({-7, -15, -25});
 	CHECK_EQ(idxs, ralgo::vector<int>{0,0,0});
 
-	CHECK_EQ(deltacloud.deltas()({0,0,0}), ralgo::vector<double>{-1,1,0});
-	CHECK_EQ(deltacloud.deltas()({1,0,0}), ralgo::vector<double>{0,1,0});
+	CHECK_EQ(deltacloud.deltas()({0,0}), ralgo::vector<double>{-1,1,0});
+	CHECK_EQ(deltacloud.deltas()({0,1}), ralgo::vector<double>{0,1,0});
+	CHECK_EQ(deltacloud.deltas()({0,2}), ralgo::vector<double>{1,1,0});
+	CHECK_EQ(deltacloud.deltas()({1,0}), ralgo::vector<double>{-1,0,0});
+	CHECK_EQ(deltacloud.deltas()({1,1}), ralgo::vector<double>{0,0,0});
+	CHECK_EQ(deltacloud.deltas()({1,2}), ralgo::vector<double>{1,0,0});
+	CHECK_EQ(deltacloud.deltas()({2,0}), ralgo::vector<double>{-1,-1,0});
+	CHECK_EQ(deltacloud.deltas()({2,1}), ralgo::vector<double>{0,-1,0});
+	CHECK_EQ(deltacloud.deltas()({2,2}), ralgo::vector<double>{1,-1,0});
 }
