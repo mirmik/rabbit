@@ -4,9 +4,7 @@
 #include <rabbit/opengl/shader_collection.h>
 #include <rabbit/mesh.h>
 #include <rabbit/util.h>
-#include <rabbit/space/pose3.h>
-
-#include <rabbit/space/htrans.h>
+#include <ralgo/space/pose3.h>
 
 // GLEW
 #define GLEW_STATIC
@@ -63,7 +61,7 @@ int main()
     {
         camera.set_eye({100*cos(glfwGetTime()), 100*sin(glfwGetTime()), 0});
         camera.set_target({0, 0, 0});
-        auto model = rabbit::rot3({0, 0, 1}, rabbit::deg(0));
+        auto model = ralgo::rot3({0, 0, 1}, rabbit::deg(0));
 
         glfwPollEvents();
 

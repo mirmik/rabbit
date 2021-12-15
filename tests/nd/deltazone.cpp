@@ -15,6 +15,13 @@ TEST_CASE("binary_hypercube")
 	CHECK_EQ(ndindexes[7], ralgo::vector<int> {1, 1, 1});
 }
 
+TEST_CASE("binary_hypercube")
+{
+	auto ndindexes = rabbit::nd::binary_hypercube_vertices(1);
+	CHECK_EQ(ndindexes[0], ralgo::vector<int> {0});
+	CHECK_EQ(ndindexes[1], ralgo::vector<int> {1});
+}
+
 TEST_CASE("multidim_cell_indices")
 {
 	auto ndindexes = rabbit::nd::multidim_cell_indices({3, 6, 1});
@@ -104,13 +111,13 @@ TEST_CASE("deltacloud.correction")
 		{ -20, 0, 20}
 	});
 
-	SUBCES("zero deltas")
+	SUBCASE("zero deltas")
 	{
 		deltacloud.set_deltas(igris::ndarray<rabbit::nd::vector>
 		{
-			{ rabbit::nd::vector{  0,  0 }, rabbit::nd::vector{  0,  1 }, rabbit::nd::vector{  1,  1 } },
-			{ rabbit::nd::vector{ -1,  0 }, rabbit::nd::vector{  0,  0 }, rabbit::nd::vector{  1,  0 } },
-			{ rabbit::nd::vector{ -1, -1 }, rabbit::nd::vector{  0, -1 }, rabbit::nd::vector{  1, -1 } },
+			{ rabbit::nd::vector{ 0, 0 }, rabbit::nd::vector{ 0, 0 }, rabbit::nd::vector{ 0, 0 } },
+			{ rabbit::nd::vector{ 0, 0 }, rabbit::nd::vector{ 0, 0 }, rabbit::nd::vector{ 0, 0 } },
+			{ rabbit::nd::vector{ 0, 0 }, rabbit::nd::vector{ 0, 0 }, rabbit::nd::vector{ 0, 0 } },
 		});
 
 		rabbit::nd::point apnt{ -5, 10 };
@@ -133,34 +140,29 @@ TEST_CASE("deltacloud.correction")
 		CHECK_EQ(polysegm[10][0], doctest::Approx(5));
 		CHECK_EQ(polysegm[6][1], doctest::Approx(10));
 	}
+}
 
-	SUBCES("nonzero deltas")
+TEST_CASE("deltacloud.correction")
+{
+	rabbit::nd::deltacloud deltacloud;
+
+	deltacloud.set_zone(
 	{
-		deltacloud.set_deltas(igris::ndarray<rabbit::nd::vector>
-		{
-			{rabbit::nd::vector{ -1, 1, 0,}, rabbit::nd::vector{0, 1, 0}, rabbit::nd::vector{1, 1, 0}},
-			{rabbit::nd::vector{ -1, 0, 0,}, rabbit::nd::vector{0, 0, 0}, rabbit::nd::vector{1, 0, 0}},
-			{rabbit::nd::vector{ -1, -1, 0,}, rabbit::nd::vector{0, -1, 0}, rabbit::nd::vector{1, -1, 0}},
-		});
+		{-10, 0, 10}
+	});
 
-		rabbit::nd::point apnt{ -5, 10 };
-		rabbit::nd::point bpnt{  5, 10 };
+	deltacloud.set_deltas(igris::ndarray<rabbit::nd::vector>
+	{
+		rabbit::nd::vector{ -1}, rabbit::nd::vector{-1}, rabbit::nd::vector{1}
+	});
 
-		rabbit::nd::segment segm(apnt, bpnt);
-		CHECK_EQ(segm.length(), 10);
+	rabbit::nd::point apnt{ -5 };
+	rabbit::nd::point bpnt{  5 };
 
-		auto polysegm = deltacloud.delta_correction(segm, 11);
-		CHECK_EQ(polysegm[0][0], doctest::Approx(-5));
-		CHECK_EQ(polysegm[1][0], doctest::Approx(-4));
-		CHECK_EQ(polysegm[2][0], doctest::Approx(-3));
-		CHECK_EQ(polysegm[3][0], doctest::Approx(-2));
-		CHECK_EQ(polysegm[4][0], doctest::Approx(-1));
-		CHECK_EQ(polysegm[5][0], doctest::Approx(0));
-		CHECK_EQ(polysegm[6][0], doctest::Approx(1));
-		CHECK_EQ(polysegm[7][0], doctest::Approx(2));
-		CHECK_EQ(polysegm[8][0], doctest::Approx(3));
-		CHECK_EQ(polysegm[9][0], doctest::Approx(4));
-		CHECK_EQ(polysegm[10][0], doctest::Approx(5));
-		CHECK_EQ(polysegm[6][1], doctest::Approx(10));
-	}
+	rabbit::nd::segment segm(apnt, bpnt);
+	CHECK_EQ(segm.length(), 10);
+
+	auto correction_data = deltacloud.delta_correction(segm, 11);
+	CHECK_EQ(correction_data.points()[0][0], doctest::Approx(-6));
+	//CHECK_EQ(polysegm[1][0], doctest::Approx(-5.5));
 }

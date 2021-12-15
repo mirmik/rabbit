@@ -34,7 +34,7 @@ namespace rabbit
 	{
 	public:
 		virtual void buffer(xypoint ** arr, int * siz) = 0; 
-		virtual void minmax(linalg::vec<float> & min, linalg::vec<float> & max) = 0; 
+		virtual void minmax(linalg::vec<float,2> & min, linalg::vec<float,2> & max) = 0; 
 	};
 
 	class xyseries : public xyseries_basic
@@ -46,8 +46,7 @@ namespace rabbit
 
 	class sliding_xyseries : public xyseries_basic
 	{	
-		ralgo::sliding_array<xypoint> 
-	
+		ralgo::sliding_array<xypoint> array;
 
 		void buffer(xypoint ** arr, int * siz) 
 		{
@@ -59,7 +58,7 @@ namespace rabbit
 
 	class chart 
 	{
-		std::vector<ixyseries *> series;
+		std::vector<xyseries *> series;
 
 	public:
 		chart()
@@ -67,7 +66,7 @@ namespace rabbit
 
 		}
 
-		void add_series(ixyseries * xys) 
+		void add_series(xyseries * xys) 
 		{
 			series.push_back(xys);
 		}

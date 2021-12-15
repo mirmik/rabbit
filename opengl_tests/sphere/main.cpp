@@ -8,10 +8,9 @@
 #include <rabbit/opengl/shader_collection.h>
 #include <rabbit/mesh.h>
 #include <rabbit/util.h>
-#include <rabbit/space/pose3.h>
+#include <ralgo/space/pose3.h>
 
 #include <nos/fprint.h>
-#include <rabbit/space/htrans.h>
 
 // GLFW
 #include <GLFW/glfw3.h>
@@ -28,7 +27,7 @@
 #include <rabbit/font/font.h>
 #include <rabbit/font/textzone.h>
 
-#include <igris/systime.h>
+#include <igris/time/systime.h>
 
 // Window dimensions
 const GLuint WIDTH = 1600, HEIGHT = 800;
@@ -96,7 +95,7 @@ int main()
     int iiii = 0;
     while (!glfwWindowShouldClose(window))
     {
-        auto model = rabbit::rot3({0, 0, 1}, rabbit::deg(glfwGetTime() * 16));
+        auto model = ralgo::rot3({0, 0, 1}, rabbit::deg(glfwGetTime() * 16));
 
         camera.set_eye({10, 0, 3});
         camera.set_target({0, 0, 0});
@@ -179,7 +178,7 @@ int main()
 
         drawer.draw_mesh(
             mesh,
-            (rabbit::rot3(rabbit::vec3{0.3, 0.7, 0}, rabbit::deg(20)) * model).to_mat4(),
+            (ralgo::rot3(rabbit::vec3{0.3, 0.7, 0}, rabbit::deg(20)) * model).to_mat4(),
             camera.view_matrix(),
             projection);
 
@@ -199,14 +198,14 @@ int main()
 
         drawer.draw_mesh(
             mesh4,
-            (rabbit::rot3(rabbit::vec3{0.6, 0.2, 0}, rabbit::deg(20)) * model.inverse()).to_mat4(),
+            (ralgo::rot3(rabbit::vec3{0.6, 0.2, 0}, rabbit::deg(20)) * model.inverse()).to_mat4(),
             camera.view_matrix(),
             projection
         );
 
         drawer.draw_mesh(
             mesh5,
-            (rabbit::mov3({5.5f * sinf(glfwGetTime()), 5.5f * cosf(glfwGetTime()), 0}) * model).to_mat4(),
+            (ralgo::mov3(linalg::vec<float,3>{5.5f * sinf(glfwGetTime()), 5.5f * cosf(glfwGetTime()), 0}) * model).to_mat4(),
             camera.view_matrix(),
             projection
         );

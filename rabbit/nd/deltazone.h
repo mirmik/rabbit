@@ -12,6 +12,12 @@ namespace rabbit
 {
 	namespace nd
 	{
+		struct correction_data 
+		{
+			std::vector<nd::point> points;
+			std::vector<nd::vector> deltas;
+		}
+
 		static inline
 		auto binary_hypercube_vertices(int dim)
 		{
@@ -150,13 +156,14 @@ namespace rabbit
 
 		class deltacloud
 		{
-			int dim;
 			igris::ndarray<nd::vector> _deltas;
 			cartesian_sliced_zone _grid;
 
 		public:
 			cartesian_sliced_zone& grid() { return _grid; }
 			igris::ndarray<nd::vector>& deltas() { return _deltas; }
+
+			size_t dim() const { return _grid.dim(); }
 
 			deltacloud() {}
 
@@ -166,6 +173,30 @@ namespace rabbit
 			void set_deltas(igris::ndarray<nd::vector> deltas)
 			{
 				_deltas = deltas;
+
+				if (deltas[0].size() != dim()) 
+					throw std::runtime_error("deltas has no same dim as deltacloud");
+			}
+
+			nd::vector apply_lerpcoeffs(
+				ralgo::vector<double> coeffs,
+				std::vector<ralgo::vector<double>> celldeltas
+			) 
+			{
+				nd::vector ret(coeffs.size());
+				auto cube = binary_hypercube_vertices(coeffs.size());
+				assert(cube.size() == celldeltas.size());
+				assert(coeffs.size() == cube[0].size());
+				for (int v = 0; v < cube.size(); ++v)
+				{
+					double mul = 1;
+					for (int i = 0; i < cube[v].size(); ++i) 
+					{
+						mul *= cube[v][i] ? coeffs[i] : 1-coeffs[i];
+					}
+					ret += celldeltas[v] * mul;
+				}
+				return ret;
 			}
 
 			rabbit::nd::polysegment delta_correction(
@@ -180,12 +211,13 @@ namespace rabbit
 				for (const auto& pnt : uniform)
 				{
 					ralgo::vector<int> cellzone_indices = _grid.point_in_cell_indices(pnt);
-					auto ndarray_indices = multidim_cell_indices(cellzone_indices);
+					std::vector<ralgo::vector<int> >ndarray_indices = multidim_cell_indices(cellzone_indices);
 					cartesian_cell cellzone = _grid.cellzone(cellzone_indices);
 					ralgo::vector<double> coeffs = cellzone.lerpcoeffs(pnt);
+					auto celldeltas = _deltas.get(ndarray_indices);
 
-					nd::vector correction;
-					polysegm.add_last_point(pnt);
+					nd::vector correction = apply_lerpcoeffs(coeffs, celldeltas);
+					polysegm.add_last_point(pnt + correction);
 				}
 
 				return polysegm;

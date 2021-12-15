@@ -1,7 +1,7 @@
 #ifndef RABBIT_CAMERA_H
 #define RABBIT_CAMERA_H
 
-#include <rabbit/space/pose3.h>
+#include <ralgo/space/pose3.h>
 
 namespace rabbit
 {

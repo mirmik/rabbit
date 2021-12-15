@@ -4,9 +4,6 @@
 #include <rabbit/opengl/shader_collection.h>
 #include <rabbit/mesh.h>
 #include <rabbit/util.h>
-#include <rabbit/space/pose3.h>
-
-#include <rabbit/space/htrans.h>
 
 // GLEW
 #define GLEW_STATIC
@@ -29,7 +26,7 @@
 #include <nos/print.h>
 
 #include <igris/tuple.h>
-#include <igris/systime.h>
+#include <igris/time/systime.h>
 
 #include <chrono>
 

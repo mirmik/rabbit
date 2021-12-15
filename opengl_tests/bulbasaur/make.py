@@ -6,9 +6,9 @@ licant.include("rabbit", "../../rabbit.g.py")
 licant.include("igris")
 
 licant.cxx_application("target",
-	mdepends=["rabbit", "rabbit.opengl", "igris.util"],
+	mdepends=["rabbit", "rabbit.opengl", "igris.util", "rabbit.mesh"],
 	sources = ["main.cpp"],
-	libs = ["GLEW", "glfw", "GL", "X11", "pthread", "Xrandr", "Xi", "SOIL", "nos"],
+	libs = ["GLEW", "glfw", "GL", "X11", "pthread", "Xrandr", "Xi", "SOIL", "igris", "nos"],
 	include_paths=["/usr/include/SOIL"],
 	cxx_flags = "-g"
 )
