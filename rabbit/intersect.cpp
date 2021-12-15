@@ -1,4 +1,5 @@
 #include <rabbit/intersect.h>
+#include <rabbit/prim2.h>
 #include <igris/util/macro.h>
 
 using namespace rabbit;

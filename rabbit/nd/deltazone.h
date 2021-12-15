@@ -16,7 +16,7 @@ namespace rabbit
 		{
 			std::vector<nd::point> points;
 			std::vector<nd::vector> deltas;
-		}
+		};
 
 		static inline
 		auto binary_hypercube_vertices(int dim)
@@ -199,14 +199,16 @@ namespace rabbit
 				return ret;
 			}
 
-			rabbit::nd::polysegment delta_correction(
+			correction_data delta_correction(
 			    const rabbit::nd::segment& segm,
-			    size_t points
+			    size_t npoints
 			)
 			{
-				rabbit::nd::polysegment polysegm;
+				//rabbit::nd::polysegment polysegm;
+				std::vector<rabbit::nd::point> points;
+				std::vector<rabbit::nd::vector> deltas;
 				auto uniform =
-				    ralgo::linspace(segm.apnt, segm.bpnt, points);
+				    ralgo::linspace(segm.apnt, segm.bpnt, npoints);
 
 				for (const auto& pnt : uniform)
 				{
@@ -217,10 +219,11 @@ namespace rabbit
 					auto celldeltas = _deltas.get(ndarray_indices);
 
 					nd::vector correction = apply_lerpcoeffs(coeffs, celldeltas);
-					polysegm.add_last_point(pnt + correction);
+					deltas.push_back(correction);
+					points.push_back(pnt);
 				}
 
-				return polysegm;
+				return  { points, deltas };
 			}
 
 			void set_zone(const std::vector<std::vector<double>>& zone)
