@@ -126,19 +126,19 @@ TEST_CASE("deltacloud.correction")
 		rabbit::nd::segment segm(apnt, bpnt);
 		CHECK_EQ(segm.length(), 10);
 
-		/*auto polysegm = deltacloud.delta_correction(segm, 11);
-		CHECK_EQ(polysegm[0][0], doctest::Approx(-5));
-		CHECK_EQ(polysegm[1][0], doctest::Approx(-4));
-		CHECK_EQ(polysegm[2][0], doctest::Approx(-3));
-		CHECK_EQ(polysegm[3][0], doctest::Approx(-2));
-		CHECK_EQ(polysegm[4][0], doctest::Approx(-1));
-		CHECK_EQ(polysegm[5][0], doctest::Approx(0));
-		CHECK_EQ(polysegm[6][0], doctest::Approx(1));
-		CHECK_EQ(polysegm[7][0], doctest::Approx(2));
-		CHECK_EQ(polysegm[8][0], doctest::Approx(3));
-		CHECK_EQ(polysegm[9][0], doctest::Approx(4));
-		CHECK_EQ(polysegm[10][0], doctest::Approx(5));
-		CHECK_EQ(polysegm[6][1], doctest::Approx(10));*/
+		auto correction = deltacloud.delta_correction(segm, 11);
+		CHECK_EQ(correction.points[0][0], doctest::Approx(-5));
+		CHECK_EQ(correction.points[1][0], doctest::Approx(-4));
+		CHECK_EQ(correction.points[2][0], doctest::Approx(-3));
+		CHECK_EQ(correction.points[3][0], doctest::Approx(-2));
+		CHECK_EQ(correction.points[4][0], doctest::Approx(-1));
+		CHECK_EQ(correction.points[5][0], doctest::Approx(0));
+		CHECK_EQ(correction.points[6][0], doctest::Approx(1));
+		CHECK_EQ(correction.points[7][0], doctest::Approx(2));
+		CHECK_EQ(correction.points[8][0], doctest::Approx(3));
+		CHECK_EQ(correction.points[9][0], doctest::Approx(4));
+		CHECK_EQ(correction.points[10][0], doctest::Approx(5));
+		CHECK_EQ(correction.points[6][1], doctest::Approx(10));
 	}
 }
 
