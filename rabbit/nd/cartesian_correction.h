@@ -174,7 +174,7 @@ namespace rabbit
 			}
 		};
 
-		class deltacloud
+		class cartesian_correction
 		{
 			igris::ndarray<nd::vector> _deltas;
 			cartesian_sliced_zone _grid;
@@ -185,9 +185,9 @@ namespace rabbit
 
 			size_t dim() const { return _grid.dim(); }
 
-			deltacloud() {}
+			cartesian_correction() {}
 
-			deltacloud(std::vector<std::vector<double>> gridcoords)
+			cartesian_correction(std::vector<std::vector<double>> gridcoords)
 				: _grid(gridcoords) {}
 
 			void set_deltas(igris::ndarray<nd::vector> deltas)
@@ -195,7 +195,7 @@ namespace rabbit
 				_deltas = deltas;
 
 				if (deltas[0].size() != dim())
-					throw std::runtime_error("deltas has no same dim as deltacloud");
+					throw std::runtime_error("deltas has no same dim as cartesian_correction");
 			}
 
 			nd::vector apply_lerpcoeffs(

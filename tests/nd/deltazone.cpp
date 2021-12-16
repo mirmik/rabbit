@@ -1,5 +1,5 @@
 #include <doctest/doctest.h>
-#include <rabbit/nd/deltazone.h>
+#include <rabbit/nd/cartesian_correction.h>
 #include <nos/print.h>
 
 TEST_CASE("binary_hypercube")
@@ -35,18 +35,18 @@ TEST_CASE("multidim_cell_indices")
 	CHECK_EQ(ndindexes[7], ralgo::vector<int> {4, 7, 2});
 }
 
-TEST_CASE("deltazone")
+TEST_CASE("cartesian_correction")
 {
-	rabbit::nd::deltacloud deltacloud;
+	rabbit::nd::cartesian_correction cartesian_correction;
 
-	deltacloud.set_zone(
+	cartesian_correction.set_zone(
 	{
 		{ -10, 0, 10},
 		{ -20, 0, 20},
 		{ -30, 0, 30}
 	});
 
-	deltacloud.set_deltas(igris::ndarray<rabbit::nd::vector>
+	cartesian_correction.set_deltas(igris::ndarray<rabbit::nd::vector>
 	{
 		{
 			{rabbit::nd::vector{ -1, 1, 0,}, rabbit::nd::vector{0, 1, 0}, rabbit::nd::vector{1, 1, 0}},
@@ -67,30 +67,30 @@ TEST_CASE("deltazone")
 
 	SUBCASE("deltas")
 	{
-		CHECK_EQ(deltacloud.deltas()({0, 0, 0}), ralgo::vector<double> { -1, 1, 0});
-		CHECK_EQ(deltacloud.deltas()({0, 0, 1}), ralgo::vector<double> {0, 1, 0});
-		CHECK_EQ(deltacloud.deltas()({0, 0, 2}), ralgo::vector<double> {1, 1, 0});
-		CHECK_EQ(deltacloud.deltas()({0, 1, 0}), ralgo::vector<double> { -1, 0, 0});
-		CHECK_EQ(deltacloud.deltas()({0, 1, 1}), ralgo::vector<double> {0, 0, 0});
-		CHECK_EQ(deltacloud.deltas()({0, 1, 2}), ralgo::vector<double> {1, 0, 0});
-		CHECK_EQ(deltacloud.deltas()({0, 2, 0}), ralgo::vector<double> { -1, -1, 0});
-		CHECK_EQ(deltacloud.deltas()({0, 2, 1}), ralgo::vector<double> {0, -1, 0});
-		CHECK_EQ(deltacloud.deltas()({0, 2, 2}), ralgo::vector<double> {1, -1, 0});
+		CHECK_EQ(cartesian_correction.deltas()({0, 0, 0}), ralgo::vector<double> { -1, 1, 0});
+		CHECK_EQ(cartesian_correction.deltas()({0, 0, 1}), ralgo::vector<double> {0, 1, 0});
+		CHECK_EQ(cartesian_correction.deltas()({0, 0, 2}), ralgo::vector<double> {1, 1, 0});
+		CHECK_EQ(cartesian_correction.deltas()({0, 1, 0}), ralgo::vector<double> { -1, 0, 0});
+		CHECK_EQ(cartesian_correction.deltas()({0, 1, 1}), ralgo::vector<double> {0, 0, 0});
+		CHECK_EQ(cartesian_correction.deltas()({0, 1, 2}), ralgo::vector<double> {1, 0, 0});
+		CHECK_EQ(cartesian_correction.deltas()({0, 2, 0}), ralgo::vector<double> { -1, -1, 0});
+		CHECK_EQ(cartesian_correction.deltas()({0, 2, 1}), ralgo::vector<double> {0, -1, 0});
+		CHECK_EQ(cartesian_correction.deltas()({0, 2, 2}), ralgo::vector<double> {1, -1, 0});
 	}
 
 	SUBCASE("point_indices")
 	{
-		auto idxs = deltacloud.grid().point_in_cell_indices({7, 15, 25});
+		auto idxs = cartesian_correction.grid().point_in_cell_indices({7, 15, 25});
 		CHECK_EQ(idxs, ralgo::vector<int> {1, 1, 1});
 
-		idxs = deltacloud.grid().point_in_cell_indices({ -7, -15, -25});
+		idxs = cartesian_correction.grid().point_in_cell_indices({ -7, -15, -25});
 		CHECK_EQ(idxs, ralgo::vector<int> {0, 0, 0});
 	}
 
 	SUBCASE("cellzone")
 	{
-		auto idxs = deltacloud.grid().point_in_cell_indices({ -7, 15, -25});
-		auto cell = deltacloud.grid().cellzone(idxs);
+		auto idxs = cartesian_correction.grid().point_in_cell_indices({ -7, 15, -25});
+		auto cell = cartesian_correction.grid().cellzone(idxs);
 
 		CHECK_EQ(cell.maxs, ralgo::vector<double> {0, 20, 0});
 		CHECK_EQ(cell.mins, ralgo::vector<double> { -10, 0, -30});
@@ -101,11 +101,11 @@ TEST_CASE("deltazone")
 }
 
 
-TEST_CASE("deltacloud.correction")
+TEST_CASE("cartesian_correction.correction")
 {
-	rabbit::nd::deltacloud deltacloud;
+	rabbit::nd::cartesian_correction cartesian_correction;
 
-	deltacloud.set_zone(
+	cartesian_correction.set_zone(
 	{
 		{ -10, 0, 10},
 		{ -20, 0, 20}
@@ -113,7 +113,7 @@ TEST_CASE("deltacloud.correction")
 
 	SUBCASE("zero deltas")
 	{
-		deltacloud.set_deltas(igris::ndarray<rabbit::nd::vector>
+		cartesian_correction.set_deltas(igris::ndarray<rabbit::nd::vector>
 		{
 			{ rabbit::nd::vector{ 0, 0 }, rabbit::nd::vector{ 0, 0 }, rabbit::nd::vector{ 0, 0 } },
 			{ rabbit::nd::vector{ 0, 0 }, rabbit::nd::vector{ 0, 0 }, rabbit::nd::vector{ 0, 0 } },
@@ -126,7 +126,7 @@ TEST_CASE("deltacloud.correction")
 		rabbit::nd::segment segm(apnt, bpnt);
 		CHECK_EQ(segm.length(), 10);
 
-		auto correction = deltacloud.delta_correction(segm, 11);
+		auto correction = cartesian_correction.delta_correction(segm, 11);
 		CHECK_EQ(correction.points()[0][0], doctest::Approx(-5));
 		CHECK_EQ(correction.points()[1][0], doctest::Approx(-4));
 		CHECK_EQ(correction.points()[2][0], doctest::Approx(-3));
@@ -142,18 +142,18 @@ TEST_CASE("deltacloud.correction")
 	}
 }
 
-TEST_CASE("deltacloud.correction")
+TEST_CASE("cartesian_correction.correction")
 {
-	rabbit::nd::deltacloud deltacloud;
+	rabbit::nd::cartesian_correction cartesian_correction;
 
-	deltacloud.set_zone(
+	cartesian_correction.set_zone(
 	{
-		{-10, 0, 10}
+		{ -10, 0, 10}
 	});
 
-	deltacloud.set_deltas(igris::ndarray<rabbit::nd::vector>
+	cartesian_correction.set_deltas(igris::ndarray<rabbit::nd::vector>
 	{
-		rabbit::nd::vector{ -1}, rabbit::nd::vector{-1}, rabbit::nd::vector{1}
+		rabbit::nd::vector{ -1}, rabbit::nd::vector{ -1}, rabbit::nd::vector{1}
 	});
 
 	rabbit::nd::point apnt{ -5 };
@@ -162,7 +162,7 @@ TEST_CASE("deltacloud.correction")
 	rabbit::nd::segment segm(apnt, bpnt);
 	CHECK_EQ(segm.length(), 10);
 
-	auto correction = deltacloud.delta_correction(segm, 11);
+	auto correction = cartesian_correction.delta_correction(segm, 11);
 	CHECK_EQ(correction.points()[0][0], doctest::Approx(-5));
 	CHECK_EQ(correction.points()[1][0], doctest::Approx(-4));
 	CHECK_EQ(correction.points()[2][0], doctest::Approx(-3));
@@ -200,4 +200,34 @@ TEST_CASE("deltacloud.correction")
 	CHECK_EQ(points[8][0], doctest::Approx(2.6));
 	CHECK_EQ(points[9][0], doctest::Approx(3.8));
 	CHECK_EQ(points[10][0], doctest::Approx(5));
+}
+
+TEST_CASE("nd case")
+{
+	rabbit::nd::cartesian_correction cartesian_correction;
+
+	cartesian_correction.set_zone(
+	{
+		{ -10, 0, 10},
+		{ -10, 0, 10}
+	});
+
+	cartesian_correction.set_deltas(igris::ndarray<rabbit::nd::vector>
+	{
+		{rabbit::nd::vector{ -1, -1}, rabbit::nd::vector{ -1, 0}, rabbit::nd::vector{ -1, 1}},
+		{rabbit::nd::vector{ 0, -1}, rabbit::nd::vector{ 0, 0}, rabbit::nd::vector{ 0, 1}},
+		{rabbit::nd::vector{ 1, -1}, rabbit::nd::vector{ 1, 0}, rabbit::nd::vector{ 1, 1}},
+	});
+
+	rabbit::nd::point apnt{ -5, -5 };
+	rabbit::nd::point bpnt{  5,  5 };
+
+	rabbit::nd::segment segm(apnt, bpnt);
+	auto correction = cartesian_correction.delta_correction(segm, 11).compile_polysegment();
+	auto points = correction.points();
+
+	CHECK_EQ(points[0][0], doctest::Approx(-5.5));
+	CHECK_EQ(points[0][1], doctest::Approx(-5.5));	
+	CHECK_EQ(points[10][0], doctest::Approx(5.5));
+	CHECK_EQ(points[10][1], doctest::Approx(5.5));	
 }
