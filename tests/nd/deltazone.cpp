@@ -188,4 +188,16 @@ TEST_CASE("deltacloud.correction")
 	CHECK_EQ(correction.deltas()[10][0], doctest::Approx(0));
 
 	auto polysegm = correction.compile_polysegment();
+	auto points = polysegm.points();
+	CHECK_EQ(points[0][0], doctest::Approx(-6));
+	CHECK_EQ(points[1][0], doctest::Approx(-5));
+	CHECK_EQ(points[2][0], doctest::Approx(-4));
+	CHECK_EQ(points[3][0], doctest::Approx(-3));
+	CHECK_EQ(points[4][0], doctest::Approx(-2));
+	CHECK_EQ(points[5][0], doctest::Approx(-1));
+	CHECK_EQ(points[6][0], doctest::Approx(0.2));
+	CHECK_EQ(points[7][0], doctest::Approx(1.4));
+	CHECK_EQ(points[8][0], doctest::Approx(2.6));
+	CHECK_EQ(points[9][0], doctest::Approx(3.8));
+	CHECK_EQ(points[10][0], doctest::Approx(5));
 }

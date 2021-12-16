@@ -31,7 +31,7 @@ namespace rabbit
 
 			nd::polysegment compile_polysegment()
 			{
-				nd::polysegment ret(_points[0].size(), _points.size());
+				nd::polysegment ret;
 				for (size_t i = 0; i < _points.size(); ++i)
 					ret.add_point(_points[i]+_deltas[i]);
 				return ret;
