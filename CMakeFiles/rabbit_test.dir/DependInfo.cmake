@@ -12,7 +12,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/home/mirmik/project/rabbit/tests/optimize.cpp" "/home/mirmik/project/rabbit/CMakeFiles/rabbit_test.dir/tests/optimize.cpp.o"
   "/home/mirmik/project/rabbit/tests/svd.cpp" "/home/mirmik/project/rabbit/CMakeFiles/rabbit_test.dir/tests/svd.cpp.o"
   )
-set(CMAKE_CXX_COMPILER_ID "Clang")
+set(CMAKE_CXX_COMPILER_ID "GNU")
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH

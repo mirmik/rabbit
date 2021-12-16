@@ -4,7 +4,7 @@
 #include <rabbit/third/linalg.h>
 
 #ifndef RABBIT_REAL_TYPE
-#define RABBIT_REAL_TYPE float
+#define RABBIT_REAL_TYPE double
 #endif
 
 typedef float r_float;

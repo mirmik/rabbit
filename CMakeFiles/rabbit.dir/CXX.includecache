@@ -9,6 +9,8 @@
 /home/mirmik/project/rabbit/rabbit/intersect.cpp
 rabbit/intersect.h
 -
+rabbit/prim2.h
+-
 igris/util/macro.h
 -
 
