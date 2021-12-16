@@ -174,4 +174,16 @@ TEST_CASE("deltacloud.correction")
 	CHECK_EQ(correction.points[8][0], doctest::Approx(3));
 	CHECK_EQ(correction.points[9][0], doctest::Approx(4));
 	CHECK_EQ(correction.points[10][0], doctest::Approx(5));
+
+	CHECK_EQ(correction.deltas[0][0], doctest::Approx(-1));
+	CHECK_EQ(correction.deltas[1][0], doctest::Approx(-1));
+	CHECK_EQ(correction.deltas[2][0], doctest::Approx(-1));
+	CHECK_EQ(correction.deltas[3][0], doctest::Approx(-1));
+	CHECK_EQ(correction.deltas[4][0], doctest::Approx(-1));
+	CHECK_EQ(correction.deltas[5][0], doctest::Approx(-1));
+	CHECK_EQ(correction.deltas[6][0], doctest::Approx(-0.8));
+	CHECK_EQ(correction.deltas[7][0], doctest::Approx(-0.6));
+	CHECK_EQ(correction.deltas[8][0], doctest::Approx(-0.4));
+	CHECK_EQ(correction.deltas[9][0], doctest::Approx(-0.2));
+	CHECK_EQ(correction.deltas[10][0], doctest::Approx(0));
 }
