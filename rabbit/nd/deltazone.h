@@ -12,10 +12,30 @@ namespace rabbit
 {
 	namespace nd
 	{
-		struct correction_data 
+		class correction_data
 		{
-			std::vector<nd::point> points;
-			std::vector<nd::vector> deltas;
+			std::vector<nd::point> _points;
+			std::vector<nd::vector> _deltas;
+
+		public:
+			correction_data(
+			    const std::vector<nd::point>& pnts,
+			    const std::vector<nd::vector>& dlts
+			)
+				: _points(pnts), _deltas(dlts)
+			{}
+
+			std::vector<nd::point> points() { return _points; }
+			std::vector<nd::vector> deltas() { return _deltas; }
+
+
+			nd::polysegment compile_polysegment()
+			{
+				nd::polysegment ret(_points[0].size(), _points.size());
+				for (size_t i = 0; i < _points.size(); ++i)
+					ret.add_point(_points[i]+_deltas[i]);
+				return ret;
+			}
 		};
 
 		static inline
@@ -174,14 +194,14 @@ namespace rabbit
 			{
 				_deltas = deltas;
 
-				if (deltas[0].size() != dim()) 
+				if (deltas[0].size() != dim())
 					throw std::runtime_error("deltas has no same dim as deltacloud");
 			}
 
 			nd::vector apply_lerpcoeffs(
-				ralgo::vector<double> coeffs,
-				std::vector<ralgo::vector<double>> celldeltas
-			) 
+			    ralgo::vector<double> coeffs,
+			    std::vector<ralgo::vector<double>> celldeltas
+			)
 			{
 				nd::vector ret(coeffs.size());
 				auto cube = binary_hypercube_vertices(coeffs.size());
@@ -190,9 +210,9 @@ namespace rabbit
 				for (int v = 0; v < cube.size(); ++v)
 				{
 					double mul = 1;
-					for (int i = 0; i < cube[v].size(); ++i) 
+					for (int i = 0; i < cube[v].size(); ++i)
 					{
-						mul *= cube[v][i] ? coeffs[i] : 1-coeffs[i];
+						mul *= cube[v][i] ? coeffs[i] : 1 - coeffs[i];
 					}
 					ret += celldeltas[v] * mul;
 				}
