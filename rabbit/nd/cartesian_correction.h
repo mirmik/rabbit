@@ -300,33 +300,6 @@ namespace rabbit
 				return ret;
 			}
 
-			correction_data delta_correction(
-			    const rabbit::nd::segment& segm,
-			    size_t npoints
-			)
-			{
-				//rabbit::nd::polysegment polysegm;
-				std::vector<rabbit::nd::point> points;
-				std::vector<rabbit::nd::vector> deltas;
-				auto uniform =
-				    ralgo::linspace(segm.apnt, segm.bpnt, npoints);
-
-				for (const auto& pnt : uniform)
-				{
-					ralgo::vector<int> cellzone_indices = _grid.point_in_cell_indices(pnt);
-					std::vector<ralgo::vector<int> >ndarray_indices = multidim_cell_indices(cellzone_indices);
-					cartesian_cell cellzone = _grid.cellzone(cellzone_indices);
-					ralgo::vector<double> coeffs = cellzone.lerpcoeffs(pnt);
-					auto celldeltas = _deltas.get(ndarray_indices);
-
-					nd::vector correction = apply_lerpcoeffs(coeffs, celldeltas);
-					deltas.push_back(correction);
-					points.push_back(pnt);
-				}
-
-				return  { points, deltas };
-			}
-
 			void set_zone(const std::vector<std::vector<double>>& zone)
 			{
 				_grid.set_zone(zone);
