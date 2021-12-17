@@ -196,6 +196,10 @@ namespace rabbit
 			void set_fulldim(int fulldim) 
 			{
 				this->fulldim = fulldim;
+				igris::ab_converter<int, int> conv;
+				for (int i = 0; i < fulldim; i++) conv.add(i,i);
+				this->delta2full_converter = conv;
+				this->grid2full_converter = conv;	
 			}
 
 			void set_delta_to_full_indexes(igris::ab_converter<int, int> converter)
@@ -285,6 +289,15 @@ namespace rabbit
 				auto pnt_delta = apply_lerpcoeffs(coeffs, celldeltas);
 
 				return pnt + fulled_delta(pnt_delta);
+			}
+
+			auto corrected_points(
+				const std::vector<nd::vector>& pnts) 
+			{
+				std::vector<nd::vector> ret(pnts.size());
+				for (int i = 0; i < pnts.size(); ++i) 
+					ret[i] = corrected_point(pnts[i]);
+				return ret;
 			}
 
 			correction_data delta_correction(

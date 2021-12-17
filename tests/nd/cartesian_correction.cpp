@@ -32,7 +32,7 @@ TEST_CASE("cartesian_correction.perpendicular")
 	CHECK_EQ(corrected, ralgo::vector<double>{0,5,0.25});
 }
 
-TEST_CASE("cartesian_correction.perpendicular") 
+TEST_CASE("cartesian_correction.same") 
 {
 	rabbit::nd::cartesian_correction cartesian_correction;
 
@@ -60,6 +60,36 @@ TEST_CASE("cartesian_correction.perpendicular")
 	auto corrected = cartesian_correction.corrected_point(point);
 
 	CHECK_EQ(corrected, ralgo::vector<double>{0,5.25,0});
+}
+
+TEST_CASE("cartesian_correction.same") 
+{
+	rabbit::nd::cartesian_correction cartesian_correction;
+
+	cartesian_correction.set_fulldim(3);
+
+	cartesian_correction.set_zone(
+	{
+		{ -10, 0, 10}
+	});
+
+	cartesian_correction.set_deltas(
+	{
+		rabbit::nd::vector{0.1}, {0.2}, {0.3}
+	});
+
+	cartesian_correction.set_delta_to_full_indexes({
+		{0, 1},
+	});
+
+	cartesian_correction.set_grid_to_full_indexes({
+		{0, 2},
+	});
+
+	rabbit::nd::vector point {5,0,0};
+	auto corrected = cartesian_correction.corrected_point(point);
+
+	CHECK_EQ(corrected, ralgo::vector<double>{5,0.2,0});
 }
 
 TEST_CASE("binary_hypercube")
