@@ -2,11 +2,14 @@
 #define RABBIT_DELTAZONE_H
 
 #include <igris/container/ndarray.h>
+#include <igris/util/ab_converter.h>
 #include <ralgo/linalg/vector.h>
 #include <ralgo/linspace.h>
+#include <ralgo/linalg/vecops.h>
 #include <rabbit/nd/point.h>
 #include <rabbit/nd/segment.h>
 #include <rabbit/nd/polysegment.h>
+#include <rabbit/nd/cartesian_correction.h>
 
 namespace rabbit
 {
@@ -33,7 +36,7 @@ namespace rabbit
 			{
 				nd::polysegment ret;
 				for (size_t i = 0; i < _points.size(); ++i)
-					ret.add_point(_points[i]+_deltas[i]);
+					ret.add_point(_points[i] + _deltas[i]);
 				return ret;
 			}
 		};
@@ -178,10 +181,59 @@ namespace rabbit
 		{
 			igris::ndarray<nd::vector> _deltas;
 			cartesian_sliced_zone _grid;
+			std::vector<int> grid_index_converter;
+
+			int fulldim;
+			// Слева координаты дельта пространства, справа - полного пространства.
+			igris::ab_converter<int, int> delta2full_converter;
+			// Слева координаты пространства сетки, справа - полного пространства.
+			igris::ab_converter<int, int> grid2full_converter;
 
 		public:
 			cartesian_sliced_zone& grid() { return _grid; }
 			igris::ndarray<nd::vector>& deltas() { return _deltas; }
+
+			void set_fulldim(int fulldim) 
+			{
+				this->fulldim = fulldim;
+			}
+
+			void set_delta_to_full_indexes(igris::ab_converter<int, int> converter)
+			{
+				this->delta2full_converter = converter;
+			}
+
+			void set_grid_to_full_indexes(igris::ab_converter<int, int> converter)
+			{
+				this->grid2full_converter = converter;
+			}
+
+			size_t griddim() const { return _grid.dim(); }
+
+			// Приводит дельта вектор приведенный к полному виду.
+			ralgo::vector<double> fulled_delta(const ralgo::vector<double>& delta)
+			{
+				ralgo::vector<double> full(fulldim);
+				ralgo::vecops::fill(full, 0);
+				for (int i = 0; i < _deltas.dim(); ++i)
+				{
+					full[delta2full_converter.b(i)] = delta[i];
+				}
+				return full;
+			}
+
+			// Возвращает вектор координат представляющий точку
+			// в системе координат сетки.
+			ralgo::vector<double> zoned_point(const ralgo::vector<double>& point)
+			{
+				ralgo::vector<double> vec(griddim());
+				ralgo::vecops::fill(vec, 0);
+				for (int i = 0; i < _grid.dim(); ++i)
+				{
+					vec[i] = point[grid2full_converter.b(i)];
+				}
+				return vec;
+			}
 
 			size_t dim() const { return _grid.dim(); }
 
@@ -190,12 +242,13 @@ namespace rabbit
 			cartesian_correction(std::vector<std::vector<double>> gridcoords)
 				: _grid(gridcoords) {}
 
-			void set_deltas(igris::ndarray<nd::vector> deltas)
+			void set_deltas(const igris::ndarray<nd::vector>& deltas)
 			{
 				_deltas = deltas;
 
-				if (deltas[0].size() != dim())
+				/*if (deltas[0].size() != dim())
 					throw std::runtime_error("deltas has no same dim as cartesian_correction");
+				*/
 			}
 
 			nd::vector apply_lerpcoeffs(
@@ -217,6 +270,21 @@ namespace rabbit
 					ret += celldeltas[v] * mul;
 				}
 				return ret;
+			}
+
+			auto corrected_point(const nd::vector& pnt)
+			{
+				assert(pnt.size() == fulldim);
+
+				auto gridpnt = zoned_point(pnt);
+				auto cellzone_index = _grid.point_in_cell_indices(gridpnt);
+				auto cellzone = _grid.cellzone(cellzone_index);
+				auto deltas_indices = multidim_cell_indices(cellzone_index);
+				auto coeffs = cellzone.lerpcoeffs(gridpnt);
+				auto celldeltas = _deltas.get(deltas_indices);
+				auto pnt_delta = apply_lerpcoeffs(coeffs, celldeltas);
+
+				return pnt + fulled_delta(pnt_delta);
 			}
 
 			correction_data delta_correction(
