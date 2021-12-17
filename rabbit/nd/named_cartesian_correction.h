@@ -8,71 +8,27 @@ namespace rabbit
 {
 	namespace nd
 	{
-		class named_cartesian_correction
+		static auto make_numeric_index_converter(
+			const std::vector<std::string>& fullset, 
+			const std::vector<std::string>& partset 
+		) 
 		{
-			nd::cartesian_correction raw_correction;
-
-			std::vector<std::string> _full_form_names;
-			std::vector<std::string> _zone_axes_names;
-			std::vector<std::string> _deltas_axes_names;
-
-			igris::ab_converter<std::string, int> full2idx_converter;
-			igris::ab_converter<std::string, int> zone2idx_converter;
-			igris::ab_converter<std::string, int> delta2idx_converter;
-
-		public:
-			named_cartesian_correction() = default;
-
-			void set_full_axes_names(const std::vector<std::string>& names)
+			igris::ab_converter<int,int> ret;
+			for (int i = 0; i < partset.size(); ++i) 
 			{
-				_full_form_names = names;
-				for (int i = 0; i < names.size(); ++i)
-				{
-					full2idx_converter.add(names[i], i);
-				}
-			}
+				auto it = std::find(
+					fullset.begin(), 
+					fullset.end(),
+					partset[i]);
 
-			size_t zone_dimension() const
-			{
-				return _zone_axes_names.size();
+				if (it == fullset.end())
+					throw std::runtime_error("bad partset index");
+			
+				ret.add(i, std::distance(fullset.begin(), it));
 			}
+			return ret;
+		}
 
-			size_t deltas_dimension() const
-			{
-				return _deltas_axes_names.size();
-			}
-
-			size_t full_dimension() const
-			{
-				return _full_form_names.size();
-			}
-
-			void set_zone_names(const std::vector<std::string>& zone_axes_names)
-			{
-				this->_zone_axes_names = zone_axes_names;
-			}
-
-			void set_deltas_names(const std::vector<std::string>& deltas_axes_names)
-			{
-				this->_deltas_axes_names = deltas_axes_names;
-			}
-
-			std::vector<std::string>& output_axes_names()
-			{
-				return _full_form_names;
-			}
-
-			void set_zone(const std::vector<std::vector<double>>& zone) 
-			{
-				raw_correction.set_zone(zone);
-			}
-
-			void set_deltas(const igris::ndarray<nd::vector>& deltas)
-			{
-				raw_correction.set_deltas(deltas);
-			}
-
-		};
 	}
 }
 
