@@ -43,15 +43,6 @@ jobs:
         sudo cmake --install .
         cd ..
 
-    - name: Install crow library
-      run: |
-        git clone https://github.com/mirmik/crow
-        cd crow
-        cmake .
-        cmake --build .
-        sudo cmake --install .
-        cd ..
-
     - name: Install ralgo library
       run: |
         git clone https://github.com/mirmik/ralgo
