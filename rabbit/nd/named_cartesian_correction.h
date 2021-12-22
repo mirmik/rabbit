@@ -37,6 +37,22 @@ namespace rabbit
 			std::vector<std::string> head_deltas;
 			std::vector<std::vector<double>> grid;
 			igris::ndarray<nd::vector> deltas;
+
+		public:
+			cartesian_correction make_correction_table()
+			{
+				cartesian_correction ret;
+				ret.set_fulldim(head_full.size());
+				ret.set_zone(grid);
+				ret.set_deltas(deltas);
+
+				igris::ab_converter<int, int> grid_to_full = 
+					make_numeric_index_converter(head_full, head_grid);
+				igris::ab_converter<int, int> deltas_to_full = 
+					make_numeric_index_converter(head_full, head_deltas);
+
+				return ret;
+			}
 		};
 
 		static inline
@@ -45,7 +61,7 @@ namespace rabbit
 			if (tr[0].is_numer())
 			{
 				nd::vector vec;
-				for(auto & t : tr.as_list())
+				for (auto & t : tr.as_list())
 					vec.push_back(t.as_numer());
 				*it = vec;
 				return ++it;

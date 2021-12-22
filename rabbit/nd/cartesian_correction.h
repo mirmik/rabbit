@@ -241,10 +241,7 @@ namespace rabbit
 
 			size_t dim() const { return _grid.dim(); }
 
-			cartesian_correction() {}
-
-			cartesian_correction(std::vector<std::vector<double>> gridcoords)
-				: _grid(gridcoords) {}
+			cartesian_correction() = default;
 
 			void set_deltas(const igris::ndarray<nd::vector>& deltas)
 			{
