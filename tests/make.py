@@ -13,8 +13,7 @@ application("runtests",
 		sources = [
 			"*.cpp",
 			"fitting/*.cpp",
-			"geom/*.cpp",	
-			"nd/*.cpp"	
+			"geom/*.cpp"
 		],
 
 		cxx_flags = "-g",
