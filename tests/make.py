@@ -23,7 +23,7 @@ application("runtests",
 		include_paths = ["."],
 		mdepends = [ "rabbit" ],
 
-		libs=["nos", "igris", "ralgo"],
+		libs=["nos", "ralgo"],
 		defines=["RABBIT_REAL_TYPE=double"]
 )
 
