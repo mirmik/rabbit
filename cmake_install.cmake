@@ -1,4 +1,4 @@
-# Install script for directory: /home/mirmik/project/radioline/rfmeask/submodules/rabbit
+# Install script for directory: /mnt/c/Users/sorok/project/rfmeask/submodules/rabbit
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

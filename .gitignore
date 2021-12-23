@@ -37,3 +37,15 @@ tests/runtests_float
 tests/runtests_double
 
 opengl_tests/sphere/target
+
+CMakeLists.txt.user
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Testing
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps

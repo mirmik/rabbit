@@ -42,19 +42,19 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /usr/local/bin/cmake
+CMAKE_COMMAND = /usr/bin/cmake
 
 # The command to remove a file.
-RM = /usr/local/bin/cmake -E rm -f
+RM = /usr/bin/cmake -E remove -f
 
 # Escaping for special characters.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/mirmik/project/radioline/rfmeask
+CMAKE_SOURCE_DIR = /mnt/c/Users/sorok/project/rfmeask
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/mirmik/project/radioline/rfmeask
+CMAKE_BINARY_DIR = /mnt/c/Users/sorok/project/rfmeask
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -62,7 +62,7 @@ CMAKE_BINARY_DIR = /home/mirmik/project/radioline/rfmeask
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/usr/local/bin/cmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/usr/bin/cmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -72,8 +72,8 @@ rebuild_cache/fast: rebuild_cache
 
 # Special rule for the target edit_cache
 edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
-	/usr/local/bin/ccmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
+	/usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -84,7 +84,7 @@ edit_cache/fast: edit_cache
 # Special rule for the target test
 test:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running tests..."
-	/usr/local/bin/ctest --force-new-ctest-process $(ARGS)
+	/usr/bin/ctest --force-new-ctest-process $(ARGS)
 .PHONY : test
 
 # Special rule for the target test
@@ -94,14 +94,14 @@ test/fast: test
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/mirmik/project/radioline/rfmeask && $(CMAKE_COMMAND) -E cmake_progress_start /home/mirmik/project/radioline/rfmeask/CMakeFiles /home/mirmik/project/radioline/rfmeask/submodules/rabbit/CMakeFiles/progress.marks
-	cd /home/mirmik/project/radioline/rfmeask && $(MAKE) -f CMakeFiles/Makefile2 submodules/rabbit/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/mirmik/project/radioline/rfmeask/CMakeFiles 0
+	cd /mnt/c/Users/sorok/project/rfmeask && $(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/sorok/project/rfmeask/CMakeFiles /mnt/c/Users/sorok/project/rfmeask/submodules/rabbit/CMakeFiles/progress.marks
+	cd /mnt/c/Users/sorok/project/rfmeask && $(MAKE) -f CMakeFiles/Makefile2 submodules/rabbit/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /mnt/c/Users/sorok/project/rfmeask/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/mirmik/project/radioline/rfmeask && $(MAKE) -f CMakeFiles/Makefile2 submodules/rabbit/clean
+	cd /mnt/c/Users/sorok/project/rfmeask && $(MAKE) -f CMakeFiles/Makefile2 submodules/rabbit/clean
 .PHONY : clean
 
 # The main clean target
@@ -111,17 +111,17 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/mirmik/project/radioline/rfmeask && $(MAKE) -f CMakeFiles/Makefile2 submodules/rabbit/preinstall
+	cd /mnt/c/Users/sorok/project/rfmeask && $(MAKE) -f CMakeFiles/Makefile2 submodules/rabbit/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/mirmik/project/radioline/rfmeask && $(MAKE) -f CMakeFiles/Makefile2 submodules/rabbit/preinstall
+	cd /mnt/c/Users/sorok/project/rfmeask && $(MAKE) -f CMakeFiles/Makefile2 submodules/rabbit/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/mirmik/project/radioline/rfmeask && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /mnt/c/Users/sorok/project/rfmeask && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Help Target
@@ -144,6 +144,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/mirmik/project/radioline/rfmeask && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /mnt/c/Users/sorok/project/rfmeask && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

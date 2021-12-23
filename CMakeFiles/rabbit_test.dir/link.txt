@@ -1,1 +1,0 @@
-/usr/bin/c++     CMakeFiles/rabbit_test.dir/tests/intersect.cpp.o CMakeFiles/rabbit_test.dir/tests/line2.cpp.o CMakeFiles/rabbit_test.dir/tests/main.cpp.o CMakeFiles/rabbit_test.dir/tests/nearest.cpp.o CMakeFiles/rabbit_test.dir/tests/optimize.cpp.o CMakeFiles/rabbit_test.dir/tests/svd.cpp.o CMakeFiles/rabbit_test.dir/rabbit/intersect.cpp.o  -o rabbit_test  -lralgo -lnos -ligris 
