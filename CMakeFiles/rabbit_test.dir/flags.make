@@ -6,5 +6,5 @@ CXX_FLAGS =   -std=gnu++17
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/mirmik/project/rabbit/. -I/home/mirmik/project/rabbit/tests 
+CXX_INCLUDES = -I/home/mirmik/project/radioline/rfmeask/submodules/rabbit/. -I/home/mirmik/project/radioline/rfmeask/submodules/rabbit/tests 
 

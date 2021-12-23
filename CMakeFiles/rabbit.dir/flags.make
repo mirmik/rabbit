@@ -6,5 +6,5 @@ CXX_FLAGS = -fPIC   -std=gnu++17
 
 CXX_DEFINES = -Drabbit_EXPORTS
 
-CXX_INCLUDES = -I/home/mirmik/project/rabbit/. 
+CXX_INCLUDES = -I/home/mirmik/project/radioline/rfmeask/submodules/rabbit/. 
 

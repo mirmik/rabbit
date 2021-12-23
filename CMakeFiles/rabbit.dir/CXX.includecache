@@ -6,12 +6,10 @@
 
 #IncludeRegexTransform: 
 
-/home/mirmik/project/rabbit/rabbit/intersect.cpp
+/home/mirmik/project/radioline/rfmeask/submodules/rabbit/rabbit/intersect.cpp
 rabbit/intersect.h
 -
 rabbit/prim2.h
--
-igris/util/macro.h
 -
 
 rabbit/intersect.h

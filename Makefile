@@ -51,47 +51,13 @@ RM = /usr/local/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/mirmik/project/rabbit
+CMAKE_SOURCE_DIR = /home/mirmik/project/radioline/rfmeask
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/mirmik/project/rabbit
+CMAKE_BINARY_DIR = /home/mirmik/project/radioline/rfmeask
 
 #=============================================================================
 # Targets provided globally by CMake.
-
-# Special rule for the target install/strip
-install/strip: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
-	/usr/local/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
-.PHONY : install/strip
-
-# Special rule for the target install/strip
-install/strip/fast: preinstall/fast
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
-	/usr/local/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
-.PHONY : install/strip/fast
-
-# Special rule for the target install
-install: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
-	/usr/local/bin/cmake -P cmake_install.cmake
-.PHONY : install
-
-# Special rule for the target install
-install/fast: preinstall/fast
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Install the project..."
-	/usr/local/bin/cmake -P cmake_install.cmake
-.PHONY : install/fast
-
-# Special rule for the target list_install_components
-list_install_components:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Available install components are: \"Unspecified\""
-.PHONY : list_install_components
-
-# Special rule for the target list_install_components
-list_install_components/fast: list_install_components
-
-.PHONY : list_install_components/fast
 
 # Special rule for the target rebuild_cache
 rebuild_cache:
@@ -126,28 +92,16 @@ test/fast: test
 
 .PHONY : test/fast
 
-# Special rule for the target install/local
-install/local: preinstall
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
-	/usr/local/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
-.PHONY : install/local
-
-# Special rule for the target install/local
-install/local/fast: preinstall/fast
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing only the local directory..."
-	/usr/local/bin/cmake -DCMAKE_INSTALL_LOCAL_ONLY=1 -P cmake_install.cmake
-.PHONY : install/local/fast
-
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/mirmik/project/rabbit/CMakeFiles /home/mirmik/project/rabbit/CMakeFiles/progress.marks
-	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/mirmik/project/rabbit/CMakeFiles 0
+	cd /home/mirmik/project/radioline/rfmeask && $(CMAKE_COMMAND) -E cmake_progress_start /home/mirmik/project/radioline/rfmeask/CMakeFiles /home/mirmik/project/radioline/rfmeask/submodules/rabbit/CMakeFiles/progress.marks
+	cd /home/mirmik/project/radioline/rfmeask && $(MAKE) -f CMakeFiles/Makefile2 submodules/rabbit/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/mirmik/project/radioline/rfmeask/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	$(MAKE) -f CMakeFiles/Makefile2 clean
+	cd /home/mirmik/project/radioline/rfmeask && $(MAKE) -f CMakeFiles/Makefile2 submodules/rabbit/clean
 .PHONY : clean
 
 # The main clean target
@@ -157,236 +111,18 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	$(MAKE) -f CMakeFiles/Makefile2 preinstall
+	cd /home/mirmik/project/radioline/rfmeask && $(MAKE) -f CMakeFiles/Makefile2 submodules/rabbit/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	$(MAKE) -f CMakeFiles/Makefile2 preinstall
+	cd /home/mirmik/project/radioline/rfmeask && $(MAKE) -f CMakeFiles/Makefile2 submodules/rabbit/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/mirmik/project/radioline/rfmeask && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
-
-#=============================================================================
-# Target rules for targets named rabbit
-
-# Build rule for target.
-rabbit: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 rabbit
-.PHONY : rabbit
-
-# fast build rule for target.
-rabbit/fast:
-	$(MAKE) -f CMakeFiles/rabbit.dir/build.make CMakeFiles/rabbit.dir/build
-.PHONY : rabbit/fast
-
-#=============================================================================
-# Target rules for targets named rabbit_test
-
-# Build rule for target.
-rabbit_test: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 rabbit_test
-.PHONY : rabbit_test
-
-# fast build rule for target.
-rabbit_test/fast:
-	$(MAKE) -f CMakeFiles/rabbit_test.dir/build.make CMakeFiles/rabbit_test.dir/build
-.PHONY : rabbit_test/fast
-
-rabbit/intersect.o: rabbit/intersect.cpp.o
-
-.PHONY : rabbit/intersect.o
-
-# target to build an object file
-rabbit/intersect.cpp.o:
-	$(MAKE) -f CMakeFiles/rabbit.dir/build.make CMakeFiles/rabbit.dir/rabbit/intersect.cpp.o
-	$(MAKE) -f CMakeFiles/rabbit_test.dir/build.make CMakeFiles/rabbit_test.dir/rabbit/intersect.cpp.o
-.PHONY : rabbit/intersect.cpp.o
-
-rabbit/intersect.i: rabbit/intersect.cpp.i
-
-.PHONY : rabbit/intersect.i
-
-# target to preprocess a source file
-rabbit/intersect.cpp.i:
-	$(MAKE) -f CMakeFiles/rabbit.dir/build.make CMakeFiles/rabbit.dir/rabbit/intersect.cpp.i
-	$(MAKE) -f CMakeFiles/rabbit_test.dir/build.make CMakeFiles/rabbit_test.dir/rabbit/intersect.cpp.i
-.PHONY : rabbit/intersect.cpp.i
-
-rabbit/intersect.s: rabbit/intersect.cpp.s
-
-.PHONY : rabbit/intersect.s
-
-# target to generate assembly for a file
-rabbit/intersect.cpp.s:
-	$(MAKE) -f CMakeFiles/rabbit.dir/build.make CMakeFiles/rabbit.dir/rabbit/intersect.cpp.s
-	$(MAKE) -f CMakeFiles/rabbit_test.dir/build.make CMakeFiles/rabbit_test.dir/rabbit/intersect.cpp.s
-.PHONY : rabbit/intersect.cpp.s
-
-tests/intersect.o: tests/intersect.cpp.o
-
-.PHONY : tests/intersect.o
-
-# target to build an object file
-tests/intersect.cpp.o:
-	$(MAKE) -f CMakeFiles/rabbit_test.dir/build.make CMakeFiles/rabbit_test.dir/tests/intersect.cpp.o
-.PHONY : tests/intersect.cpp.o
-
-tests/intersect.i: tests/intersect.cpp.i
-
-.PHONY : tests/intersect.i
-
-# target to preprocess a source file
-tests/intersect.cpp.i:
-	$(MAKE) -f CMakeFiles/rabbit_test.dir/build.make CMakeFiles/rabbit_test.dir/tests/intersect.cpp.i
-.PHONY : tests/intersect.cpp.i
-
-tests/intersect.s: tests/intersect.cpp.s
-
-.PHONY : tests/intersect.s
-
-# target to generate assembly for a file
-tests/intersect.cpp.s:
-	$(MAKE) -f CMakeFiles/rabbit_test.dir/build.make CMakeFiles/rabbit_test.dir/tests/intersect.cpp.s
-.PHONY : tests/intersect.cpp.s
-
-tests/line2.o: tests/line2.cpp.o
-
-.PHONY : tests/line2.o
-
-# target to build an object file
-tests/line2.cpp.o:
-	$(MAKE) -f CMakeFiles/rabbit_test.dir/build.make CMakeFiles/rabbit_test.dir/tests/line2.cpp.o
-.PHONY : tests/line2.cpp.o
-
-tests/line2.i: tests/line2.cpp.i
-
-.PHONY : tests/line2.i
-
-# target to preprocess a source file
-tests/line2.cpp.i:
-	$(MAKE) -f CMakeFiles/rabbit_test.dir/build.make CMakeFiles/rabbit_test.dir/tests/line2.cpp.i
-.PHONY : tests/line2.cpp.i
-
-tests/line2.s: tests/line2.cpp.s
-
-.PHONY : tests/line2.s
-
-# target to generate assembly for a file
-tests/line2.cpp.s:
-	$(MAKE) -f CMakeFiles/rabbit_test.dir/build.make CMakeFiles/rabbit_test.dir/tests/line2.cpp.s
-.PHONY : tests/line2.cpp.s
-
-tests/main.o: tests/main.cpp.o
-
-.PHONY : tests/main.o
-
-# target to build an object file
-tests/main.cpp.o:
-	$(MAKE) -f CMakeFiles/rabbit_test.dir/build.make CMakeFiles/rabbit_test.dir/tests/main.cpp.o
-.PHONY : tests/main.cpp.o
-
-tests/main.i: tests/main.cpp.i
-
-.PHONY : tests/main.i
-
-# target to preprocess a source file
-tests/main.cpp.i:
-	$(MAKE) -f CMakeFiles/rabbit_test.dir/build.make CMakeFiles/rabbit_test.dir/tests/main.cpp.i
-.PHONY : tests/main.cpp.i
-
-tests/main.s: tests/main.cpp.s
-
-.PHONY : tests/main.s
-
-# target to generate assembly for a file
-tests/main.cpp.s:
-	$(MAKE) -f CMakeFiles/rabbit_test.dir/build.make CMakeFiles/rabbit_test.dir/tests/main.cpp.s
-.PHONY : tests/main.cpp.s
-
-tests/nearest.o: tests/nearest.cpp.o
-
-.PHONY : tests/nearest.o
-
-# target to build an object file
-tests/nearest.cpp.o:
-	$(MAKE) -f CMakeFiles/rabbit_test.dir/build.make CMakeFiles/rabbit_test.dir/tests/nearest.cpp.o
-.PHONY : tests/nearest.cpp.o
-
-tests/nearest.i: tests/nearest.cpp.i
-
-.PHONY : tests/nearest.i
-
-# target to preprocess a source file
-tests/nearest.cpp.i:
-	$(MAKE) -f CMakeFiles/rabbit_test.dir/build.make CMakeFiles/rabbit_test.dir/tests/nearest.cpp.i
-.PHONY : tests/nearest.cpp.i
-
-tests/nearest.s: tests/nearest.cpp.s
-
-.PHONY : tests/nearest.s
-
-# target to generate assembly for a file
-tests/nearest.cpp.s:
-	$(MAKE) -f CMakeFiles/rabbit_test.dir/build.make CMakeFiles/rabbit_test.dir/tests/nearest.cpp.s
-.PHONY : tests/nearest.cpp.s
-
-tests/optimize.o: tests/optimize.cpp.o
-
-.PHONY : tests/optimize.o
-
-# target to build an object file
-tests/optimize.cpp.o:
-	$(MAKE) -f CMakeFiles/rabbit_test.dir/build.make CMakeFiles/rabbit_test.dir/tests/optimize.cpp.o
-.PHONY : tests/optimize.cpp.o
-
-tests/optimize.i: tests/optimize.cpp.i
-
-.PHONY : tests/optimize.i
-
-# target to preprocess a source file
-tests/optimize.cpp.i:
-	$(MAKE) -f CMakeFiles/rabbit_test.dir/build.make CMakeFiles/rabbit_test.dir/tests/optimize.cpp.i
-.PHONY : tests/optimize.cpp.i
-
-tests/optimize.s: tests/optimize.cpp.s
-
-.PHONY : tests/optimize.s
-
-# target to generate assembly for a file
-tests/optimize.cpp.s:
-	$(MAKE) -f CMakeFiles/rabbit_test.dir/build.make CMakeFiles/rabbit_test.dir/tests/optimize.cpp.s
-.PHONY : tests/optimize.cpp.s
-
-tests/svd.o: tests/svd.cpp.o
-
-.PHONY : tests/svd.o
-
-# target to build an object file
-tests/svd.cpp.o:
-	$(MAKE) -f CMakeFiles/rabbit_test.dir/build.make CMakeFiles/rabbit_test.dir/tests/svd.cpp.o
-.PHONY : tests/svd.cpp.o
-
-tests/svd.i: tests/svd.cpp.i
-
-.PHONY : tests/svd.i
-
-# target to preprocess a source file
-tests/svd.cpp.i:
-	$(MAKE) -f CMakeFiles/rabbit_test.dir/build.make CMakeFiles/rabbit_test.dir/tests/svd.cpp.i
-.PHONY : tests/svd.cpp.i
-
-tests/svd.s: tests/svd.cpp.s
-
-.PHONY : tests/svd.s
-
-# target to generate assembly for a file
-tests/svd.cpp.s:
-	$(MAKE) -f CMakeFiles/rabbit_test.dir/build.make CMakeFiles/rabbit_test.dir/tests/svd.cpp.s
-.PHONY : tests/svd.cpp.s
 
 # Help Target
 help:
@@ -394,36 +130,9 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
-	@echo "... install/strip"
-	@echo "... install"
-	@echo "... list_install_components"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... test"
-	@echo "... install/local"
-	@echo "... rabbit"
-	@echo "... rabbit_test"
-	@echo "... rabbit/intersect.o"
-	@echo "... rabbit/intersect.i"
-	@echo "... rabbit/intersect.s"
-	@echo "... tests/intersect.o"
-	@echo "... tests/intersect.i"
-	@echo "... tests/intersect.s"
-	@echo "... tests/line2.o"
-	@echo "... tests/line2.i"
-	@echo "... tests/line2.s"
-	@echo "... tests/main.o"
-	@echo "... tests/main.i"
-	@echo "... tests/main.s"
-	@echo "... tests/nearest.o"
-	@echo "... tests/nearest.i"
-	@echo "... tests/nearest.s"
-	@echo "... tests/optimize.o"
-	@echo "... tests/optimize.i"
-	@echo "... tests/optimize.s"
-	@echo "... tests/svd.o"
-	@echo "... tests/svd.i"
-	@echo "... tests/svd.s"
 .PHONY : help
 
 
@@ -435,6 +144,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/mirmik/project/radioline/rfmeask && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 
