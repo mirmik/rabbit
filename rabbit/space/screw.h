@@ -7,6 +7,12 @@ namespace rabbit
 {
 	template <class T, int N>
 	using screw = ralgo::screw<T,N>;
+
+	template <class T>
+	using screw3 = ralgo::screw<T,3>;
+
+	template <class T>
+	using screw2 = ralgo::screw<T,2>;
 }
 
 #endif

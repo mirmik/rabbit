@@ -67,7 +67,7 @@ int main()
 	rabbit::camera camera;
 
 
-	//PRINT(vertices);
+
 
 	rabbit::opengl_shader_program sprg(
 	    rabbit::simple_vertex_shader,

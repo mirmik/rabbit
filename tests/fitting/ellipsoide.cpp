@@ -24,6 +24,6 @@ TEST_CASE("ellipsoide_fit")
 	}
 
 	rabbit::ellipse_fit fitting(point_cloud);
-	PRINT(fitting.result());
-	PRINT(fitting.center());*/
+
+
 }

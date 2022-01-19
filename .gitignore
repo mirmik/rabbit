@@ -63,3 +63,4 @@ ZERO_CHECK.vcxproj.filters
 *.dir/
 *.vcxproj
 *.vcxproj.filters
+rabbit_test
