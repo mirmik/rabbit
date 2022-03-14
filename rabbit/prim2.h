@@ -9,6 +9,7 @@ namespace rabbit
 	class equation_curve2 
 	{
 		virtual real subs(real x, real y) = 0;
+		virtual ~equation_curve2() = default;
 	};
 
 	class line2eq
