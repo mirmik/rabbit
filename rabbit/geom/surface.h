@@ -9,7 +9,7 @@ namespace rabbit
 	class surface
 	{
 	protected:
-		pose3<real> _pose;
+		pose3<real> _pose = {};
 
 	public:
 		surface(){}
@@ -26,7 +26,7 @@ namespace rabbit
 
 	class sphere_surface : public surface
 	{
-		real _radius;
+		real _radius = 0;
 
 	public:
 		sphere_surface(real radius) : _radius(radius), surface() {}
@@ -50,7 +50,7 @@ namespace rabbit
 
 	class parabolic_surface : public surface
 	{
-		real _a, _b;
+		real _a=0, _b=0;
 
 	public:
 		parabolic_surface(real a, real b) : _a(a), _b(b), surface() {}
@@ -73,7 +73,7 @@ namespace rabbit
 
 	class round_parabolic_surface : public surface
 	{
-		real _a;
+		real _a=0;
 
 	public:
 		round_parabolic_surface(real a) : _a(a), surface() {}
@@ -98,7 +98,7 @@ namespace rabbit
 
 	class torus_surface : public surface
 	{
-		real _r1, _r2;
+		real _r1=0, _r2=0;
 
 	public:
 		torus_surface(real r1, real r2) : _r1(r1), _r2(r2), surface() {}

@@ -12,15 +12,15 @@ namespace rabbit
 	class minimize_bracket
 	{
 	public:
-		rabbit::function * func;
+		rabbit::function * func = nullptr;
 
-		real a;
-		real b;
-		real c;
+		real a = 0;
+		real b = 0;
+		real c = 0;
 
-		real fa;
-		real fb;
-		real fc;
+		real fa = 0;
+		real fb = 0;
+		real fc = 0;
 
 		real lambda = GOLD;
 		real min_border = std::numeric_limits<real>::lowest();

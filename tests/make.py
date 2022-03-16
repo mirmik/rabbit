@@ -16,7 +16,7 @@ application("runtests",
 			"geom/*.cpp"
 		],
 
-		cxx_flags = "-g",
+		cxx_flags = "-g -Weffc++",
 		cc_flags = "-g",
 		cxxstd = "c++20",
 
