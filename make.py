@@ -19,7 +19,7 @@ licant.cxx_shared_library("librabbit.so",
 	mdepends=[
 		"rabbit"
 	],
-	cxx_flags="-fPIC -Weffc++",
+	cxx_flags="-fPIC -Weffc++ -Wextra",
 	cc_flags="-fPIC",
 	cxxstd = "c++2a"
 )
