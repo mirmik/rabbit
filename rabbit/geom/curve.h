@@ -9,7 +9,7 @@ namespace rabbit
 	class curve
 	{
 	protected:
-		ralgo::pose3<real> _pose;
+		ralgo::pose3<real> _pose = {};
 
 	public:
 		curve() {};
@@ -20,12 +20,14 @@ namespace rabbit
 
 		virtual real tmin() = 0;
 		virtual real tmax() = 0;
+
+		virtual ~curve() = default;
 	};
 
 	class ellipse_curve : public curve
 	{
-		real  _a;
-		real  _b;
+		real  _a = 0;
+		real  _b = 0;
 
 	public:
 		ellipse_curve(real a, real b, ralgo::pose3<real> pose)

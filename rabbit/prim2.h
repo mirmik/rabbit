@@ -9,12 +9,13 @@ namespace rabbit
 	class equation_curve2 
 	{
 		virtual real subs(real x, real y) = 0;
+		virtual ~equation_curve2() = default;
 	};
 
 	class line2eq
 	{
 	public:
-		real a, b, c;
+		real a=0, b=0, c=0;
 
 		line2eq(real a, real b, real c)
 			: a(a), b(b), c(c)
@@ -82,8 +83,8 @@ namespace rabbit
 	class segm2
 	{
 	public:
-		vec2 apnt;
-		vec2 bpnt;
+		vec2 apnt={};
+		vec2 bpnt={};
 
 	public:
 		segm2() {}
@@ -117,8 +118,8 @@ namespace rabbit
 	class polysegm2
 	{
 	public:
-		vec2 * pnts;
-		int pnts_count;
+		vec2 * pnts=nullptr;
+		int pnts_count=0;
 
 	public:
 

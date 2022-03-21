@@ -31,8 +31,6 @@ namespace rabbit
 
 		return minit;
 	}
-
-	static real deg(real x) { return x * (real)M_PI / (real)180.; }
 }
 
 #endif
