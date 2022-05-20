@@ -16,14 +16,15 @@ application("runtests",
 			"geom/*.cpp"
 		],
 
-		cxx_flags = "-g -Weffc++ -Wextra",
-		cc_flags = "-g -Wextra",
+		cxx_flags = "-g -Weffc++ -Wextra -fPIE",
+		cc_flags = "-g -Wextra -fPIE",
+		ld_flags = "-g -fPIE",
 		cxxstd = "c++20",
 
 		include_paths = ["."],
 		mdepends = [ "rabbit" ],
 
-		libs=["nos", "ralgo"],
+		libs=["nos", "ralgo", "igris"],
 		defines=["RABBIT_REAL_TYPE=double"]
 )
 

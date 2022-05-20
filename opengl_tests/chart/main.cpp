@@ -27,7 +27,7 @@
 
 #include <igris/tuple.h>
 #include <igris/time/systime.h>
-
+#include <igris/math.h>
 #include <chrono>
 
 // Window dimensions
@@ -61,8 +61,8 @@ int main()
 	drawer.init_opengl_context();
 
 	float aspect = (float)WIDTH / (float)HEIGHT;
-	rabbit::mat4 projection =
-	    rabbit::opengl_perspective(rabbit::deg(100) / aspect, aspect, 0.1, 100);
+	rabbit::mat4f projection =
+	    rabbit::opengl_perspective(igris::deg(100) / aspect, aspect, 0.1, 100);
 
 	rabbit::camera camera;
 
