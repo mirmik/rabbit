@@ -2,8 +2,11 @@
 
 import licant
 
+licant.include("rabbit", "../../rabbit.g.py")
+
 licant.cxx_application("qtchart",
 	sources= ["main.cpp"],
+	mdepends = ["rabbit", "rabbit.qt_opengl"],
 
 	libs=["igris", "nos", "crow", 
 		"Qt5Core", 

@@ -4,12 +4,17 @@
 
 namespace rabbit 
 {
-	class qtchart : public QOpenGLWidget
+	class qtchart : public QOpenGLWidget, protected QOpenGLFunctions
 	{
-		QGLShaderProgram * shader_program;
-		QOpenGLBuffer * vertex_array_buffer;
-		QOpenGLBuffer * element_array_buffer;
-		QOpenGLBuffer * index_array_buffer;
+		QOpenGLShaderProgram * shader;
+		//QOpenGLBuffer * vertex_array_buffer;
+		//QOpenGLBuffer * element_array_buffer;
+		//QOpenGLBuffer * index_array_buffer;
+
+		//QOpenGLVertexArrayObject * vertex_array_object;
+
+
+		int posAttribute;
 
 		const char * chart_vertex_shader  = R"""(#version 300 es
 layout (location = 0) in vec2 position;
@@ -31,74 +36,68 @@ void main()
 } 
 )""";		
 
+    const char* vertexShaderSource =
+        "#version 330 core\n"
+        "in vec3 posAttr;\n"
+        //"attribute lowp vec3 colAttr;\n"
+        //"varying lowp vec4 col;\n"
+        //"uniform highp mat4 matrix;\n"
+        "void main() {\n"
+        //"   col = colAttr;\n"
+        "   gl_Position = vec4(posAttr, 1) ;\n"
+        "}\n";
+
+
+	const char* fragmentShaderSource = R"(
+    #version 330 core
+
+    out vec4 fragColor;
+
+    void main() {
+        fragColor = vec4(1.0, 0.0, 1.0, 0.0);
+    }
+)";
+
 	public:
 		qtchart(QWidget *parent = 0) 
 		{
 		}
 
 		void initializeGL()
-		{
-			auto ctx = context();
-			shader_program = new QGLShaderProgram(ctx);
-			shader_program->addShaderFromSourceCode(QGLShader::Vertex, chart_vertex_shader);
-			shader_program->addShaderFromSourceCode(QGLShader::Fragment, chart_fragment_shader);
-			
-			vertex_array_buffer = new QOpenGLBuffer(QOpenGLBuffer::VertexBuffer);
-			vertex_array_buffer->create();
+		{    
+			connect(context(), &QOpenGLContext::aboutToBeDestroyed, this, &qtchart::cleanup);
 
-    		// Enable depth buffer
-   			glEnable(GL_DEPTH_TEST);
-
-    		// Enable back face culling
+    		initializeOpenGLFunctions();
+    		glClearColor(.0f, .0f, .0f, 1.0f);
+    		shader = new QOpenGLShaderProgram(this);
+		
+    		shader->addShaderFromSourceCode(QOpenGLShader::Vertex, vertexShaderSource);
+    		shader->addShaderFromSourceCode(QOpenGLShader::Fragment, fragmentShaderSource);
+		
+    		Q_ASSERT(shader->link());
+    		posAttribute = shader->attributeLocation("posAttr");
+		
+    		Q_ASSERT(shader->bind());
+		
+    		glEnable(GL_DEPTH_TEST);
     		glEnable(GL_CULL_FACE);
-
-			glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		}
 
-		void paintGL() override
+		void paintGL()
 		{
-			std::vector<float> vertices = {
-				 1.0f, 0.0f ,
-				 -1.0f, 1.0f,
-				 0.0f, 1.0f,
-			};
-
-/*index_array_buffer = new QOpenGLBuffer(QOpenGLBuffer::IndexBuffer);
-index_array_buffer->create();
-index_array_buffer->bind();
-index_array_buffer->setUsagePattern(QOpenGLBuffer::StaticDraw);
-index_array_buffer->allocate(m_indices, 6 * sizeof(GLint));*/
-
-
-			nos::println("painting");
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			shader_program->bind();
-			vertex_array_buffer->bind();
-			vertex_array_buffer->allocate(vertices.data(), 6 * sizeof(GLfloat));
-			vertex_array_buffer->setUsagePattern(QOpenGLBuffer::StreamDraw);
-			glVertexAttribPointer(m_posAttr, 2, GL_FLOAT, GL_FALSE, 0, vertices);
-			shader_program->setUniformValue("Color", QColor(Qt::red).rgba());
-
-			draw_line();
-			glDrawArrays(GL_TRIANGLES, 0, 6);
-
-			auto err = glGetError();
-			nos::println(err, "error");
-
-			shader_program->release();
+		     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		
+		     GLfloat vertices[] = { 0.0f, 0.707f, 0.0f, -0.5f, -0.5f, 0.0f, 0.5f, -0.5f, 0.0f };
+		     shader->setAttributeArray(posAttribute,vertices, 3);
+		
+		     glEnableVertexAttribArray(posAttribute);
+		     glDrawArrays(GL_LINE_STRIP, 0, 3);
+		     glDisableVertexAttribArray(posAttribute);
 		}
 
-		void draw_line()
+		void cleanup() 
 		{
-		}
 
-		void set_line_color(float r, float g, float b)
-		{
-			glColor3f(r, g, b);
-		}
-
-		void shader_program_init()
-		{	
 		}
 	};
 }
