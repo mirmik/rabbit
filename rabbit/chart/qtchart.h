@@ -38,13 +38,13 @@ void main()
 
     const char* vertexShaderSource =
         "#version 330 core\n"
-        "in vec3 posAttr;\n"
+        "in vec2 posAttr;\n"
         //"attribute lowp vec3 colAttr;\n"
         //"varying lowp vec4 col;\n"
         //"uniform highp mat4 matrix;\n"
         "void main() {\n"
         //"   col = colAttr;\n"
-        "   gl_Position = vec4(posAttr, 1) ;\n"
+        "   gl_Position = vec4(posAttr, 0, 1) ;\n"
         "}\n";
 
 
@@ -77,22 +77,25 @@ void main()
     		Q_ASSERT(shader->link());
     		posAttribute = shader->attributeLocation("posAttr");
 		
-    		Q_ASSERT(shader->bind());
-		
+    		//Q_ASSERT(shader->bind());
     		glEnable(GL_DEPTH_TEST);
     		glEnable(GL_CULL_FACE);
 		}
 
 		void paintGL()
 		{
+			shader->bind();
+
 		     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
-		     GLfloat vertices[] = { 0.0f, 0.707f, 0.0f, -0.5f, -0.5f, 0.0f, 0.5f, -0.5f, 0.0f };
-		     shader->setAttributeArray(posAttribute,vertices, 3);
+		     GLfloat vertices[] = { 0.0f, 0.707f, -0.5f, -0.5f, 0.5f, -0.5f };
+		     shader->setAttributeArray(posAttribute,vertices, 2);
 		
 		     glEnableVertexAttribArray(posAttribute);
 		     glDrawArrays(GL_LINE_STRIP, 0, 3);
 		     glDisableVertexAttribArray(posAttribute);
+
+		     shader->release();
 		}
 
 		void cleanup() 
