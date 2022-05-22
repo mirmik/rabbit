@@ -9,6 +9,7 @@ namespace rabbit
 	{
 	public:
 		virtual int value(real parameter, real* result) = 0;
+		virtual ~function() = default;
 	};
 }
 

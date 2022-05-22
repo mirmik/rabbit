@@ -35,23 +35,23 @@ namespace rabbit
 
 		void draw_mesh(
 		    const rabbit::mesh & mesh,
-		    const mat4 & model,
-		    const mat4 & view,
-		    const mat4 & projection);
+		    const mat4f & model,
+		    const mat4f & view,
+		    const mat4f & projection);
 
 		void draw_points(
 		    const vec3 * pnts,
 		    int count,
-		    const mat4 & model,
-		    const mat4 & view,
-		    const mat4 & projection);
+		    const mat4f & model,
+		    const mat4f & view,
+		    const mat4f & projection);
 
 
 		void draw_points(
 		    const std::vector<vec3> & pnts,
-		    const mat4 & model,
-		    const mat4 & view,
-		    const mat4 & projection)
+		    const mat4f & model,
+		    const mat4f & view,
+		    const mat4f & projection)
 		{
 			draw_points(pnts.data(), pnts.size(), model, view, projection);
 		}

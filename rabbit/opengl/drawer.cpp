@@ -121,9 +121,9 @@ void rabbit::opengl_drawer::clean(real r, real g, real b, real a)
 
 void rabbit::opengl_drawer::draw_mesh(
     const rabbit::mesh & mesh,
-    const mat4 & model,
-    const mat4 & view,
-    const mat4 & projection)
+    const mat4f & model,
+    const mat4f & view,
+    const mat4f & projection)
 {
 	glBindVertexArray(VAO);
 
@@ -169,9 +169,9 @@ void rabbit::opengl_drawer::draw_mesh(
 void rabbit::opengl_drawer::draw_points(
     const vec3 * pnts,
     int count,
-    const mat4 & model,
-    const mat4 & view,
-    const mat4 & projection)
+    const mat4f & model,
+    const mat4f & view,
+    const mat4f & projection)
 {
 	glBindVertexArray(VAO);
 

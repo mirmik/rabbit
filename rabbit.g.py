@@ -18,6 +18,12 @@ licant.module("rabbit.opengl",
 	]
 )
 
+licant.module("rabbit.qt_opengl",
+	sources=[
+		"rabbit/opengl/qt_drawer.cpp",
+	]
+)
+
 licant.module("rabbit.mesh",
 	sources=[
 		"rabbit/mesh.cpp"

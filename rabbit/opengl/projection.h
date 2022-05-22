@@ -13,9 +13,9 @@ namespace rabbit
 			float bottom, float top, 
 			float near, float far)
 	{
-		real tx = - (right + left) / (right - left);
-		real ty = - (top + bottom) / (top - bottom);
-		real tz = - (far + near)   / (far - near);
+		float tx = - (right + left) / (right - left);
+		float ty = - (top + bottom) / (top - bottom);
+		float tz = - (far + near)   / (far - near);
 
 		return
 		{
@@ -32,8 +32,8 @@ namespace rabbit
 	                                            float zNear,
 	                                            float zFar)
 	{
-		real angle = fovy / 2;
-		real f = cos(angle) / sin(angle);
+		float angle = fovy / 2;
+		float f = cos(angle) / sin(angle);
 
 		return
 		{
