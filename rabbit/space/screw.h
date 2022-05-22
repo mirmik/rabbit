@@ -1,5 +1,5 @@
-#ifndef RABBIT_SPACE_SCREW_H
-#define RABBIT_SPACE_SCREW_H
+#ifndef RABBIT_SPACE_SCREW__H
+#define RABBIT_SPACE_SCREW__H
 
 #include <ralgo/space/screw.h>
 
