@@ -64,3 +64,5 @@ ZERO_CHECK.vcxproj.filters
 *.vcxproj
 *.vcxproj.filters
 rabbit_test
+
+target

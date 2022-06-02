@@ -10,27 +10,27 @@ namespace rabbit
 	class mesh
 	{
 	public:
-		std::vector<linalg::vec<real, 3>> vertices;
+		std::vector<linalg::vec<float, 3>> vertices;
 		std::vector<linalg::vec<unsigned int, 3>> triangles;
 
 		mesh(
-		    const std::vector<linalg::vec<real, 3>>& _vertices,
+		    const std::vector<linalg::vec<float, 3>>& _vertices,
 		    const std::vector<linalg::vec<unsigned int, 3>>& _triangles
 		);
 
 		mesh(
-		    std::vector<linalg::vec<real, 3>>&& _vertices,
+		    std::vector<linalg::vec<float, 3>>&& _vertices,
 		    std::vector<linalg::vec<unsigned int, 3>>&& _triangles
 		);
 
-		vec3 center();
+		vec3f center();
 		void correct_center();
 	};
 
 	mesh surface_rubic_mesh(
 	    surface & surf,
-	    real ustrt, real ufini, int utotal,
-	    real vstrt, real vfini, int vtotal);
+	    float ustrt, float ufini, int utotal,
+	    float vstrt, float vfini, int vtotal);
 
 	mesh surface_rubic_mesh(
 	    surface & surf,

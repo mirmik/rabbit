@@ -5,25 +5,25 @@
 using namespace rabbit;
 
 rabbit::mesh::mesh(
-    const std::vector<linalg::vec<real, 3>>& _vertices,
+    const std::vector<linalg::vec<float, 3>>& _vertices,
     const std::vector<linalg::vec<unsigned int, 3>>& _triangles
 ) : vertices(_vertices), triangles(_triangles)
 {}
 
 rabbit::mesh::mesh(
-    std::vector<linalg::vec<real, 3>>&& _vertices,
+    std::vector<linalg::vec<float, 3>>&& _vertices,
     std::vector<linalg::vec<unsigned int, 3>>&& _triangles
 ) : vertices(std::move(_vertices)), triangles(std::move(_triangles))
 {}
 
 mesh rabbit::surface_rubic_mesh(
     surface & surf,
-    real ustrt, real ufini, int utotal,
-    real vstrt, real vfini, int vtotal)
+    float ustrt, float ufini, int utotal,
+    float vstrt, float vfini, int vtotal)
 {
 	int iter;
 
-	std::vector<linalg::vec<real, 3>> vertices;
+	std::vector<linalg::vec<float, 3>> vertices;
 	std::vector<linalg::vec<unsigned int, 3>> triangles;
 
 	vertices.resize((utotal + 1) * (vtotal + 1));
@@ -34,13 +34,14 @@ mesh rabbit::surface_rubic_mesh(
 	{
 		for (int i = 0; i < utotal + 1; ++i)
 		{
-			real ku = ((real)i / (real)utotal);
-			real kv = ((real)j / (real)vtotal);
+			float ku = ((float)i / (float)utotal);
+			float kv = ((float)j / (float)vtotal);
 
-			real u = ustrt * ((real)1. - ku) + ufini * ku;
-			real v = vstrt * ((real)1. - kv) + vfini * kv;
+			float u = ustrt * ((float)1. - ku) + ufini * ku;
+			float v = vstrt * ((float)1. - kv) + vfini * kv;
 
-			vertices[iter++] = surf.value(u, v);
+			auto val = surf.value(u, v);
+			vertices[iter++] = { val.x, val.y, val.z };
 		}
 	}
 
@@ -81,7 +82,7 @@ mesh rabbit::mesh_from_file(const char * path)
 	std::vector<float> coords, normals;
 	std::vector<unsigned int> tris, solids;
 
-	std::vector<linalg::vec<real, 3>> vertices;
+	std::vector<linalg::vec<float, 3>> vertices;
 	std::vector<linalg::vec<unsigned int, 3>> triangles;
 	
 	stl_reader::ReadStlFile ("bulbasaur_dual_body.STL", coords, normals, tris, solids);
@@ -102,7 +103,7 @@ mesh rabbit::mesh_from_file(const char * path)
 }
 
 
-vec3 rabbit::mesh::center() 
+vec3f rabbit::mesh::center() 
 {
 	linalg::vec<double, 3> acc = { 0, 0, 0 };
 	int n = vertices.size();
@@ -112,14 +113,13 @@ vec3 rabbit::mesh::center()
 		acc += v;
 	}
 
-	return vec3 { acc / n };
+	return vec3f { acc / n };
 }
 
 
 void rabbit::mesh::correct_center() 
 {
 	auto c = center();
-
 	for (auto & v : vertices) 
 	{
 		v -= c;

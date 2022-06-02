@@ -52,16 +52,16 @@ int main()
     mesh.correct_center();
 
     float aspect = (float)WIDTH / (float)HEIGHT;
-    rabbit::mat4 projection =
+    rabbit::mat4f projection =
         rabbit::opengl_perspective(rabbit::deg(100) / aspect, aspect, 0.1, 200);
 
     rabbit::camera camera;
 
     while (!glfwWindowShouldClose(window))
     {
-        camera.set_eye({100*cos(glfwGetTime()), 100*sin(glfwGetTime()), 0});
+        camera.set_eye(rabbit::vec3f{100.f*cos(glfwGetTime()), 100.f*sin(glfwGetTime()), 0});
         camera.set_target({0, 0, 0});
-        auto model = ralgo::rot3({0, 0, 1}, rabbit::deg(0));
+        auto model = ralgo::rot3<float>({0, 0, 1}, rabbit::deg(0));
 
         glfwPollEvents();
 

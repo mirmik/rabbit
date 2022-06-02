@@ -31,6 +31,11 @@ namespace rabbit
 
 		return minit;
 	}
+
+	static constexpr double deg(double arg) 
+	{
+		return arg / 180.0 * M_PI;
+	} 
 }
 
 #endif

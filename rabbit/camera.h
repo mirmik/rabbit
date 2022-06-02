@@ -7,9 +7,9 @@ namespace rabbit
 {
 	class camera
 	{
-		vec3 _eye;
-		vec3 _dir;
-		vec3 _up;
+		vec3f _eye;
+		vec3f _dir;
+		vec3f _up;
 
 	public:
 		camera() : _eye{0, 0, 0}, _dir(1, 0, 0), _up(0, 0, 1)
@@ -18,16 +18,16 @@ namespace rabbit
 		}
 
 		camera(
-		    const vec3 & eye,
-		    const vec3 & target,
-		    const vec3 & up = {0, 0, 1}
+		    const vec3f & eye,
+		    const vec3f & target,
+		    const vec3f & up = {0, 0, 1}
 		)
 			: _eye(eye), _dir(normalize(eye - target)), _up(normalize(up))
 		{
 			correct_up();
 		}
 
-		vec3 right()
+		vec3f right()
 		{
 			return cross(_up, _dir);
 		}
@@ -36,7 +36,7 @@ namespace rabbit
 		{
 			auto _right = right();
 			
-			if (length(_right) < epsilon)
+			if (length(_right) < 1e-5)
 			{
 				if (_dir.z > 0.99)
 					_up = {1, 0, 0};
@@ -49,19 +49,20 @@ namespace rabbit
 			_up = normalize(_up);
 		}
 
-		void set_eye(const vec3& vec) { _eye = vec; }
-		void set_dir(const vec3& vec) { _dir = normalize(vec); }
-		void set_target(const vec3& target)
+		void set_eye(const vec3f& vec) { _eye = vec; }
+		void set_eye(const vec3& vec) { _eye = vec3f{ (float)vec.x, (float)vec.y, (float)vec.z }; }
+		void set_dir(const vec3f& vec) { _dir = normalize(vec); }
+		void set_target(const vec3f& target)
 		{
 			_dir = normalize(_eye - target);
 			correct_up();
 		}
 
-		mat4 view_rotation_matrix()
+		mat4f view_rotation_matrix()
 		{
-			vec3& D = _dir;
-			vec3& U = _up;
-			vec3  R = normalize(cross(_up, _dir));
+			vec3f& D = _dir;
+			vec3f& U = _up;
+			vec3f  R = normalize(cross(_up, _dir));
 
 			return
 			{
@@ -72,20 +73,20 @@ namespace rabbit
 			};
 		}
 
-		mat4 view_translation_matrix()
+		mat4f view_translation_matrix()
 		{
-			vec3& C = _eye;
+			vec3f& C = _eye;
 
 			return
 			{
-				{1, 0, 0, 0},
-				{0, 1, 0, 0},
-				{0, 0, 1, 0},
-				{ -C.x, -C.y, -C.z, 1}
+				{  1.f,  0.f,  0.f, 0.f},
+				{  0.f,  1.f,  0.f, 0.f},
+				{  0.f,  0.f,  1.f, 0.f},
+				{ -C.x, -C.y, -C.z, 1.f}
 			};
 		}
 
-		mat4 view_matrix()
+		mat4f view_matrix()
 		{
 			return mul(view_rotation_matrix(), view_translation_matrix());
 		}

@@ -51,10 +51,7 @@ int main()
     glEnable(GL_BLEND);
 
     rabbit::opengl_drawer drawer;
-    rabbit::opengl_drawer drawer1;
-
     drawer.init_opengl_context();
-    drawer1.init_opengl_context();
 
     auto surf = rabbit::torus_surface(4, 0.2);
     auto surf2 = rabbit::sphere_surface(2);
@@ -69,8 +66,10 @@ int main()
     auto mesh5 = rabbit::surface_rubic_mesh(surf5, 30, 20);
 
     float aspect = (float)WIDTH / (float)HEIGHT;
-    rabbit::mat4 projection =
+    rabbit::mat4f projection =
         rabbit::opengl_perspective(rabbit::deg(100) / aspect, aspect, 0.1, 100);
+
+    //rabbit::mat4f projection = rabbit::opengl_ortho(-100,100,-100,100,-100,100);
 
     rabbit::camera camera;
     rabbit::font font(rabbit::naive_font16x26_texture);
@@ -88,9 +87,9 @@ int main()
     double last_time = 0;
     while (!glfwWindowShouldClose(window))
     {
-        auto model = ralgo::rot3({0, 0, 1}, rabbit::deg(glfwGetTime() * 16));
+        auto model = ralgo::rot3<float>(rabbit::vec3f{0, 0, 1}, rabbit::deg(glfwGetTime() * 16));
 
-        camera.set_eye({10, 0, 3});
+        camera.set_eye(rabbit::vec3f{10, 0, 3});
         camera.set_target({0, 0, 0});
 
         glfwPollEvents();
@@ -110,10 +109,10 @@ int main()
             projection, 
             mul(
                 mul(
-                    linalg::rotation_matrix(linalg::rotation_quat<float>({0,1,0}, -M_PI/10)),
-                    linalg::rotation_matrix(linalg::rotation_quat<float>({1,0,0}, -M_PI/10))
+                    ralgo::rot3<float>({0,1,0}, -M_PI/10).to_mat4(),
+                    ralgo::rot3<float>({1,0,0}, -M_PI/10).to_mat4()
                 ),
-                linalg::translation_matrix<float>({0,0,-2})
+                ralgo::mov3<float>({0,0,-2}).to_mat4()
             )
         );
 
@@ -157,7 +156,7 @@ int main()
 
         drawer.draw_mesh(
             mesh,
-            (ralgo::rot3(rabbit::vec3{0.3, 0.7, 0}, rabbit::deg(20)) * model).to_mat4(),
+            (ralgo::rot3<float>(rabbit::vec3f{0.3, 0.7, 0}, rabbit::deg(20)) * model).to_mat4(),
             camera.view_matrix(),
             projection);
 
@@ -177,14 +176,14 @@ int main()
 
         drawer.draw_mesh(
             mesh4,
-            (ralgo::rot3(rabbit::vec3{0.6, 0.2, 0}, rabbit::deg(20)) * model.inverse()).to_mat4(),
+            (ralgo::rot3<float>(rabbit::vec3f{0.6, 0.2, 0}, rabbit::deg(20)) * model.inverse()).to_mat4(),
             camera.view_matrix(),
             projection
         );
 
         drawer.draw_mesh(
             mesh5,
-            (ralgo::mov3(linalg::vec<float,3>{5.5f * sinf(glfwGetTime()), 5.5f * cosf(glfwGetTime()), 0}) * model).to_mat4(),
+            (ralgo::mov3<float>(linalg::vec<float,3>{5.5f * sinf(glfwGetTime()), 5.5f * cosf(glfwGetTime()), 0}) * model).to_mat4(),
             camera.view_matrix(),
             projection
         );
