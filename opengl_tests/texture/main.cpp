@@ -59,11 +59,11 @@ int main()
     auto surf4 = rabbit::torus_surface(8, 0.2);
     auto surf5 = rabbit::sphere_surface(0.6);
 
-    auto mesh = rabbit::surface_rubic_mesh(surf, 30, 20);
-    auto mesh2 = rabbit::surface_rubic_mesh(surf2, 30, 20);
-    auto mesh3 = rabbit::surface_rubic_mesh(surf3, 30, 20);
-    auto mesh4 = rabbit::surface_rubic_mesh(surf4, 30, 20);
-    auto mesh5 = rabbit::surface_rubic_mesh(surf5, 30, 20);
+    auto mesh = rabbit::surface_rubic_mesh<float>(surf, 30, 20);
+    auto mesh2 = rabbit::surface_rubic_mesh<float>(surf2, 30, 20);
+    auto mesh3 = rabbit::surface_rubic_mesh<float>(surf3, 30, 20);
+    auto mesh4 = rabbit::surface_rubic_mesh<float>(surf4, 30, 20);
+    auto mesh5 = rabbit::surface_rubic_mesh<float>(surf5, 30, 20);
 
     float aspect = (float)WIDTH / (float)HEIGHT;
     rabbit::mat4f projection =

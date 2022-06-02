@@ -48,7 +48,7 @@ int main()
 
     auto surf = rabbit::sphere_surface(0.5);
 
-    auto mesh = rabbit::mesh_from_file("bulbasaur_dual_body.STL");
+    auto mesh = rabbit::mesh_from_file<float>("bulbasaur_dual_body.STL");
     mesh.correct_center();
 
     float aspect = (float)WIDTH / (float)HEIGHT;

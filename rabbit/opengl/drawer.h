@@ -34,7 +34,7 @@ namespace rabbit
 		void clean(real r, real g, real b, real a);
 
 		void draw_mesh(
-		    const rabbit::mesh & mesh,
+		    const rabbit::mesh<float> & mesh,
 		    const mat4f & model,
 		    const mat4f & view,
 		    const mat4f & projection);

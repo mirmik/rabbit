@@ -11,7 +11,7 @@ namespace rabbit
 	{
 		pose3<real> pose;
 
-		std::shared_ptr<rabbit::mesh> get_mesh();
+		std::shared_ptr<rabbit::mesh<float>> get_mesh();
 		std::shared_ptr<rabbit::meshline> get_lines();
 	};
 }
