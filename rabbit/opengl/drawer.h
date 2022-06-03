@@ -7,10 +7,11 @@
 #include <rabbit/opengl/texture.h>
 #include <rabbit/font/font.h>
 #include <rabbit/font/textzone.h>
+#include <rabbit/opengl/abstract_drawer.h>
 
 namespace rabbit
 {
-	class opengl_drawer
+	class opengl_drawer : public rabbit::opengl_abstract_drawer
 	{
 	public:
 		opengl_drawer();
@@ -23,6 +24,8 @@ namespace rabbit
 
 		opengl_shader_program opengl_mesh_program;
 		opengl_shader_program opengl_simple_program;
+		opengl_shader_program opengl_space_point3d_program;
+		opengl_shader_program opengl_simple_2d_program;
 		opengl_shader_program opengl_onecolored_texture;
 		opengl_shader_program opengl_rgb_texture;
 
@@ -37,27 +40,16 @@ namespace rabbit
 		    const rabbit::mesh<float> & mesh,
 		    const mat4f & model,
 		    const mat4f & view,
-		    const mat4f & projection);
+		    const mat4f & projection) override;
 
 		void draw_points(
-		    const vec3 * pnts,
+		    const vec3f * pnts,
 		    int count,
 		    const mat4f & model,
 		    const mat4f & view,
-		    const mat4f & projection);
+		    const mat4f & projection) override;
 
-
-		void draw_points(
-		    const std::vector<vec3> & pnts,
-		    const mat4f & model,
-		    const mat4f & view,
-		    const mat4f & projection)
-		{
-			draw_points(pnts.data(), pnts.size(), model, view, projection);
-		}
-
-
-
+		using rabbit::opengl_abstract_drawer::draw_points;
 
 		void create_buffers();
 
@@ -73,11 +65,23 @@ namespace rabbit
 
 		void draw_lines(
 		    float * vertices,
-		    int vertices_total, GLint style);
+		    int vertices_total);
 
 		void draw_lines(
-		    const std::vector<vec3> & lines, GLint style);
+		    const std::vector<vec3f> & lines) override;
 
+		void draw_points2d(
+		    const igris::array_view<vec2f> & lines, GLint style) override;
+
+		void draw_points3d(
+		    const igris::array_view<vec3f> & lines, GLint style) override;
+
+		void draw_points3d(
+		    const igris::array_view<vec3f> & lines, GLint style,
+		    const rabbit::mat4f& model,
+		    const rabbit::mat4f& view,
+		    const rabbit::mat4f& projective
+		) override;
 
 		void uniform_mat4f(
 		    unsigned int loc, const linalg::mat<float, 4, 4> & matrix);

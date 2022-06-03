@@ -1,5 +1,6 @@
 #include <rabbit/opengl/drawer.h>
 #include <rabbit/opengl/shader_collection.h>
+#include <igris/util/bug.h>
 
 rabbit::opengl_drawer::opengl_drawer() {}
 
@@ -12,6 +13,16 @@ void rabbit::opengl_drawer::init_opengl_context()
 
 	opengl_simple_program.open(
 	    rabbit::simple_vertex_shader,
+	    rabbit::simple_fragment_shader
+	);
+
+	opengl_simple_2d_program.open(
+	    rabbit::simple_2d_vertex_shader,
+	    rabbit::simple_fragment_shader
+	);
+
+	opengl_space_point3d_program.open(
+	    rabbit::space_3d_vertex_shader,
 	    rabbit::simple_fragment_shader
 	);
 
@@ -79,7 +90,7 @@ void rabbit::opengl_drawer::draw_triangles(
 
 void rabbit::opengl_drawer::draw_lines(
     float * vertices,
-    int vertices_total, GLint style)
+    int vertices_total)
 {
 	glBindVertexArray(VAO);
 
@@ -89,19 +100,18 @@ void rabbit::opengl_drawer::draw_lines(
 	glVertexAttribPointer(0, vertices_stride, GL_FLOAT, GL_FALSE, vertices_stride * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0);
 
-	glDrawArrays(style, 0, vertices_total);
+	glDrawArrays(GL_LINES, 0, vertices_total);
 
 	glBindVertexArray(0);
 
 }
 
 void rabbit::opengl_drawer::draw_lines(
-    const std::vector<vec3> & vertices, GLint style)
+    const std::vector<vec3f> & vertices)
 {
 	draw_lines(
 	    (float*)vertices.data(),
-	    vertices.size(),
-	    style);
+	    vertices.size());
 }
 
 
@@ -167,7 +177,7 @@ void rabbit::opengl_drawer::draw_mesh(
 }
 
 void rabbit::opengl_drawer::draw_points(
-    const vec3 * pnts,
+    const vec3f * pnts,
     int count,
     const mat4f & model,
     const mat4f & view,
@@ -177,10 +187,13 @@ void rabbit::opengl_drawer::draw_points(
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER,
-	             count * sizeof(float) * 3, pnts, GL_DYNAMIC_DRAW);
+	             count*sizeof(float) * 3, pnts, GL_DYNAMIC_DRAW);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
-	glEnableVertexAttribArray(VAO);
+	glEnableVertexAttribArray(0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
 
 	GLint vertexColorLocation = glGetUniformLocation(opengl_mesh_program.Program, "vertexColor");
 	opengl_mesh_program.use();
@@ -190,9 +203,17 @@ void rabbit::opengl_drawer::draw_points(
 	uniform_mat4f("projection", opengl_mesh_program.Program, projection);
 
 	glBindVertexArray(VAO);
-	glDisable(GL_POLYGON_OFFSET_FILL);
+	glEnable(GL_POLYGON_OFFSET_FILL);
 
+	glPolygonOffset(1, 1);
+	glUniform4f(vertexColorLocation, 1.0f, 1.0f, 1.0f, 1.0f);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glDrawArrays(GL_POINTS, 0, count);
+
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//glPolygonOffset(0, 0);
+	//glUniform4f(vertexColorLocation, 0.0f, 0.0f, 0.0f, 1.0f);
+	//glDrawElements(GL_TRIANGLES, mesh.triangles.size()*sizeof(int) * 3, GL_UNSIGNED_INT, 0);
 
 	glBindVertexArray(0);
 	glUseProgram(0);
@@ -327,4 +348,68 @@ void rabbit::opengl_drawer::print_text(
 
         cursor.increment();
 	}
+}
+
+void rabbit::opengl_drawer::draw_points2d(
+		    const igris::array_view<vec2f> & points, GLint style)
+{
+	int stride = 2 * sizeof(GLfloat);
+	int total = points.size();
+	opengl_simple_2d_program.use();
+	glBindVertexArray(VAO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, stride * total, points.data(), GL_DYNAMIC_DRAW);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, stride, (GLvoid*)0);
+	glEnableVertexAttribArray(0);
+	glDrawArrays(style, 0, total);
+	glBindVertexArray(0);
+	glUseProgram(0);
+}
+
+void rabbit::opengl_drawer::draw_points3d(
+		    const igris::array_view<vec3f> & points, GLint style)
+{
+	int stride = 3 * sizeof(GLfloat);
+	int total = points.size();
+	opengl_simple_program.use();
+	glBindVertexArray(VAO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, stride * total, points.data(), GL_DYNAMIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, (GLvoid*)0);
+	glEnableVertexAttribArray(0);
+	glDrawArrays(style, 0, total);
+	glBindVertexArray(0);
+	glUseProgram(0);
+}
+
+
+void rabbit::opengl_drawer::draw_points3d(
+    const igris::array_view<rabbit::vec3f> & points, GLint style,
+    const rabbit::mat4f& model,
+    const rabbit::mat4f& view,
+    const rabbit::mat4f& projection
+) 
+{
+	int count = points.size();
+	auto pnts = points.data();
+	glBindVertexArray(VAO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER,
+	             count*sizeof(float) * 3, pnts, GL_DYNAMIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+	GLint vertexColorLocation = glGetUniformLocation(opengl_mesh_program.Program, "vertexColor");
+	opengl_mesh_program.use();
+	uniform_mat4f("model", opengl_mesh_program.Program, model);
+	uniform_mat4f("view", opengl_mesh_program.Program, view);
+	uniform_mat4f("projection", opengl_mesh_program.Program, projection);
+	glBindVertexArray(VAO);
+	glEnable(GL_POLYGON_OFFSET_FILL);
+	glPolygonOffset(1, 1);
+	glUniform4f(vertexColorLocation, 1.0f, 1.0f, 1.0f, 1.0f);
+	glDrawArrays(style, 0, count);
+	glBindVertexArray(0);
+	glUseProgram(0);
 }

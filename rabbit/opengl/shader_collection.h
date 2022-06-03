@@ -7,7 +7,10 @@ namespace rabbit
 	extern const char * mesh_fragment_shader;
 
 	extern const char * simple_vertex_shader;
+	extern const char * simple_2d_vertex_shader;
 	extern const char * simple_fragment_shader;
+
+	extern const char * space_3d_vertex_shader;
 
 	extern const char * onecolored_texture_vertex_shader;
 	extern const char * onecolored_texture_fragment_shader;

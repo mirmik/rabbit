@@ -58,6 +58,14 @@ namespace rabbit
 			correct_up();
 		}
 
+		void set_camera(vec3f eye, vec3f target, vec3f up=vec3f{0, 0, 1})
+		{
+			_eye = eye;
+			_dir = normalize(eye - target);
+			_up = normalize(up);
+			correct_up();
+		}
+
 		mat4f view_rotation_matrix()
 		{
 			vec3f& D = _dir;

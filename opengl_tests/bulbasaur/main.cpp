@@ -21,6 +21,8 @@
 #include <rabbit/opengl/util.h>
 #include <rabbit/opengl/drawer.h>
 #include <rabbit/camera.h>
+#include <thread>
+#include <chrono>
 
 // Window dimensions
 const GLuint WIDTH = 1600, HEIGHT = 800;
@@ -59,8 +61,10 @@ int main()
 
     while (!glfwWindowShouldClose(window))
     {
-        camera.set_eye(rabbit::vec3f{100.f*cos(glfwGetTime()), 100.f*sin(glfwGetTime()), 0});
-        camera.set_target({0, 0, 0});
+        camera.set_camera(
+            rabbit::vec3f{100.f*cos(glfwGetTime()), 100.f*sin(glfwGetTime()), 10},
+            {0, 0, 0}
+        );
         auto model = ralgo::rot3<float>({0, 0, 1}, rabbit::deg(0));
 
         glfwPollEvents();
@@ -71,16 +75,18 @@ int main()
             mesh,
             (model).to_mat4(),
             camera.view_matrix(),
-            projection);        
+            projection);      
 
-        /*drawer.draw_points(
-            mesh.vertices,
+         /*drawer.draw_points3d(
+            {mesh.vertices.data(),
+            mesh.vertices.size()},
+            GL_LINE_STRIP,
             (model).to_mat4(),
             camera.view_matrix(),
-            projection);*/
-
+            projection);      */
 
         glfwSwapBuffers(window);
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
 
     glfwTerminate();
