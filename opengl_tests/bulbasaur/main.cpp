@@ -2,7 +2,7 @@
 #include <rabbit/opengl/projection.h>
 #include <rabbit/opengl/drawer.h>
 #include <rabbit/opengl/shader_collection.h>
-#include <rabbit/mesh.h>
+#include <rabbit/mesh/mesh.h>
 #include <rabbit/util.h>
 #include <ralgo/space/pose3.h>
 

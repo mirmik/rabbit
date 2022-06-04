@@ -5,6 +5,7 @@ licant.module("rabbit",
 	sources=[
 		"inctest.cpp",
 		"intersect.cpp",
+		"mesh/primitives.cpp",
 	],
 	include_paths=["."]
 )

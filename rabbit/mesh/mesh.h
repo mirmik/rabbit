@@ -22,6 +22,8 @@ namespace rabbit
 		) : vertices(_vertices), triangles(_triangles)
 		{}
 
+		mesh() = default;
+
 		mesh(
 		    std::vector<linalg::vec<T, 3>>&& _vertices,
     		std::vector<linalg::vec<unsigned int, 3>>&& _triangles
@@ -55,7 +57,7 @@ namespace rabbit
 
 	template <class T>
 	mesh<T> surface_rubic_mesh(
-	    surface & surf,
+	    const surface & surf,
 	    T ustrt, T ufini, int utotal,
 	    T vstrt, T vfini, int vtotal)
 	{
@@ -104,7 +106,7 @@ namespace rabbit
 
 	template <class T>
 	mesh<T> surface_rubic_mesh(
-	    surface & surf,
+	    const surface & surf,
 	    int utotal,
 	    int vtotal)
 	{

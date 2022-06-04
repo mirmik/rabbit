@@ -75,6 +75,27 @@ namespace rabbit
 	using imat3 = linalg::mat<int32_t, 3, 3>;
 	using imat4 = linalg::mat<int32_t, 4, 4>;
 
+
+	using uvec2 = linalg::vec<uint32_t, 2>;
+	using uvec3 = linalg::vec<uint32_t, 3>;
+	using uvec4 = linalg::vec<uint32_t, 4>;
+
+	using umat22 = linalg::mat<uint32_t, 2, 2>;
+	using umat23 = linalg::mat<uint32_t, 2, 3>;
+	using umat24 = linalg::mat<uint32_t, 2, 4>;
+
+	using umat32 = linalg::mat<uint32_t, 3, 2>;
+	using umat33 = linalg::mat<uint32_t, 3, 3>;
+	using umat34 = linalg::mat<uint32_t, 3, 4>;
+
+	using umat42 = linalg::mat<uint32_t, 4, 2>;
+	using umat43 = linalg::mat<uint32_t, 4, 3>;
+	using umat44 = linalg::mat<uint32_t, 4, 4>;
+
+	using umat2 = linalg::mat<uint32_t, 2, 2>;
+	using umat3 = linalg::mat<uint32_t, 3, 3>;
+	using umat4 = linalg::mat<uint32_t, 4, 4>;
+
 } 
 
 #endif

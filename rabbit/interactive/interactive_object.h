@@ -2,7 +2,7 @@
 #define RABBIT_INTERACTIVE_OBJECT_H
 
 #include <memory>
-#include <rabbit/mesh.h>
+#include <rabbit/mesh/mesh.h>
 #include <rabbit/meshline.h>
 
 namespace rabbit 

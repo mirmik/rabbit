@@ -19,6 +19,8 @@ namespace rabbit
 	public:
 		drawable_object() : pose({0,0,0,1},{0,0,0}) {}
 		virtual void draw_on(rabbit::view& view) = 0;
+
+		void set_pose(const ralgo::pose3<float>& p) { pose = p; }
 	};
 
 	class view
@@ -27,8 +29,11 @@ namespace rabbit
 		rabbit::opengl_drawer drawer;
 		rabbit::camera camera;
 		rabbit::scene * scene = nullptr;
+		bool _trihedron_axes_enabled = false;
 
 	public:
+		void enable_trihedron(bool en = true) { _trihedron_axes_enabled = en; }
+
 		//void attach_to_window_id(int id);
 		view(rabbit::scene * scene) : scene(scene) 
 		{
@@ -38,28 +43,77 @@ namespace rabbit
 		void clean() 
 		{
 			drawer.clean(0.3,0,0.3,0);
+
+			if (_trihedron_axes_enabled) 
+			{
+				auto c1 = camera_pose_matrix();
+				auto c2 = camera_projection_matrix();
+
+				drawer.draw_line({-10000.0,0,0}, {1,0,0,1}, {10000.0,0,0}, {1,0,0,1}, linalg::identity, c1, c2);
+				drawer.draw_line({0,-10000.0,0}, {0,1,0,1}, {0,10000.0,0}, {0,1,0,1}, linalg::identity, c1, c2);
+				drawer.draw_line({0,0,-10000.0}, {0,0,1,1}, {0,0,10000.0}, {0,0,1,1}, linalg::identity, c1, c2);
+			}
 		}
+
+		rabbit::mat4f camera_pose_matrix() 
+		{
+			return camera.view_matrix();
+		}
+
+		rabbit::mat4f camera_projection_matrix() 
+		{
+			int WIDTH = 1600, HEIGHT = 800;
+   			float aspect = (float)WIDTH / (float)HEIGHT;
+			return rabbit::opengl_perspective(
+					rabbit::deg(100) / aspect, aspect, 0.1, 200);
+		}		
 
 		void draw_line_strip(
 				const std::vector<vec3f>& lines, 
 				const rabbit::mat4f& model_matrix
 		) 
 		{
-			int WIDTH = 1600, HEIGHT = 800;
-   			float aspect = (float)WIDTH / (float)HEIGHT;
-			auto camera_projective = rabbit::opengl_perspective(
-					rabbit::deg(100) / aspect, aspect, 0.1, 200);
-			auto camera_position = camera.view_matrix();
-
 			drawer.draw_points3d(
 				igris::array_view<rabbit::vec3f>(
 					(rabbit::vec3f*)lines.data(), lines.size()),
 				GL_LINE_STRIP,
 				model_matrix,
-				camera_position,
-				camera_projective
+				camera_pose_matrix(),
+				camera_projection_matrix()
 			);
 		}
+
+		void draw_mesh(
+				const rabbit::mesh<float>& mesh, 
+				const rabbit::mat4f& model_matrix
+		) 
+		{
+			drawer.draw_mesh(
+				mesh,
+				model_matrix,
+				camera_pose_matrix(),
+				camera_projection_matrix()
+			);
+		}
+
+		/*void draw_triangles(
+				float * points,
+				size_t nbpoints,
+				int * triangles,
+				size_t nbtriangles,
+				const rabbit::mat4f& model_matrix
+		) 
+		{
+			drawer.draw_triangles(
+				points,
+				nbpoints,
+				triangles,
+				nbtriangles,
+				model_matrix,
+				camera_pose_matrix(),
+				camera_projection_matrix()
+			);
+		}*/
 	};
 
 	class scene 
@@ -111,6 +165,20 @@ namespace rabbit
 		}
 	};
 
+	class mesh_drawable_object : public drawable_object
+	{
+		rabbit::mesh<float> mesh;
+
+	public:
+		mesh_drawable_object(const rabbit::mesh<float>& mesh) 
+			: mesh(mesh) 
+		{}
+
+		void draw_on(rabbit::view& view) override
+		{
+			view.draw_mesh(mesh, pose.to_mat4());
+		}
+	};
 
 }
 

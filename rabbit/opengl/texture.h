@@ -18,7 +18,7 @@
 #include <cassert>
 #include <cstring>
 
-#include <rabbit/mesh.h>
+#include <rabbit/mesh/mesh.h>
 #include <rabbit/cell3d.h>
 
 namespace rabbit

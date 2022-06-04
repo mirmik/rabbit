@@ -11,6 +11,11 @@ void rabbit::opengl_drawer::init_opengl_context()
 	    rabbit::mesh_fragment_shader
 	);
 
+	opengl_colored_mesh_program.open(
+	    rabbit::mesh_colored_vertex_shader,
+	    rabbit::mesh_colored_fragment_shader
+	);
+
 	opengl_simple_program.open(
 	    rabbit::simple_vertex_shader,
 	    rabbit::simple_fragment_shader
@@ -410,6 +415,42 @@ void rabbit::opengl_drawer::draw_points3d(
 	glPolygonOffset(1, 1);
 	glUniform4f(vertexColorLocation, 1.0f, 1.0f, 1.0f, 1.0f);
 	glDrawArrays(style, 0, count);
+	glBindVertexArray(0);
+	glUseProgram(0);
+}
+
+void rabbit::opengl_drawer::draw_line(
+			linalg::vec<float,3> p1,
+			linalg::vec<float,4> c1,
+			linalg::vec<float,3> p2,
+			linalg::vec<float,4> c2,
+		    const rabbit::mat4f& model,
+		    const rabbit::mat4f& view,
+		    const rabbit::mat4f& projection		
+		)
+{
+	int count = 2;
+	std::pair<linalg::vec<float,3>, linalg::vec<float,4>> pnts[] = { {p1,c1}, {p2,c2} }; 
+	glBindVertexArray(VAO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER,
+	             count*sizeof(float) * (3+4), pnts, GL_DYNAMIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), (GLvoid*)0);
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), (GLvoid*)12);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+	opengl_colored_mesh_program.use();
+	uniform_mat4f("model", opengl_colored_mesh_program.Program, model);
+	uniform_mat4f("view", opengl_colored_mesh_program.Program, view);
+	uniform_mat4f("projection", opengl_colored_mesh_program.Program, projection);
+	glBindVertexArray(VAO);
+	glEnable(GL_POLYGON_OFFSET_FILL);
+	glPolygonOffset(1, 1);
+	glDrawArrays(GL_LINES, 0, count);
+	glDisableVertexAttribArray(0);
+	glDisableVertexAttribArray(1);
 	glBindVertexArray(0);
 	glUseProgram(0);
 }

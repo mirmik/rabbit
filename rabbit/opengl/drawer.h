@@ -23,6 +23,7 @@ namespace rabbit
 		void set_vertices_stride(int arg) { vertices_stride = arg; }
 
 		opengl_shader_program opengl_mesh_program;
+		opengl_shader_program opengl_colored_mesh_program;
 		opengl_shader_program opengl_simple_program;
 		opengl_shader_program opengl_space_point3d_program;
 		opengl_shader_program opengl_simple_2d_program;
@@ -82,6 +83,16 @@ namespace rabbit
 		    const rabbit::mat4f& view,
 		    const rabbit::mat4f& projective
 		) override;
+
+		void draw_line(
+			linalg::vec<float,3> p1,
+			linalg::vec<float,4> c1,
+			linalg::vec<float,3> p2,
+			linalg::vec<float,4> c2,
+		    const rabbit::mat4f& model,
+		    const rabbit::mat4f& view,
+		    const rabbit::mat4f& projective			
+		);
 
 		void uniform_mat4f(
 		    unsigned int loc, const linalg::mat<float, 4, 4> & matrix);
