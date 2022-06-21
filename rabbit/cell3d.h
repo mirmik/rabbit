@@ -4,12 +4,24 @@
 namespace rabbit 
 {
 	
-	struct cell3d
+	class cell3d
 	{
-		linalg::vec<float, 3> ll;
-		linalg::vec<float, 3> hl;
-		linalg::vec<float, 3> lh;
-		linalg::vec<float, 3> hh;
+	public:
+		linalg::vec<float, 3> ll = {};
+		linalg::vec<float, 3> hl = {};
+		linalg::vec<float, 3> lh = {};
+		linalg::vec<float, 3> hh = {};
+
+	public:
+		cell3d() = default;
+		cell3d(
+			const linalg::vec<float, 3>& ll, 
+			const linalg::vec<float, 3>& hl, 
+			const linalg::vec<float, 3>& lh, 
+			const linalg::vec<float, 3>& hh)
+		: 
+			ll(ll), hl(hl), lh(lh), hh(hh)
+		{}
 	};
 }
 

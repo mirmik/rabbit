@@ -2,40 +2,78 @@
 #define RABBIT_REACT_CAST
 
 #include <ralgo/linalg/linalg.h>
+#include <ralgo/linalg/extlinalg.h>
+#include <ralgo/space/pose3.h>
 #include <reactphysics3d/reactphysics3d.h>
 
 namespace rabbit 
 {
 	static_assert(sizeof(reactphysics3d::decimal) == sizeof(float));
 
-	const linalg::vec<float,3> react_cast(const reactphysics3d::Vector3& v) 
+	static inline linalg::vec<float,3> react_cast(const reactphysics3d::Vector3& v) 
 	{
 		return { v.x, v.y, v.z };
 	}
 
-	const linalg::vec<float,4> react_cast(const reactphysics3d::Quaternion& q) 
+	static inline linalg::vec<float,4> react_cast(const reactphysics3d::Quaternion& q) 
 	{
 		return { q.x, q.y, q.z, q.w };
 	}
 
-	const ralgo::pose3<float> react_cast(const reactphysics3d::Transform& t) 
+	static inline ralgo::pose3<float> react_cast(const reactphysics3d::Transform& t) 
 	{
 		return { react_cast(t.getOrientation()), react_cast(t.getPosition()) };
 	}
 
-	const reactphysics3d::Vector3 react_cast(const linalg::vec<float,3>& v) 
+	static inline reactphysics3d::Vector3 react_cast(const linalg::vec<float,3>& v) 
 	{
 		return { v.x, v.y, v.z };
 	}
 
-	const reactphysics3d::Quaternion react_cast(const linalg::vec<float,4>& q) 
+	static inline reactphysics3d::Quaternion react_cast(const linalg::vec<float,4>& q) 
 	{
 		return { q.x, q.y, q.z, q.w };
 	}
 
-	const reactphysics3d::Transform react_cast(const ralgo::pose3<float>& t) 
+	static inline reactphysics3d::Transform react_cast(const ralgo::pose3<float>& t) 
 	{
 		return { react_cast(t.lin), react_cast(t.ang) };
+	}
+
+	/*static inline linalg::mat<float,4,4> react_world_frame_inertia_tensor(const reactphysics3d::RigidBody& rb) 
+	{
+		auto mass = rb.getMass();
+		auto inertia = react_cast(rb.getLocalInertiaTensor());
+		auto center = react_cast(rb.getLocalCenterOfMass());
+		auto trans = react_cast(rb.getTransform());
+
+		auto wf_inertia = trans.rotate_quadric_form(ralgo::diag(inertia));
+		auto wf_center = trans.rotate_vector(center);
+		auto wf_center_tensor = ralgo::antisymmetric_tensor(wf_center);
+
+		/// 
+	}*/
+
+	// Теорема Штайнера
+	static inline linalg::mat<float,3,3> react_world_inertia_for_center(
+		const reactphysics3d::RigidBody& rb,
+		const linalg::vec<float, 3>& target
+	) 
+	{
+		auto inertia = react_cast(rb.getLocalInertiaTensor());
+		auto center = react_cast(rb.getLocalCenterOfMass());
+		auto trans = react_cast(rb.getTransform());
+
+		auto wf_inertia = trans.rotate_quadric_form(ralgo::diag(inertia));
+		auto wf_center = trans.transform_point(center);
+		auto mass = rb.getMass();
+		auto radius = target - wf_center;
+
+		auto kroneker_prod = ralgo::diag<float>({ radius[0]*radius[0], radius[1]*radius[1], radius[2]*radius[2] });
+		auto outer_prod = ralgo::outer(radius, radius);
+
+		auto shteiner = wf_inertia + mass * (kroneker_prod - outer_prod);
+		return shteiner;
 	}
 } 
 

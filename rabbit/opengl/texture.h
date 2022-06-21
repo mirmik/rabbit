@@ -30,7 +30,7 @@ namespace rabbit
 		int height = 0;
 
 		int allocated_buffer = 0;
-		GLuint texture;
+		GLuint texture = {};
 
 		GLint opengl_format = GL_RED;
 		GLint format = GL_RED;
@@ -63,6 +63,24 @@ namespace rabbit
 			data(oth.data)
 		{
 			oth.data = nullptr;
+		}
+
+		opengl_texture& operator= (const opengl_texture & oth)
+		{
+			if (this == &oth)
+				return *this;
+
+			width = oth.width;
+			height = oth.height;
+			texture = oth.texture;
+			opengl_format = oth.opengl_format;
+			format = oth.format;
+			type = oth.type;
+
+			resize(width, height, point_size());
+			memcpy(data, oth.data, point_size());
+
+			return *this;
 		}
 
 		opengl_texture & operator= (opengl_texture && oth)

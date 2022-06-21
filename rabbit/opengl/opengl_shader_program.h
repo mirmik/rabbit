@@ -26,7 +26,7 @@ namespace rabbit
 	class opengl_shader_program
 	{
 	public:
-		GLuint Program;
+		GLuint Program = {};
 
 		GLuint id() { return Program; }
 

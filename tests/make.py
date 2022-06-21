@@ -24,7 +24,7 @@ application("runtests",
 		include_paths = ["."],
 		mdepends = [ "rabbit" ],
 
-		libs=["nos", "ralgo", "igris"],
+		libs=["nos", "ralgo", "igris", "reactphysics3d"],
 		defines=["RABBIT_REAL_TYPE=double"]
 )
 

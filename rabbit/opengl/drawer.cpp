@@ -2,8 +2,6 @@
 #include <rabbit/opengl/shader_collection.h>
 #include <igris/util/bug.h>
 
-rabbit::opengl_drawer::opengl_drawer() {}
-
 void rabbit::opengl_drawer::init_opengl_context()
 {
 	opengl_mesh_program.open(

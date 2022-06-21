@@ -9,6 +9,8 @@ namespace rabbit
 	class opengl_abstract_drawer 
 	{
 	public:
+		virtual ~opengl_abstract_drawer() = default;
+
 		virtual void draw_mesh(
 		    const rabbit::mesh<float> & mesh,
 		    const mat4f & model,

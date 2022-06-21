@@ -14,24 +14,25 @@ namespace rabbit
 	class opengl_drawer : public rabbit::opengl_abstract_drawer
 	{
 	public:
-		opengl_drawer();
-
 		GLuint VBO = 0, VAO = 0, EBO = 0;
 		int vertices_stride = 3;
+
+		opengl_shader_program opengl_mesh_program = {};
+		opengl_shader_program opengl_colored_mesh_program = {};
+		opengl_shader_program opengl_simple_program = {};
+		opengl_shader_program opengl_space_point3d_program = {};
+		opengl_shader_program opengl_simple_2d_program = {};
+		opengl_shader_program opengl_onecolored_texture = {};
+		opengl_shader_program opengl_rgb_texture = {};
+
+	public:
+		opengl_drawer() = default;
+		virtual ~opengl_drawer() = default;
 
 		void set_buffers(int vao, int vbo, int ebo) { VAO = vao; VBO = vbo; EBO = ebo; }
 		void set_vertices_stride(int arg) { vertices_stride = arg; }
 
-		opengl_shader_program opengl_mesh_program;
-		opengl_shader_program opengl_colored_mesh_program;
-		opengl_shader_program opengl_simple_program;
-		opengl_shader_program opengl_space_point3d_program;
-		opengl_shader_program opengl_simple_2d_program;
-		opengl_shader_program opengl_onecolored_texture;
-		opengl_shader_program opengl_rgb_texture;
-
 		void draw_interactive_object(interactive_object & iobj);
-
 		void init_opengl_context();
 		void destroy_opengl_context();
 
