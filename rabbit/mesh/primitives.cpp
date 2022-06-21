@@ -37,3 +37,9 @@ rabbit::mesh<float> rabbit::box_mesh(float x, float y, float z)
 	rabbit::mesh box(vertices, triangles);
 	return box;
 }
+
+rabbit::mesh<float> rabbit::cylinder_mesh(float r, float h, int x, int y) 
+{
+	auto surface = rabbit::cylinder_surface(r, h);
+	return rabbit::surface_rubic_mesh<float>(surface, 0, M_PI*2, x, 0, h, y);
+}

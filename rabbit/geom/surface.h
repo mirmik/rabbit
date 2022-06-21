@@ -119,6 +119,28 @@ namespace rabbit
 		real vmin() const  override { return -M_PI; }
 		real vmax() const  override { return M_PI; }
 	};
+
+	class cylinder_surface : public surface
+	{
+		real _r=0, _h=0;
+
+	public:
+		cylinder_surface(real r, real h) : _r(r), _h(h) {}
+
+		vec3 value(real u, real v) const override
+		{
+			real x = _r * cos(u);
+			real y = _r * sin(u);
+			real z = v;
+
+			return _pose(vec3{x, y, z});
+		}
+
+		real umin() const  override { return 0; }
+		real umax() const  override { return 2 * M_PI;}
+		real vmin() const  override { return -std::numeric_limits<float>::infinity(); }
+		real vmax() const  override { return std::numeric_limits<float>::infinity(); }
+	};
 }
 
 #endif

@@ -60,20 +60,13 @@ namespace rabbit
 		const linalg::vec<float, 3>& target
 	) 
 	{
-		auto inertia = react_cast(rb.getLocalInertiaTensor());
-		auto center = react_cast(rb.getLocalCenterOfMass());
-		auto trans = react_cast(rb.getTransform());
-
-		auto wf_inertia = trans.rotate_quadric_form(ralgo::diag(inertia));
-		auto wf_center = trans.transform_point(center);
-		auto mass = rb.getMass();
-		auto radius = target - wf_center;
-
-		auto kroneker_prod = ralgo::diag<float>({ radius[0]*radius[0], radius[1]*radius[1], radius[2]*radius[2] });
-		auto outer_prod = ralgo::outer(radius, radius);
-
-		auto shteiner = wf_inertia + mass * (kroneker_prod - outer_prod);
-		return shteiner;
+		return steiner(
+        	rb.getMass(),
+        	react_cast(rb.getLocalInertiaTensor()), 
+        	react_cast(rb.getLocalCenterOfMass()),
+        	react_cast(rb.getTransform()),
+        	target
+	    );
 	}
 } 
 
