@@ -13,7 +13,7 @@ target = "librabbit.so"
 install_include_path = '/usr/local/include/rabbit' 
 install_directory_path = '/usr/lib/'
 install_library_path = os.path.join(install_directory_path, target)
-
+ 
 
 licant.cxx_shared_library("librabbit.so",
 	mdepends=[
