@@ -18,7 +18,8 @@ install_library_path = os.path.join(install_directory_path, target)
 licant.cxx_shared_library("librabbit.so",
 	mdepends=[
 		"rabbit",
-		"rabbit.opengl"
+#		"rabbit.opengl" ## Отключено, потому что требует зависимости при сборке 
+						## компонентов, не зависящих от opengl
 	],
 	cxx_flags="-fPIC -Weffc++ -Wextra",
 	cc_flags="-fPIC",
