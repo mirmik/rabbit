@@ -14,8 +14,9 @@ install_include_path = '/usr/local/include/rabbit'
 install_directory_path = '/usr/lib/'
 install_library_path = os.path.join(install_directory_path, target) 
   
-
-licant.cxx_shared_library("librabbit.so",
+licant.cxx_static_and_shared("libs",
+	shared_lib = "librabbit.so",
+	static_lib = "librabbit.a",
 	mdepends=[
 		"rabbit",
 #		"rabbit.opengl" ## Отключено, потому что требует зависимости при сборке 
@@ -29,8 +30,8 @@ licant.cxx_shared_library("librabbit.so",
 licant.install.install_library(
 	tgt="install",
 	uninstall="uninstall",
-	libtgt="librabbit.so",
+	libtgt=["librabbit.so", "librabbit.a"],
 	hroot="rabbit",
 	headers="rabbit")
 
-licant.ex("librabbit.so")
+licant.ex("libs")
