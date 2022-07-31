@@ -324,25 +324,6 @@ void rabbit::opengl_drawer::draw_rgb_texture_2d(
 	glUseProgram(0);
 }
 
-void rabbit::opengl_drawer::draw_image_uint8(rabbit::opengl_texture & texture) 
-{
-	const std::vector<std::pair<linalg::vec<float, 3>, linalg::vec<float, 2>>> & vertices
-		= {
-			{ { -1.0f, -1.0f, 0.0f }, { 0.0f, 0.0f } },
-			{ { 1.0f, -1.0f, 0.0f }, { 1.0f, 0.0f } },
-			{ { 1.0f, 1.0f, 0.0f }, { 1.0f, 1.0f } },
-			{ { -1.0f, 1.0f, 0.0f }, { 0.0f, 1.0f } }				
-		};
-    const std::vector<ivec3> triangles = {
-		{ 0, 1, 2 },
-		{ 0, 2, 3 }
-	};
-    const linalg::vec<float, 3> & color = { 0.5f, 0.5f, 0.5f };
-    const linalg::mat<float, 4, 4> & transform = linalg::identity;
-
-	draw_onecolored_texture_2d(vertices, triangles, texture, color, transform);
-}
-
 void rabbit::opengl_drawer::print_text(
 	const rabbit::font & font,
 	rabbit::textzone_cursor & cursor,
