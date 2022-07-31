@@ -136,6 +136,8 @@ namespace rabbit
 		    const linalg::vec<float,3> & color,
 		    const linalg::mat<float,4,4> & transform = linalg::identity
 		);
+
+		void draw_image_uint8(rabbit::opengl_texture & texture);
 	};
 }
 #endif

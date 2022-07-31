@@ -23,8 +23,7 @@ licant.cxx_static_and_shared("libs",
 						## компонентов, не зависящих от opengl
 	],
 	cxx_flags="-fPIC -Weffc++ -Wextra",
-	cc_flags="-fPIC",
-	cxxstd = "c++2a"
+	cc_flags="-fPIC"
 )
 
 licant.install.install_library(
