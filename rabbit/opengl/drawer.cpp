@@ -1,6 +1,8 @@
 #include <rabbit/opengl/drawer.h>
 #include <rabbit/opengl/shader_collection.h>
 #include <igris/util/bug.h>
+#include <nos/print.h>
+#include <nos/fprint.h>
 
 void rabbit::opengl_drawer::init_opengl_context()
 {
@@ -296,32 +298,32 @@ void rabbit::opengl_drawer::draw_rgb_texture_2d(
     const linalg::mat<float, 4, 4> & transform
 )
 {
-	glBindVertexArray(VAO);
+	GLCHECK(glBindVertexArray(VAO));
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER,
-	             vertices.size() * sizeof(float) * 5, vertices.data(), GL_DYNAMIC_DRAW);
+	GLCHECK(glBindBuffer(GL_ARRAY_BUFFER, VBO));
+	GLCHECK(glBufferData(GL_ARRAY_BUFFER,
+	             vertices.size() * sizeof(float) * 5, vertices.data(), GL_DYNAMIC_DRAW));
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
-	glEnableVertexAttribArray(0);
-	glEnableVertexAttribArray(1);
+	GLCHECK(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0));
+	GLCHECK(glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat))));
+	GLCHECK(glEnableVertexAttribArray(0));
+	GLCHECK(glEnableVertexAttribArray(1));
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER,
-	             triangles.size()*sizeof(int) * 3, triangles.data(), GL_DYNAMIC_DRAW);
+	GLCHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO));
+	GLCHECK(glBufferData(GL_ELEMENT_ARRAY_BUFFER,
+	             triangles.size()*sizeof(int) * 3, triangles.data(), GL_DYNAMIC_DRAW));
 
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+	GLCHECK(glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR));
 
 	opengl_rgb_texture.use();
 	opengl_rgb_texture.uniform_mat4f("transform22", transform);
 	texture.activate(opengl_rgb_texture.id(), "ourTexture", 0);
 
-	glBindVertexArray(VAO);
-	glDrawElements(GL_TRIANGLES, triangles.size()*sizeof(int) * 3, GL_UNSIGNED_INT, 0);
+	GLCHECK(glBindVertexArray(VAO));
+	GLCHECK(glDrawElements(GL_TRIANGLES, triangles.size()*sizeof(int) * 3, GL_UNSIGNED_INT, 0));
 
-	glBindVertexArray(0);
-	glUseProgram(0);
+	GLCHECK(glBindVertexArray(0));
+	GLCHECK(glUseProgram(0));
 }
 
 void rabbit::opengl_drawer::print_text(
@@ -448,5 +450,5 @@ void rabbit::opengl_drawer::draw_line(
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
 	glBindVertexArray(0);
-	glUseProgram(0);
+	GLCHECK(glUseProgram(0));
 }

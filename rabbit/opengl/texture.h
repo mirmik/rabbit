@@ -1,6 +1,9 @@
 #ifndef RABBIT_OPENGL_TEXTURE_H
 #define RABBIT_OPENGL_TEXTURE_H
 
+#include <nos/print.h>
+#include <rabbit/opengl/util.h>
+
 #if __has_include(<GL/glew.h>)
 #define GLEW_STATIC
 #include <GL/glew.h>
@@ -195,9 +198,9 @@ namespace rabbit
 
 		void bind()
 		{
-			glGenTextures(1, &texture);
-			glBindTexture(GL_TEXTURE_2D, texture);
-			glTexImage2D(
+			GLCHECK(glGenTextures(1, &texture));
+			GLCHECK(glBindTexture(GL_TEXTURE_2D, texture));
+			GLCHECK(glTexImage2D(
 			    GL_TEXTURE_2D,
 			    0,
 			    opengl_format,
@@ -207,16 +210,16 @@ namespace rabbit
 			    format,
 			    type,
 			    data
-			);
+			));
 
 			glGenerateMipmap(GL_TEXTURE_2D);
 		}
 
 		void bind(GLint channel)
 		{
-			glGenTextures(1, &texture);
-			glBindTexture(GL_TEXTURE_2D, texture);
-			glTexImage2D(
+			GLCHECK(glGenTextures(1, &texture));
+			GLCHECK(glBindTexture(GL_TEXTURE_2D, texture));
+			GLCHECK(glTexImage2D(
 			    GL_TEXTURE_2D,
 			    0,
 			    channel,
@@ -226,15 +229,15 @@ namespace rabbit
 			    channel,
 			    type,
 			    data
-			);
+			));
 
 			glGenerateMipmap(GL_TEXTURE_2D);
 		}
 
 		void rebind()
 		{
-			glBindTexture(GL_TEXTURE_2D, texture);
-			glTexImage2D(
+			GLCHECK(glBindTexture(GL_TEXTURE_2D, texture));
+			GLCHECK(glTexImage2D(
 			    GL_TEXTURE_2D,
 			    0,
 			    opengl_format,
@@ -244,15 +247,15 @@ namespace rabbit
 			    format,
 			    type,
 			    data
-			);
+			));
 
 			//glGenerateMipmap(GL_TEXTURE_2D);
 		}
 
 		void rebind(GLint channel)
 		{
-			glBindTexture(GL_TEXTURE_2D, texture);
-			glTexImage2D(
+			GLCHECK(glBindTexture(GL_TEXTURE_2D, texture));
+			GLCHECK(glTexImage2D(
 			    GL_TEXTURE_2D,
 			    0,
 			    channel,
@@ -262,16 +265,16 @@ namespace rabbit
 			    channel,
 			    type,
 			    data
-			);
+			));
 
-			glGenerateMipmap(GL_TEXTURE_2D);
+			GLCHECK(glGenerateMipmap(GL_TEXTURE_2D));
 		}
 
 		void activate(int program_id, const char * name, int no = 0) const
 		{
-			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, texture);
-			glUniform1i(glGetUniformLocation(program_id, name), no);
+			GLCHECK(glActiveTexture(GL_TEXTURE0));
+			GLCHECK(glBindTexture(GL_TEXTURE_2D, texture));
+			GLCHECK(glUniform1i(glGetUniformLocation(program_id, name), no));
 		}
 	};
 }
