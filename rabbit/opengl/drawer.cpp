@@ -289,7 +289,6 @@ void rabbit::opengl_drawer::draw_onecolored_texture_2d(
 	glUseProgram(0);
 }
 
-
 void rabbit::opengl_drawer::draw_rgb_texture_2d(
     const std::vector<std::pair<linalg::vec<float, 3>, linalg::vec<float, 2>>> & vertices,
     const std::vector<ivec3> triangles,
@@ -320,7 +319,6 @@ void rabbit::opengl_drawer::draw_rgb_texture_2d(
 
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, triangles.size()*sizeof(int) * 3, GL_UNSIGNED_INT, 0);
-
 
 	glBindVertexArray(0);
 	glUseProgram(0);
