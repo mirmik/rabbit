@@ -33,4 +33,25 @@ licant.install.install_library(
 	hroot="rabbit",
 	headers="rabbit")
 
-licant.ex("libs")
+licant.cxx_application("runtests",
+		sources = [
+			"tests/*.cpp",
+			"tests/fitting/*.cpp",
+			"tests/geom/*.cpp"
+		],
+
+		cxx_flags = "-g -Weffc++ -Wextra -fPIE",
+		cc_flags = "-g -Wextra -fPIE",
+		ld_flags = "-g -fPIE",
+		cxxstd = "c++20",
+
+		include_paths = [".", "tests"],
+		mdepends = [ "rabbit" ],
+
+		libs=["nos", "ralgo", "igris"],
+		defines=["RABBIT_REAL_TYPE=double"]
+)
+
+licant.fileset("all", targets=["runtests", "libs"])
+
+licant.ex("all")

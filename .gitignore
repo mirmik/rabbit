@@ -66,3 +66,4 @@ ZERO_CHECK.vcxproj.filters
 rabbit_test
 
 target
+runtests

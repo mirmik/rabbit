@@ -17,8 +17,5 @@ ADD . /root/rabbit
 
 WORKDIR /root/rabbit
 RUN ./make.py
-RUN sudo ./make.py install
-
-WORKDIR /root/rabbit/tests
-RUN ./make.py
 RUN ./runtests
+RUN sudo ./make.py install
