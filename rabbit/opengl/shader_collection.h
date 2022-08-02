@@ -20,6 +20,9 @@ namespace rabbit
 
 	extern const char * rgb_texture_vertex_shader;
 	extern const char * rgb_texture_fragment_shader;
+
+	extern const char * grayscale_texture_vertex_shader;
+	extern const char * grayscale_texture_fragment_shader;
 }
 
 #endif
