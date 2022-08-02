@@ -24,6 +24,7 @@ namespace rabbit
 		opengl_shader_program opengl_simple_2d_program = {};
 		opengl_shader_program opengl_onecolored_texture = {};
 		opengl_shader_program opengl_rgb_texture = {};
+		opengl_shader_program opengl_grayscale_texture = {};
 
 	public:
 		opengl_drawer() = default;
@@ -129,6 +130,13 @@ namespace rabbit
 		    const linalg::mat<float,4,4> & transform = linalg::identity
 		);
 
+		void draw_grayscale_texture(
+		    const std::vector<std::pair<linalg::vec<float, 3>, linalg::vec<float, 2>>> & vertices,
+		    const std::vector<ivec3> triangles,
+		    const rabbit::opengl_texture & texture,
+		    const linalg::mat<float,4,4> & transform = linalg::identity
+		);
+
 		void print_text(
 		    const rabbit::font & font,
 		    rabbit::textzone_cursor & cursor,
@@ -136,6 +144,8 @@ namespace rabbit
 		    const linalg::vec<float,3> & color,
 		    const linalg::mat<float,4,4> & transform = linalg::identity
 		);
+
+		void draw_image_uint8(rabbit::opengl_texture & texture);
 	};
 }
 #endif

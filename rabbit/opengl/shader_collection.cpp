@@ -143,11 +143,11 @@ layout (location = 1) in vec2 texcoords;
 
 out vec2 TexCoords;
 
-uniform mat4 transform22;
+uniform mat4 transform;
 
 void main()
 {
-    gl_Position = transform22 * vec4(vertex, 1);
+    gl_Position = transform * vec4(vertex, 1);
     TexCoords = texcoords;
 }  
 )""";
@@ -164,3 +164,35 @@ void main()
     color = texture(ourTexture, TexCoords);
 }  
 )""";
+
+
+const char * rabbit::grayscale_texture_vertex_shader = R"""(
+#version 300 es
+layout (location = 0) in vec3 vertex;
+layout (location = 1) in vec2 texcoords;
+
+out vec2 TexCoords;
+
+uniform mat4 transform;
+
+void main()
+{
+    gl_Position = transform * vec4(vertex, 1);
+    TexCoords = texcoords;
+}  
+)""";
+
+const char * rabbit::grayscale_texture_fragment_shader = R"""(
+#version 300 es
+in lowp vec2 TexCoords;
+out lowp vec4 color;
+
+uniform sampler2D ourTexture;
+
+void main()
+{    
+    mediump float r = texture(ourTexture, TexCoords).r;
+    color = vec4(r, r, r, 1);
+}  
+)""";
+

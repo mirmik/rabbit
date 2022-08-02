@@ -1,4 +1,5 @@
 #include <rabbit/opengl/opengl_shader_program.h>
+#include <rabbit/opengl/util.h>
 
 rabbit::opengl_shader_program::opengl_shader_program() {}
 
@@ -44,11 +45,11 @@ void rabbit::opengl_shader_program::open(
 	}
 	// Shader Program
 	this->Program = glCreateProgram();
-	glAttachShader(this->Program, vertex);
-	glAttachShader(this->Program, fragment);
-	glLinkProgram(this->Program);
+	GLCHECK(glAttachShader(this->Program, vertex));
+	GLCHECK(glAttachShader(this->Program, fragment));
+	GLCHECK(glLinkProgram(this->Program));
 	// Print linking errors if any
-	glGetProgramiv(this->Program, GL_LINK_STATUS, &success);
+	GLCHECK(glGetProgramiv(this->Program, GL_LINK_STATUS, &success));
 	if (!success)
 	{
 		glGetProgramInfoLog(this->Program, 512, NULL, infoLog);
@@ -56,14 +57,14 @@ void rabbit::opengl_shader_program::open(
 		abort();
 	}
 	// Delete the shaders as they're linked into our program now and no longer necessery
-	glDeleteShader(vertex);
-	glDeleteShader(fragment);
+	GLCHECK(glDeleteShader(vertex));
+	GLCHECK(glDeleteShader(fragment));
 }
 
 // Uses the current shader
 void rabbit::opengl_shader_program::use()
 {
-	glUseProgram(this->Program);
+	GLCHECK(glUseProgram(this->Program));
 }
 
 
@@ -71,7 +72,7 @@ void rabbit::opengl_shader_program::uniform_vec3f(
     const char * locname, const linalg::vec<float, 3> & v)
 {
 	GLint modelLoc = glGetUniformLocation(Program, locname);
-	glUniform3fv(modelLoc, 1, (GLfloat*) &v);
+	GLCHECK(glUniform3fv(modelLoc, 1, (GLfloat*) &v));
 }
 
 
@@ -79,5 +80,5 @@ void rabbit::opengl_shader_program::uniform_mat4f(
     const char * locname, const linalg::mat<float, 4, 4> & v)
 {
 	GLint modelLoc = glGetUniformLocation(Program, locname);
-	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, (GLfloat*) &v);
+	GLCHECK(glUniformMatrix4fv(modelLoc, 1, GL_FALSE, (GLfloat*) &v));
 }
