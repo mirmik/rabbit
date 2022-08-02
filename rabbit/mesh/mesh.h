@@ -100,7 +100,7 @@ namespace rabbit
 			}
 		}
 	
-		return mesh(std::move(vertices), std::move(triangles));
+		return mesh<T>(std::move(vertices), std::move(triangles));
 	}
 
 
@@ -140,7 +140,7 @@ namespace rabbit
 		for (unsigned int i = 0; i < triangles_total; ++i) 
 			triangles[i] = { tris[i*3], tris[i*3+1], tris[i*3+2] };  
 	
-		return mesh(std::move(vertices), std::move(triangles));
+		return mesh<T>(std::move(vertices), std::move(triangles));
 	}
 }
 
