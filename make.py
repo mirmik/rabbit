@@ -23,7 +23,8 @@ licant.cxx_static_and_shared("libs",
 						## компонентов, не зависящих от opengl
 	],
 	cxx_flags="-fPIC -Weffc++ -Wextra",
-	cc_flags="-fPIC"
+	cc_flags="-fPIC",
+	ld_flags="-fPIC"
 )
 
 licant.install.install_library(
@@ -39,15 +40,13 @@ licant.cxx_application("runtests",
 			"tests/fitting/*.cpp",
 			"tests/geom/*.cpp"
 		],
-
-		cxx_flags = "-g -Weffc++ -Wextra -fPIE",
-		cc_flags = "-g -Wextra -fPIE",
-		ld_flags = "-g -fPIE",
+		objects = [ "librabbit.a" ],
+		cxx_flags = "-fPIC -g -Weffc++ -Wextra",
+		cc_flags = "-fPIC -g -Wextra",
+		ld_flags = "-fPIC -g",
 		cxxstd = "c++20",
-
 		include_paths = [".", "tests"],
-		mdepends = [ "rabbit" ],
-
+		#mdepends = [ "rabbit" ],
 		libs=["nos", "ralgo", "igris"],
 		defines=["RABBIT_REAL_TYPE=double"]
 )
