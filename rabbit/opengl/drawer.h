@@ -43,7 +43,8 @@ namespace rabbit
 		    const rabbit::mesh<float> & mesh,
 		    const mat4f & model,
 		    const mat4f & view,
-		    const mat4f & projection) override;
+		    const mat4f & projection,
+		    const vec4f & color) override;
 
 		void draw_points(
 		    const vec3f * pnts,

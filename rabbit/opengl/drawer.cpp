@@ -144,7 +144,8 @@ void rabbit::opengl_drawer::draw_mesh(
     const rabbit::mesh<float> & mesh,
     const mat4f & model,
     const mat4f & view,
-    const mat4f & projection)
+    const mat4f & projection,
+    const vec4f & color)
 {
 	glBindVertexArray(VAO);
 
@@ -174,7 +175,7 @@ void rabbit::opengl_drawer::draw_mesh(
 	glEnable(GL_POLYGON_OFFSET_FILL);
 
 	glPolygonOffset(1, 1);
-	glUniform4f(vertexColorLocation, 0.3f, 0.4f, 0.6f, 1.0f);
+	glUniform4f(vertexColorLocation, color[0], color[1], color[2], color[3]);
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glDrawElements(GL_TRIANGLES, mesh.triangles.size()*sizeof(int) * 3, GL_UNSIGNED_INT, 0);
 

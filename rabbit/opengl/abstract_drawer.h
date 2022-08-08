@@ -15,7 +15,8 @@ namespace rabbit
 		    const rabbit::mesh<float> & mesh,
 		    const mat4f & model,
 		    const mat4f & view,
-		    const mat4f & projection) = 0;
+		    const mat4f & projection,
+		    const vec4f & color) = 0;
 
 		virtual void draw_points(
 		    const vec3f * pnts,
