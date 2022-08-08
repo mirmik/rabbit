@@ -68,3 +68,11 @@ rabbit_test
 target
 runtests
 build
+
+
+.git
+.gitignore
+.gitmodules
+.gitattributes
+.github
+.vscode
