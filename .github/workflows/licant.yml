@@ -52,19 +52,19 @@ jobs:
           sudo cmake --install .
           cd ..
 
-      - name: Install ralgo library
+      - name: Install reactivex library
         run: |
-          git clone https://github.com/mirmik/ralgo
-          cd ralgo
+          git clone https://github.com/ReactiveX/RxCpp
+          cd RxCpp
           cmake .
           cmake --build .
           sudo cmake --install .
           cd ..
 
-      - name: Install reactivex library
+      - name: Install ralgo library
         run: |
-          git clone https://github.com/ReactiveX/RxCpp
-          cd RxCpp
+          git clone https://github.com/mirmik/ralgo
+          cd ralgo
           cmake .
           cmake --build .
           sudo cmake --install .
