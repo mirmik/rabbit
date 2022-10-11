@@ -50,7 +50,7 @@ jobs:
           cmake --build .
           sudo cmake --install .
           cd ..
-    
+
       - name: Install reactivex library
         run: |
           git clone https://github.com/ReactiveX/RxCpp
@@ -68,35 +68,6 @@ jobs:
           cmake --build .
           sudo cmake --install .
           cd ..
-
-      - name: Install ralgo library
-        run: |
-          git clone https://github.com/ReactiveX/RxCpp
-          cd RxCpp
-          cmake .
-          cmake --build .
-          sudo cmake --install .
-          cd ..
-
-<<<<<<< HEAD
-      - name: Install reactivex library
-        run: |
-          git clone https://github.com/ReactiveX/RxCpp
-          cd RxCpp
-          cmake .
-          cmake --build .
-          sudo cmake --install .
-          cd ..
-=======
-    - name: Install ralgo library
-      run: |
-        git clone https://github.com/ReactiveX/RxCpp
-        cd RxCpp
-        cmake .
-        cmake --build .
-        sudo cmake --install .
-        cd ..
->>>>>>> e34ac2fc4bb9feab6862253d40e741c5a2a2ddb2
 
       - name: Configure CMake
         # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
