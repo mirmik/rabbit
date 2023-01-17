@@ -1,8 +1,8 @@
+#include <rabbit/mesh/mesh.h>
+#include <rabbit/opengl/drawer.h>
 #include <rabbit/opengl/opengl_shader_program.h>
 #include <rabbit/opengl/projection.h>
-#include <rabbit/opengl/drawer.h>
 #include <rabbit/opengl/shader_collection.h>
-#include <rabbit/mesh/mesh.h>
 #include <rabbit/util.h>
 #include <ralgo/space/pose3.h>
 
@@ -18,11 +18,11 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include <rabbit/opengl/util.h>
-#include <rabbit/opengl/drawer.h>
-#include <rabbit/camera.h>
-#include <thread>
 #include <chrono>
+#include <rabbit/camera.h>
+#include <rabbit/opengl/drawer.h>
+#include <rabbit/opengl/util.h>
+#include <thread>
 
 // Window dimensions
 const GLuint WIDTH = 1600, HEIGHT = 800;
@@ -36,7 +36,8 @@ int main()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-    GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "LearnOpenGL", nullptr, nullptr);
+    GLFWwindow *window =
+        glfwCreateWindow(WIDTH, HEIGHT, "LearnOpenGL", nullptr, nullptr);
     glfwMakeContextCurrent(window);
 
     glewExperimental = GL_TRUE;
@@ -61,29 +62,29 @@ int main()
 
     while (!glfwWindowShouldClose(window))
     {
-        camera.set_camera(
-            rabbit::vec3f{100.f*cos(glfwGetTime()), 100.f*sin(glfwGetTime()), 10},
-            {0, 0, 0}
-        );
+        camera.set_camera(rabbit::vec3f{100.f * cosf(glfwGetTime()),
+                                        100.f * sinf(glfwGetTime()),
+                                        10},
+                          {0, 0, 0});
         auto model = ralgo::rot3<float>({0, 0, 1}, rabbit::deg(0));
 
         glfwPollEvents();
 
         drawer.clean(0.2f, 0.3f, 0.3f, 1.0f);
-        
-        drawer.draw_mesh(
-            mesh,
-            (model).to_mat4(),
-            camera.view_matrix(),
-            projection);      
 
-         /*drawer.draw_points3d(
-            {mesh.vertices.data(),
-            mesh.vertices.size()},
-            GL_LINE_STRIP,
-            (model).to_mat4(),
-            camera.view_matrix(),
-            projection);      */
+        drawer.draw_mesh(mesh,
+                         (model).to_mat4(),
+                         camera.view_matrix(),
+                         projection,
+                         rabbit::vec4f{0.5, 0.5, 0.5, 1.0});
+
+        /*drawer.draw_points3d(
+           {mesh.vertices.data(),
+           mesh.vertices.size()},
+           GL_LINE_STRIP,
+           (model).to_mat4(),
+           camera.view_matrix(),
+           projection);      */
 
         glfwSwapBuffers(window);
         std::this_thread::sleep_for(std::chrono::milliseconds(10));

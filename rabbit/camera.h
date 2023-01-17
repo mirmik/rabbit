@@ -8,9 +8,9 @@ namespace rabbit
 {
     class camera
     {
-        vec3f _eye;
-        vec3f _dir;
-        vec3f _up;
+        rabbit::vec3f _eye;
+        rabbit::vec3f _dir;
+        rabbit::vec3f _up;
 
     public:
         camera() : _eye{0, 0, 0}, _dir(1, 0, 0), _up(0, 0, 1)
@@ -18,15 +18,15 @@ namespace rabbit
             correct_up();
         }
 
-        camera(const vec3f &eye,
-               const vec3f &target,
-               const vec3f &up = {0, 0, 1})
+        camera(const rabbit::vec3f &eye,
+               const rabbit::vec3f &target,
+               const rabbit::vec3f &up = {0, 0, 1})
             : _eye(eye), _dir(normalize(eye - target)), _up(normalize(up))
         {
             correct_up();
         }
 
-        vec3f right()
+        rabbit::vec3f right()
         {
             return cross(_up, _dir);
         }
@@ -48,28 +48,30 @@ namespace rabbit
             _up = normalize(_up);
         }
 
-        void set_eye(const vec3f &vec)
+        void set_eye(const rabbit::vec3f &vec)
         {
             _eye = vec;
         }
 
-        void set_eye(const vec3 &vec)
+        void set_eye(const rabbit::vec3 &vec)
         {
             _eye = vec3f{(float)vec.x, (float)vec.y, (float)vec.z};
         }
 
-        void set_dir(const vec3f &vec)
+        void set_dir(const rabbit::vec3f &vec)
         {
             _dir = normalize(vec);
         }
 
-        void set_target(const vec3f &target)
+        void set_target(const rabbit::vec3f &target)
         {
             _dir = normalize(_eye - target);
             correct_up();
         }
 
-        void set_camera(vec3f eye, vec3f target, vec3f up = vec3f{0, 0, 1})
+        void set_camera(rabbit::vec3f eye,
+                        rabbit::vec3f target,
+                        rabbit::vec3f up = rabbit::vec3f{0, 0, 1})
         {
             _eye = eye;
             _dir = normalize(eye - target);
@@ -77,7 +79,7 @@ namespace rabbit
             correct_up();
         }
 
-        mat4f view_rotation_matrix()
+        rabbit::mat4f view_rotation_matrix()
         {
             vec3f &D = _dir;
             vec3f &U = _up;
@@ -89,7 +91,7 @@ namespace rabbit
                     {0, 0, 0, 1}};
         }
 
-        mat4f view_translation_matrix()
+        rabbit::mat4f view_translation_matrix()
         {
             vec3f &C = _eye;
 
@@ -99,7 +101,7 @@ namespace rabbit
                     {-C.x, -C.y, -C.z, 1.f}};
         }
 
-        mat4f view_matrix()
+        rabbit::mat4f view_matrix()
         {
             return mul(view_rotation_matrix(), view_translation_matrix());
         }
