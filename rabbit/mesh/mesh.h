@@ -51,6 +51,29 @@ namespace rabbit
                 v -= c;
             }
         }
+
+        std::string to_json_string()
+        {
+            std::string json = "{\n";
+            json += "\t\"vertices\": [\n";
+            for (auto &v : vertices)
+            {
+                json += "\t\t[" + std::to_string(v.x) + ", " +
+                        std::to_string(v.y) + ", " + std::to_string(v.z) +
+                        "],\n";
+            }
+            json += "\t],\n";
+            json += "\t\"triangles\": [\n";
+            for (auto &t : triangles)
+            {
+                json += "\t\t[" + std::to_string(t.x) + ", " +
+                        std::to_string(t.y) + ", " + std::to_string(t.z) +
+                        "],\n";
+            }
+            json += "\t]\n";
+            json += "}\n";
+            return json;
+        }
     };
 
     template <class T = float>
