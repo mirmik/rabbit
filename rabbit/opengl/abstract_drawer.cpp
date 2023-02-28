@@ -1,6 +1,6 @@
-#include <rabbit/opengl/abstract_drawer.h>
-
 #include <GL/glew.h>
+#include <rabbit/opengl/abstract_drawer.h>
+#include <rabbit/types.h>
 
 void rabbit::opengl_abstract_drawer::draw_lines2d(
     const igris::array_view<vec2f> &lines)

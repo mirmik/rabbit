@@ -12,11 +12,8 @@ licant.module("rabbit",
 
 licant.module("rabbit.opengl",
               sources=[
-                  "rabbit/opengl/opengl_shader_program.cpp",
-                  "rabbit/opengl/shader_collection.cpp",
-                  "rabbit/opengl/drawer.cpp",
+                  "rabbit/opengl/*.cpp",
                   "rabbit/font/naive.cpp",
-                  "rabbit/opengl/window.cpp",
               ]
               )
 

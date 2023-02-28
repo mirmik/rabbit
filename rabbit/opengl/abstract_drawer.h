@@ -2,6 +2,8 @@
 #define RABBiT_OPENGL_ABSTRACT_DRAWER_H_
 
 #include <igris/container/array_view.h>
+#include <rabbit/mesh/mesh.h>
+#include <rabbit/types.h>
 #include <vector>
 
 namespace rabbit

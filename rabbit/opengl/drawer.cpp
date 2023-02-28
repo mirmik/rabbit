@@ -156,12 +156,12 @@ void rabbit::opengl_drawer::draw_mesh(const rabbit::mesh<float> &mesh,
     glBindVertexArray(0);
 
     GLint vertexColorLocation =
-        glGetUniformLocation(opengl_mesh_program.Program, "vertexColor");
+        glGetUniformLocation(opengl_mesh_program.id(), "vertexColor");
     opengl_mesh_program.use();
 
-    uniform_mat4f("model", opengl_mesh_program.Program, model);
-    uniform_mat4f("view", opengl_mesh_program.Program, view);
-    uniform_mat4f("projection", opengl_mesh_program.Program, projection);
+    uniform_mat4f("model", opengl_mesh_program.id(), model);
+    uniform_mat4f("view", opengl_mesh_program.id(), view);
+    uniform_mat4f("projection", opengl_mesh_program.id(), projection);
 
     glBindVertexArray(VAO);
     glEnable(GL_POLYGON_OFFSET_FILL);
@@ -207,12 +207,12 @@ void rabbit::opengl_drawer::draw_mesh_edges(
     glBindVertexArray(0);
 
     GLint vertexColorLocation =
-        glGetUniformLocation(opengl_mesh_program.Program, "vertexColor");
+        glGetUniformLocation(opengl_mesh_program.id(), "vertexColor");
     opengl_mesh_program.use();
 
-    uniform_mat4f("model", opengl_mesh_program.Program, model);
-    uniform_mat4f("view", opengl_mesh_program.Program, view);
-    uniform_mat4f("projection", opengl_mesh_program.Program, projection);
+    uniform_mat4f("model", opengl_mesh_program.id(), model);
+    uniform_mat4f("view", opengl_mesh_program.id(), view);
+    uniform_mat4f("projection", opengl_mesh_program.id(), projection);
 
     glBindVertexArray(VAO);
     glEnable(GL_POLYGON_OFFSET_FILL);
@@ -247,12 +247,12 @@ void rabbit::opengl_drawer::draw_points(const vec3f *pnts,
     glBindVertexArray(0);
 
     GLint vertexColorLocation =
-        glGetUniformLocation(opengl_mesh_program.Program, "vertexColor");
+        glGetUniformLocation(opengl_mesh_program.id(), "vertexColor");
     opengl_mesh_program.use();
 
-    uniform_mat4f("model", opengl_mesh_program.Program, model);
-    uniform_mat4f("view", opengl_mesh_program.Program, view);
-    uniform_mat4f("projection", opengl_mesh_program.Program, projection);
+    uniform_mat4f("model", opengl_mesh_program.id(), model);
+    uniform_mat4f("view", opengl_mesh_program.id(), view);
+    uniform_mat4f("projection", opengl_mesh_program.id(), projection);
 
     glBindVertexArray(VAO);
     glEnable(GL_POLYGON_OFFSET_FILL);
@@ -520,11 +520,11 @@ void rabbit::opengl_drawer::draw_points3d(
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
     GLint vertexColorLocation =
-        glGetUniformLocation(opengl_mesh_program.Program, "vertexColor");
+        glGetUniformLocation(opengl_mesh_program.id(), "vertexColor");
     opengl_mesh_program.use();
-    uniform_mat4f("model", opengl_mesh_program.Program, model);
-    uniform_mat4f("view", opengl_mesh_program.Program, view);
-    uniform_mat4f("projection", opengl_mesh_program.Program, projection);
+    uniform_mat4f("model", opengl_mesh_program.id(), model);
+    uniform_mat4f("view", opengl_mesh_program.id(), view);
+    uniform_mat4f("projection", opengl_mesh_program.id(), projection);
     glBindVertexArray(VAO);
     glEnable(GL_POLYGON_OFFSET_FILL);
     glPolygonOffset(1, 1);
@@ -560,10 +560,9 @@ void rabbit::opengl_drawer::draw_line(linalg::vec<float, 3> p1,
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
     opengl_colored_mesh_program.use();
-    uniform_mat4f("model", opengl_colored_mesh_program.Program, model);
-    uniform_mat4f("view", opengl_colored_mesh_program.Program, view);
-    uniform_mat4f(
-        "projection", opengl_colored_mesh_program.Program, projection);
+    uniform_mat4f("model", opengl_colored_mesh_program.id(), model);
+    uniform_mat4f("view", opengl_colored_mesh_program.id(), view);
+    uniform_mat4f("projection", opengl_colored_mesh_program.id(), projection);
     glBindVertexArray(VAO);
     glEnable(GL_POLYGON_OFFSET_FILL);
     glPolygonOffset(1, 1);
