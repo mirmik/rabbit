@@ -3,17 +3,15 @@
 
 #include <memory>
 #include <rabbit/mesh/mesh.h>
-#include <rabbit/meshline.h>
 
-namespace rabbit 
+namespace rabbit
 {
-	class interactive_object 
-	{
-		pose3<real> pose;
+    class interactive_object
+    {
+        pose3<real> pose;
 
-		std::shared_ptr<rabbit::mesh<float>> get_mesh();
-		std::shared_ptr<rabbit::meshline> get_lines();
-	};
+        std::shared_ptr<rabbit::mesh<float>> get_mesh();
+    };
 }
 
 #endif
